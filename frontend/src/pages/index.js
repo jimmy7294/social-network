@@ -1,10 +1,11 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import { headers } from "next/dist/client/components/headers";
 
 // function to build Registration
 function RegistrationComp(){
+
+
+
+
   //build inside of return <>
 return(
   <>
@@ -18,9 +19,43 @@ return(
 )
 }
 
+
+
+
 // function to build Login window
 function LoginComp(){
-  //Build inside of return <>
+  //updates form values
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+//makes sure that the submuit it not empty/sends a fetch to see if username/password is correct
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+
+    const res = await fetch('/loginvalidation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (res.ok) {
+      // Handle success
+    } else {
+      // Handle error
+    }
+  };
+  // takes the new changes in the form and updates the formdata
+  const HandleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //login component/design
   return(
     <>
     <div>
