@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 // function to build Registration
 function RegistrationComp(){
-  //build inside of return
+  //build inside of return <>
 return(
   <>
       <div>
@@ -20,7 +20,7 @@ return(
 
 // function to build Login window
 function LoginComp(){
-  //Build inside of return
+  //Build inside of return <>
   return(
     <>
     <div>
