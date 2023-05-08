@@ -25,6 +25,7 @@ export default function Login() {
               src="https://imgpile.com/images/9NDeGC.jpg"
               alt="Your Company"
             />
+            <h1 className="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">Irelevant Discussions</h1>
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign in
             </h2>
