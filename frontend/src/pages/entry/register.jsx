@@ -11,10 +11,10 @@ export default function Register() {
               alt="Your Company"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Register Here Buddy
+              Register
             </h2>
           </div>
-  
+        
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" action="#" method="POST">
               <div>
