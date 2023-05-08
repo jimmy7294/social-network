@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 export default function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("test@test");
+  const [password, setPassword] = useState("1234");
   const [firstName, setFirstName] = useState("First Name");
   const [lastName, setLastName] = useState("Last Name");
   const [birthDate, setBirthDate] = useState("Birth Date");
@@ -47,15 +47,15 @@ export default function Register() {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h1 className="mt-10 text-center text-3xl font-american-type-writer leading-9 tracking-tight text-gray-900">
+            Irelevant Discussion(s)
+          </h1>
           <img
             className="mx-auto h-40 w-auto"
             src="../images/My_Video_Page.png"
             alt="Your Company"
           />
-          <h1 className="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
-            Irelevant Discussions
-          </h1>
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-10 text-center text-2xl font-american-type-writer leading-9 tracking-tight text-gray-900">
             {registrationDone ? "Optional Information" : "Register"}
           </h2>
         </div>
@@ -70,7 +70,7 @@ export default function Register() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-md font-american-type-writer leading-6 text-gray-900"
               >
                 Email address
               </label>
@@ -82,7 +82,7 @@ export default function Register() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                 />
               </div>
             </div>
@@ -91,11 +91,11 @@ export default function Register() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="firstName"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-md font-american-type-writer leading-6 text-gray-900"
                 >
                   First Name
                 </label>
-                <div className="text-sm"></div>
+                <div className="text-md"></div>
               </div>
               <div className="mt-2">
                 <input
@@ -105,7 +105,7 @@ export default function Register() {
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                 />
               </div>
             </div>
@@ -114,11 +114,11 @@ export default function Register() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="lastName"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-md font-american-type-writer leading-6 text-gray-900"
                 >
                   Last Name
                 </label>
-                <div className="text-sm"></div>
+                <div className="text-md"></div>
               </div>
               <div className="mt-2">
                 <input
@@ -128,7 +128,7 @@ export default function Register() {
                   required
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                 />
               </div>
             </div>
@@ -137,7 +137,7 @@ export default function Register() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="birthDate"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-md font-american-type-writer leading-6 text-gray-900"
                 >
                   Date of Birth
                 </label>
@@ -150,7 +150,7 @@ export default function Register() {
                   required
                   value={birthDate}
                   onChange={(e) => setBirthDate(e.target.value)}
-                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                 />
               </div>
             </div>
@@ -159,7 +159,7 @@ export default function Register() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-md font-american-type-writer leading-6 text-gray-900"
                 >
                   Password
                 </label>
@@ -172,7 +172,7 @@ export default function Register() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                 />
               </div>
             </div>
@@ -180,7 +180,7 @@ export default function Register() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-md font-american-type-writer leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Register
               </button>
@@ -198,7 +198,7 @@ export default function Register() {
             <div>
               <label
                 htmlFor="avatar"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-md font-american-type-writer leading-6 text-gray-900"
               >
                 Avatar
               </label>
@@ -209,7 +209,7 @@ export default function Register() {
                   type="avatar"
                   value={avatar}
                   onChange={(e) => setAvatar(e.target.value)}
-                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                 />
               </div>
             </div>
@@ -218,7 +218,7 @@ export default function Register() {
             <div>
               <label
                 htmlFor="nickname"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-md font-american-type-writer leading-6 text-gray-900"
               >
                 Nickname
               </label>
@@ -229,7 +229,7 @@ export default function Register() {
                   type="nickname"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                 />
               </div>
             </div>
@@ -238,11 +238,11 @@ export default function Register() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="aboutMe"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-md font-american-type-writer leading-6 text-gray-900"
                 >
                   About Me
                 </label>
-                <div className="text-sm"></div>
+                <div className="text-md"></div>
               </div>
               <div className="mt-2">
                 <input
@@ -251,7 +251,7 @@ export default function Register() {
                   type="aboutMe"
                   value={aboutMe}
                   onChange={(e) => setAboutMe(e.target.value)}
-                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
                 />
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function Register() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-md font-american-type-writer leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Finish
               </button>
@@ -268,11 +268,11 @@ export default function Register() {
         </div>
 
         {/* Link for login */}
-        <p className="mt-10 text-center text-sm text-gray-500">
+        <p className="font-american-type-writer mt-10 text-center text-md text-gray-500">
           Already a user?{" "}
           <Link
             href="/entry/login"
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            className="font-american-type-writer leading-6 text-indigo-600 hover:text-indigo-500"
           >
             Login here
           </Link>
