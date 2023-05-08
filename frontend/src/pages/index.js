@@ -7,15 +7,18 @@ import { useRouter } from 'next/router';
 
 function MyComponent() {
   const router = useRouter();
-
-  if (Cookies.get('myCookie') !== undefined) {
-    // The cookie exists, do something
-    return(
-    <h2>Hello</h2>
-    )
-  } else {
-    router.push('/entry/login');
+  if (typeof window !== 'undefined') {
+    if (Cookies.get('myCookie') !== undefined) {
+      // The cookie exists, do something
+      return(
+        <h2>Hello</h2>
+      )
+    } else {
+      router.push('/entry/login');
+    }
   }
+
+
 }
 
 
