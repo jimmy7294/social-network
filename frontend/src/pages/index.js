@@ -15,6 +15,7 @@ function RegistrationComp(){
   });
 //makes sure that the submuit it not empty/sends a fetch to see if username/password is correct
   const HandleRegistration = async (e) => {
+    //makes sure form is not empty will need changing
     e.preventDefault();
 
     const res = await fetch('/registrationvalidation', {
@@ -26,7 +27,7 @@ function RegistrationComp(){
     });
 
     if (res.ok) {
-      // Handle success
+     localStorage.setItem
     } else {
       // Handle error
     }
@@ -56,10 +57,8 @@ return(
 // function to build Login window
 function LoginComp(){
   //updates form values
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 //makes sure that the submuit it not empty/sends a fetch to see if username/password is correct
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -69,7 +68,7 @@ function LoginComp(){
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({email,password}),
     });
 
     if (res.ok) {
@@ -80,10 +79,8 @@ function LoginComp(){
   };
   // takes the new changes in the form and updates the formdata
   const HandleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setEmail(e.taget.value)
+    setPassword(e.target.value)
   };
 
   //login component/design
