@@ -1,10 +1,43 @@
 import { headers } from "next/dist/client/components/headers";
+import { useState } from "react";
 
 // function to build Registration
 function RegistrationComp(){
 
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    nickname: '',
+    about: '',
+    firstName: '',
+    lastName: '',
 
+  });
+//makes sure that the submuit it not empty/sends a fetch to see if username/password is correct
+  const HandleRegistration = async (e) => {
+    e.preventDefault();
 
+    const res = await fetch('/registrationvalidation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (res.ok) {
+      // Handle success
+    } else {
+      // Handle error
+    }
+  };
+  // takes the new changes in the form and updates the formdata
+  const HandleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   //build inside of return <>
 return(
@@ -18,8 +51,6 @@ return(
       </>
 )
 }
-
-
 
 
 // function to build Login window
