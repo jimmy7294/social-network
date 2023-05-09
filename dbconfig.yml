@@ -1,0 +1,4 @@
+development:
+    dialect: sqlite3
+    datasource: backend/database/network.db
+    dir: backend/internal/migrations/
