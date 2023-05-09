@@ -17,6 +17,7 @@ export default async function handlerLogin(req, res) {
                 email,
                 password,
             },
+            
         };
         res.status(200).json(response);
     } else {
