@@ -1,17 +1,18 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `users`
 (
-	`id`	INTEGER NOT NULL,
+	`id`	INTEGER,
 	`password`	INTEGER NOT NULL,
-	`email`	TEXT,
-	`firstname`	TEXT,
-	`lastname`	TEXT,
-	`DOB`	INTEGER,
+	`email`	TEXT NOT NULL,
+	`firstname`	TEXT NOT NULL,
+	`lastname`	TEXT NOT NULL,
+	`DOB`	INTEGER NOT NULL,
 	`avatar`	BLOB,
 	`nickname`	TEXT,
 	`aboutMe`	TEXT,
 	`session_token`	INTEGER,
-	PRIMARY KEY(`id`)
+	`privacy` TEXT NOT NULL,
+	PRIMARY KEY(`id` AUTOINCREMENT)
 );
 
 -- +migrate Down
