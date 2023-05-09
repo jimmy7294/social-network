@@ -1,31 +1,35 @@
 import Link from "next/link";
 import { useState } from "react";
 import Router from "next/router";
+import {signIn} from "next-auth/react";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-    console.log("loginData:", data);
 
-    if (data.status === "success") {
-      // redirect to home page
-      Router.push("/");
+    // Use the signIn function from next-auth/client
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (result.error) {
+      console.error("Error:", result.error);
     } else {
-      if (data.status === "fail") {
-        data.errors.map((err) => {
-          console.log(err.msg);
-        });
-      }
+      // Redirect to home page
+      signIn("credentials", {
+        redirect: false,
+        email: email,
+        password: password,
+        })
+        console.log("Success:", result)
+        console.log("user credentials", email, password)
+        console.log("session", result.session)
+      Router.push("/");
     }
   };
   return (

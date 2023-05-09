@@ -2,71 +2,51 @@
 // import { redirect } from "next/dist/server/api-utils";
 // import Link from "next/link";
 // import { useEffect, useState } from "react";
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 import { useRouter } from 'next/router';
-import { headers } from "next/dist/client/components/headers";
-import { useState } from "react";
-
-// function to build Registration
-function RegistrationComp(){
-
+import Router from 'next/router';
+import {NextPage } from 'next';
+import { useEffect } from "react";
+import { useSession, signIn, signOut } from "next-auth/react"
 
 
 
-  //build inside of return <>
-return(
-  <>
-      <div>
-        <h2>FUCKING NAME IT </h2>
-      </div>
-      <div>
-        <h2>mooo</h2>
-      </div>
-      </>
-)
-}
+export default function Authorized() {
+  const {  data: session } = useSession()
+  console.log(session)
+  useEffect(() => {
+    if (!session) Router.replace('/entry/login')
+  }, [session])
 
-
-// function to build Login window
-function LoginComp(){
-  //updates form values
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-//makes sure that the submuit it not empty/sends a fetch to see if username/password is correct
-  const HandleSubmit = async (e) => {
-    e.preventDefault();
-
-    const res = await fetch('/loginvalidation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({email,password}),
-    });
-
-    if (res.ok) {
-      // Handle success
-    } else {
-      router.push('/entry/login');
-    }
-  };
-  // takes the new changes in the form and updates the formdata
-  const HandleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  //login component/design
-  return(
-    <>
-    <div>
-      <h2>Something</h2>
-    </div>
+  if(session) {
+    return <>
+      Signed in as {session.user.email} <br/>
+      <button onClick={() => signOut()}>Sign out</button>
     </>
-  )
+  } 
+  // else redirect to login page
+  return <>
+    Not signed in <br/>
+    <button onClick={() => signIn()}>Sign in</button>
+  </>
 }
+
+// function MyComponent() {
+//   const router = useRouter();
+//   if (typeof window !== 'undefined') {
+//     if (Cookies.get('myCookie') !== undefined) {
+//       // The cookie exists, do something
+//       return(
+//         <h2>Hello</h2>
+//       )
+//     } else {
+//       router.push('/entry/login');
+//     }
+//   }
+
+
+// }
+
 
 
 // function Chat(){
@@ -118,7 +98,7 @@ function LoginComp(){
 
 
 
-export default function Home() {
-  //MyComponent()
-return(<h1>moo</h1>)
-}
+// export default function Home() {
+//   MyComponent()
+// return(<h1>moo</h1>)
+// }
