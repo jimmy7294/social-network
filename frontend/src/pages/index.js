@@ -69,8 +69,6 @@ function LoginComp(){
 }
 
 
-}
-
 // function Chat(){
 //     return()
 // }
@@ -121,6 +119,6 @@ function LoginComp(){
 
 
 export default function Home() {
-  MyComponent()
+  //MyComponent()
 return(<h1>moo</h1>)
 }

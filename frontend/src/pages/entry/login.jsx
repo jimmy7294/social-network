@@ -30,22 +30,21 @@ export default function Login() {
   };
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h1 className="mt-10 text-center text-3xl font-american-type-writer leading-9 tracking-tight text-gray-900">
-            Irelevant Discussion(s)
-          </h1>
+      <div className="headbar">
+         
           <img
-            className="mx-auto h-40 w-auto"
-            src="../images/My_Video_Page.png"
+            className="logo"
+            src="../images/Rickrolling.png"
             alt="Your Company"
           />
-          <h2 className="mt-10 text-center text-2xl font-american-type-writer leading-9 tracking-tight text-gray-900">
+          <h1>
+            Irelevant Discussion
+          </h1>
+        </div>
+        <div class="signin-window"> 
+          <h2>
             Sign in
           </h2>
-        </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form
             className="space-y-6"
             action="#"
@@ -53,10 +52,7 @@ export default function Login() {
             onSubmit={handleSubmit}
           >
             <div>
-              <label
-                htmlFor="email"
-                className="block text-md font-american-type-writer leading-6 text-gray-900"
-              >
+              <label htmlFor="email">
                 Email address
               </label>
               <div className="mt-2">
@@ -68,27 +64,14 @@ export default function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
-                />
+                  class="input-field">
+                  </input>
               </div>
             </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-md font-american-type-writer leading-6 text-gray-900"
-                >
+              <div>
+                <label htmlFor="password">
                   Password
                 </label>
-                <div className="text-md">
-                  <a
-                    href="#"
-                    className="font-american-type-writer text-indigo-600 hover:text-indigo-500"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
@@ -99,32 +82,31 @@ export default function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
+                  class="input-field"
                 />
-              </div>
             </div>
-
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-md font-american-type-writer leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
+            <a href="https://youtu.be/eY52Zsg-KVI" class="forgot">
+                    Forgot password?
+            </a>
+            <div class="padder">
+              <button type="submit">
                 Sign in
               </button>
             </div>
+           
           </form>
 
           <p className="mt-10 text-center text-md text-gray-500">
             Not a user?{" "}
             <Link
               href="/entry/register"
-              className="font-american-type-writer leading-6 text-indigo-600 hover:text-indigo-500"
+              class="link-up"
             >
               Register here
             </Link>
           </p>
         </div>
-      </div>
+      
     </>
   );
 }
