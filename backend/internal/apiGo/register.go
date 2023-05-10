@@ -6,15 +6,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 )
 
 type reg struct {
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
-	Firstname string    `json:"firstName"`
-	Lastname  string    `json:"lastName"`
-	Birthdate time.Time `json:"birthDate"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Firstname string `json:"firstName"`
+	Lastname  string `json:"lastName"`
+	Birthdate string `json:"birthDate"`
 }
 
 func checkEmail(email string) error {
@@ -34,27 +33,32 @@ func registerUser(regData reg) error {
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("body before", r.Body)
 	helper.EnableCors(&w)
-	if r.Method != http.MethodPost {
-		return
+	//w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	//w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	fmt.Println(r.Method)
+	if r.Method == http.MethodPost {
+		var data reg
+		err := json.NewDecoder(r.Body).Decode(&data)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("body", r.Body)
+		fmt.Println("decoded data from fetch", data)
+		err = checkEmail(data.Email)
+		if err == nil {
+			fmt.Println(err)
+			helper.WriteResponse(w, "email")
+			return
+		}
+		err = registerUser(data)
+		if err != nil {
+			fmt.Println(err)
+			helper.WriteResponse(w, "database")
+			return
+		}
+		helper.WriteResponse(w, "success")
 	}
-	var data reg
-	err := json.NewDecoder(r.Body).Decode(&data)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(data)
-	err = checkEmail(data.Email)
-	if err != nil {
-		fmt.Println(err)
-		helper.WriteResponse(w, "email")
-		return
-	}
-	err = registerUser(data)
-	if err != nil {
-		fmt.Println(err)
-		helper.WriteResponse(w, "database")
-		return
-	}
-	helper.WriteResponse(w, "success")
+
 }

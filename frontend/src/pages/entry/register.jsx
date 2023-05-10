@@ -17,7 +17,7 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/register", {
+    const response = await fetch("http://localhost:8080/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export default function Register() {
 
   return (
     <>
-      <div class="headbar">
+      <div className="headbar">
         <h1> Irelevant Discussion </h1>
           <img
             className="logo"
@@ -79,7 +79,7 @@ export default function Register() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  class="input-field">
+                  className="input-field">
                   </input>
               </div>
             </div>

@@ -2,7 +2,6 @@
 CREATE TABLE IF NOT EXISTS `users`
 (
 	`id`	INTEGER,
-	`id`	INTEGER,
 	`password`	INTEGER NOT NULL,
 	`email`	TEXT NOT NULL,
 	`firstname`	TEXT NOT NULL,
@@ -12,8 +11,6 @@ CREATE TABLE IF NOT EXISTS `users`
 	`nickname`	TEXT,
 	`aboutMe`	TEXT,
 	`session_token`	INTEGER,
-	`privacy` TEXT NOT NULL,
-	PRIMARY KEY(`id` AUTOINCREMENT)
 	`privacy` TEXT NOT NULL,
 	PRIMARY KEY(`id` AUTOINCREMENT)
 );

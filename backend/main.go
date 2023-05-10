@@ -39,7 +39,6 @@ func main() {
 	}
 	//fmt.Println("file info", hello)
 	data.DB, err = sql.Open("sqlite3", "./database/network.db")
-	data.DB, err = sql.Open("sqlite3", "./database/network.db")
 	if err != nil {
 		fmt.Println("wrong bumbo", err)
 		return
