@@ -20,15 +20,8 @@ export default function Login() {
     if (result.error) {
       console.error("Error:", result.error);
     } else {
-      // Redirect to home page
-      signIn("credentials", {
-        redirect: false,
-        email: email,
-        password: password,
-        })
-        console.log("Success:", result)
-        console.log("user credentials", email, password)
-        console.log("session", result.session)
+        console.log("login.jsx - Log in Success:", result)
+        console.log("login.jsx - User credentials: ", email, password)
       Router.push("/");
     }
   };
