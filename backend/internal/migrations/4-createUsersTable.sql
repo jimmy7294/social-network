@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `users`
 	`email`	TEXT NOT NULL,
 	`firstname`	TEXT NOT NULL,
 	`lastname`	TEXT NOT NULL,
-	`DOB`	INTEGER NOT NULL,
+	`DOB`	TIMESTAMP NOT NULL,
 	`avatar`	BLOB,
 	`nickname`	TEXT,
 	`aboutMe`	TEXT,
