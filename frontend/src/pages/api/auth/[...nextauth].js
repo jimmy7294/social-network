@@ -10,7 +10,7 @@ const authOptions = {
       credentials: {},
       async authorize(credentials, req) {
         const {email, password} = credentials;
-        const user = await fetch('http://localhost:3000/api/login', {
+        const user = await fetch('http://localhost:8080/api/login', {
           method: 'POST',
           body: JSON.stringify({email, password}),
           headers: { 'Content-Type': 'application/json' }

@@ -66,24 +66,3 @@ func main() {
 		log.Fatalf("%v - Internal Server Error", http.StatusInternalServerError)
 	}
 }
-
-func getDummyPosts() {
-	rows, err := db.Query("SELECT * FROM post")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var result []MyRow
-
-	for rows.Next() {
-		var r MyRow
-		err = rows.Scan()
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, r)
-	}
-
-	return result, nil
-}

@@ -43,6 +43,7 @@ export default function Login() {
             Sign in
           </h2>
           <form
+            className="space-y-6"
             action="#"
             method="POST"
             onSubmit={handleSubmit}
@@ -57,7 +58,6 @@ export default function Login() {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  placeholder="Email@Example"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -76,7 +76,6 @@ export default function Login() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  placeholder="Password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
