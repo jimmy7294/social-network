@@ -34,6 +34,7 @@ func registerUser(regData reg) error {
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
+	helper.EnableCors(&w)
 	if r.Method != http.MethodPost {
 		return
 	}
