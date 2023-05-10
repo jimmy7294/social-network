@@ -45,12 +45,11 @@ export default function Login() {
             Irelevant Discussion
           </h1>
         </div>
-        <div class="signin-window"> 
+        <div className="signin-window"> 
           <h2>
             Sign in
           </h2>
           <form
-            className="space-y-6"
             action="#"
             method="POST"
             onSubmit={handleSubmit}
@@ -65,10 +64,11 @@ export default function Login() {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  placeholder="Email@Example"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  class="input-field">
+                  className="input-field">
                   </input>
               </div>
             </div>
@@ -83,16 +83,17 @@ export default function Login() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
+                  placeholder="Password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  class="input-field"
+                  className="input-field"
                 />
             </div>
-            <a href="https://youtu.be/eY52Zsg-KVI" class="forgot">
+            <a href="https://youtu.be/eY52Zsg-KVI" className="forgot">
                     Forgot password?
             </a>
-            <div class="padder">
+            <div className="padder">
               <button type="submit">
                 Sign in
               </button>
@@ -104,7 +105,7 @@ export default function Login() {
             Not a user?{" "}
             <Link
               href="/entry/register"
-              class="link-up"
+              className="link-up"
             >
               Register here
             </Link>
