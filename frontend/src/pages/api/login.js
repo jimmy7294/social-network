@@ -17,12 +17,17 @@ export default async function handlerLogin(req, res) {
                 password,
             },
         };
+<<<<<<< HEAD
         
         // set cookie to remember user is logged in and redirect to home page
 
         res.status(200).json(response)  
 
         
+=======
+        console.log("response: ", response)
+        res.status(200).json(response);
+>>>>>>> 84cc78f (main page navigation)
     } else {
         // Handle any other HTTP method
         res.status(200).json({ name: 'John Doe' })

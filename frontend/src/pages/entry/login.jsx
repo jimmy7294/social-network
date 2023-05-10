@@ -20,15 +20,8 @@ export default function Login() {
     if (result.error) {
       console.error("Error:", result.error);
     } else {
-      // Redirect to home page
-      signIn("credentials", {
-        redirect: false,
-        email: email,
-        password: password,
-        })
-        console.log("Success:", result)
-        console.log("user credentials", email, password)
-        console.log("session", result.session)
+        console.log("login.jsx - Log in Success:", result)
+        console.log("login.jsx - User credentials: ", email, password)
       Router.push("/");
     }
   };
@@ -45,7 +38,7 @@ export default function Login() {
             Irelevant Discussion
           </h1>
         </div>
-        <div class="signin-window"> 
+        <div className="signin-window"> 
           <h2>
             Sign in
           </h2>
@@ -68,7 +61,7 @@ export default function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  class="input-field">
+                  className="input-field">
                   </input>
               </div>
             </div>
@@ -86,13 +79,13 @@ export default function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  class="input-field"
+                  className="input-field"
                 />
             </div>
-            <a href="https://youtu.be/eY52Zsg-KVI" class="forgot">
+            <a href="https://youtu.be/eY52Zsg-KVI" className="forgot">
                     Forgot password?
             </a>
-            <div class="padder">
+            <div className="padder">
               <button type="submit">
                 Sign in
               </button>
@@ -104,7 +97,7 @@ export default function Login() {
             Not a user?{" "}
             <Link
               href="/entry/register"
-              class="link-up"
+              className="link-up"
             >
               Register here
             </Link>
