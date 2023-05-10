@@ -1,5 +1,6 @@
 import { data } from "autoprefixer";
 import { NextApiRequest, NextApiResponse } from "next";
+import Cookies from 'js-cookie'
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {

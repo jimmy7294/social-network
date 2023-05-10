@@ -39,7 +39,7 @@ export default function Register() {
     const data = { success: true };
     //Navigate to the login page after successful registration
     if (data.success) {
-      router.push("/entry/login");
+      router.push("/");
     }
   };
 

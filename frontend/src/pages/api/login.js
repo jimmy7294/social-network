@@ -1,5 +1,4 @@
 
-
 export default async function handlerLogin(req, res) {
     if (req.method === "POST") {
         // Process a POST request
@@ -17,11 +16,16 @@ export default async function handlerLogin(req, res) {
                 email,
                 password,
             },
-            
         };
-        res.status(200).json(response);
+        
+        // set cookie to remember user is logged in and redirect to home page
+
+        res.status(200).json(response)  
+
+        
     } else {
         // Handle any other HTTP method
         res.status(200).json({ name: 'John Doe' })
     }
 }
+
