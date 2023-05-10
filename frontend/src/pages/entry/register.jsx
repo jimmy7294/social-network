@@ -45,14 +45,11 @@ export default function Register() {
 
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h1 className="mt-10 text-center text-3xl font-american-type-writer leading-9 tracking-tight text-gray-900">
-            Irelevant Discussion(s)
-          </h1>
+      <div class="headbar">
+        <h1> Irelevant Discussion </h1>
           <img
-            className="mx-auto h-40 w-auto"
-            src="../images/My_Video_Page.png"
+            className="logo"
+            src="../images/Rickrolling.png"
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-american-type-writer leading-9 tracking-tight text-gray-900">
@@ -82,8 +79,8 @@ export default function Register() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-md sm:leading-6"
-                />
+                  class="input-field">
+                  </input>
               </div>
             </div>
             {/*First Name*/}
@@ -277,7 +274,6 @@ export default function Register() {
             Login here
           </Link>
         </p>
-      </div>
     </>
   );
 }
