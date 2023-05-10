@@ -18,6 +18,7 @@ export default async function handlerLogin(req, res) {
             },
         };
 <<<<<<< HEAD
+<<<<<<< HEAD
         
         // set cookie to remember user is logged in and redirect to home page
 
@@ -25,6 +26,8 @@ export default async function handlerLogin(req, res) {
 
         
 =======
+=======
+>>>>>>> 84cc78f (main page navigation)
         console.log("response: ", response)
         res.status(200).json(response);
 >>>>>>> 84cc78f (main page navigation)
