@@ -1,27 +1,44 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.headbar {
+    display: flex;
+    background-size: cover;
+    height: fit-content;
+    width: 400px;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    top: 10%;
+   }
+.logo {
+    height: 75px;
+    width: 75px;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.signin-window {
+    border: solid 2px #4faa92;
+    display: grid;
+    justify-content: center;
+    font-size: large;
+    position: relative;
+    top: 40%;
 }
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #213049;
+    color: #e3f2ee;
+}
+.forgot, .link-up {
+    color: #b5afb3;
+}
+.mt-2 {
+    width: 200px;
+    height: 25px;
+    margin: 2px;
+}
+.input-field {
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+}
+.padder {
+    margin: 3px;
 }
