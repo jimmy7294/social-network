@@ -28,6 +28,7 @@ func runMigrations() {
 func setupApi() {
 	http.HandleFunc("/api/register", apiGO.Register)
 	http.HandleFunc("/api/login", apiGO.Login)
+	http.HandleFunc("/api/updateSettings", apiGO.UpdateSettings)
 }
 
 func main() {

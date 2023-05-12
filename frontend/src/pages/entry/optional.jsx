@@ -13,7 +13,7 @@ export default function Optional() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/updateSettings", {
+    const response = await fetch("http://localhost:8080/api/updateSettings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
