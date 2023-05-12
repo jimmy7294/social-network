@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS `users`
 (
 	`id`	INTEGER,
-	`password`	INTEGER NOT NULL,
+	`passwrd`	INTEGER NOT NULL,
 	`email`	TEXT NOT NULL,
 	`firstname`	TEXT NOT NULL,
 	`lastname`	TEXT NOT NULL,

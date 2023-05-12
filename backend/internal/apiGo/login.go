@@ -14,7 +14,7 @@ type loginData struct {
 }
 
 func checkLoginDetails(email, password string) bool {
-	sqlStmt := "SELECT uid FROM user WHERE email = ? AND password = ?;"
+	sqlStmt := "SELECT id FROM user WHERE email = ? AND passwrd = ?;"
 	var dum int
 	err := data.DB.QueryRow(sqlStmt, email, password).Scan(&dum)
 	return err == nil
@@ -27,7 +27,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		var logDat loginData
 		err := json.NewDecoder(r.Body).Decode(&logDat)
 		if err != nil {
-			fmt.Println(err)
 			return
 		}
 		if !helper.CheckIfStringExist("user", "email", logDat.Email) {
@@ -38,6 +37,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "incorrect_password")
 			return
 		}
+		fmt.Println("login success")
 		helper.WriteResponse(w, "success")
 	}
 }
