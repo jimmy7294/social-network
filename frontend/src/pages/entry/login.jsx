@@ -93,7 +93,7 @@ export default function Login() {
            
           </form>
 
-          <p className="mt-10 text-center text-md text-gray-500">
+          <p className="text">
             Not a user?{" "}
             <Link
               href="/entry/register"

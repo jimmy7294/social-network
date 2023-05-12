@@ -50,10 +50,8 @@ export default function Optional() {
               className="input-field"
             ></input>
           </div>
-          <div>
-            <label htmlFor="aboutMe">About Me</label>
+          <label htmlFor="aboutMe">About Me</label>
             <div className="aboutMe">
-              {" "}
               <textarea
                 id="aboutMe"
                 name="aboutMe"
@@ -63,16 +61,17 @@ export default function Optional() {
                 onChange={(e) => setAboutMe(e.target.value)}
                 className="aboutMe"
               ></textarea>
-            </div>
-            <div>
-              <button type="submit" className="padder">
-                Finnish
-              </button>
-            </div>
+            
           </div>
+        <div className="finish">
+          <button type="submit" className="">
+            Finnish
+          </button>
+        </div>
         </form>
-        <p className="">
-          don't wanna expose yourself ? <br></br>
+
+        <p className="text">
+          don't wanna expose yourself? {" "}
           <Link href="/entry/login" className="link-up">
             Skip
           </Link>
