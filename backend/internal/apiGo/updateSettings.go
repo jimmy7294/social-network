@@ -8,9 +8,10 @@ import (
 )
 
 type settings struct {
-	Image    []byte
-	Privacy  string
-	Nickname string
+	Image    []byte `json:"avatar"`
+	Privacy  string `json:"privacy"`
+	Nickname string `json:"nickname"`
+	AboutMe  string `json:"aboutMe"`
 }
 
 func UpdateSettings(w http.ResponseWriter, r *http.Request) {
@@ -41,6 +42,14 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 			err = helper.UpdateTableColumnStringById("user", settData.Nickname, "nickname", uid)
 			if err != nil {
 				helper.WriteResponse(w, "nickname")
+				return
+			}
+		}
+
+		if len(settData.AboutMe) > 0 {
+			err = helper.UpdateTableColumnStringById("user", settData.AboutMe, "aboutMe", uid)
+			if err != nil {
+				helper.WriteResponse(w, "aboutMe")
 				return
 			}
 		}
