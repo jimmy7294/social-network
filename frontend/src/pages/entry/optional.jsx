@@ -6,17 +6,19 @@ export default function Optional() {
   const [nickname, setNickname] = useState("");
   const [avatar, setAvatar] = useState("");
   const [aboutMe, setAboutMe] = useState("");
+  const [private, setPrivate] = useState(false);
+
 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/register", {
+    const response = await fetch("/api/updateSettings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nickname, aboutMe }),
+      body: JSON.stringify({ nickname, aboutMe,private,avatar }),
     });
     const data = await response.json();
     console.log("Register data:", data);
@@ -38,17 +40,9 @@ export default function Optional() {
       </div>
       <div className="signin-window">
         <form className="" onSubmit={handleSubmit}>
-          <label htmlFor="Nickname">Nickname</label>
-          <div className="mt-2">
-            <input
-              id="Nickname"
-              name="Nickname"
-              type="Nickname"
-              placeholder="Nickname"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              className="input-field"
-            ></input>
+        <label for="image">Choose an image:</label>
+  <input type="file" name="image" id="image">
+  <input type="submit" value="Upload">
           </div>
           <label htmlFor="aboutMe">About Me</label>
             <div className="aboutMe">
@@ -63,6 +57,19 @@ export default function Optional() {
               ></textarea>
             
           </div>
+            <div>
+                <label for="image">Choose an image:</label>
+              <input type="file" name="image" id="image"></input>
+               <input type="submit" value="Upload"></input>
+            </div>
+            <div>
+            <input type="radio" id="public" name="access" value="public"></input>
+            <label for="public">Public</label><br></br>
+            <input type="radio" id="private" name="access" value="private"></input>
+             <label for="private">Private</label><br></br>
+            </div>
+
+
         <div className="finish">
           <button type="submit" className="">
             Finnish
