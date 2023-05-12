@@ -4,14 +4,14 @@ import Link from "next/link";
 
 export default function Optional() {
   const [nickname, setNickname] = useState("");
-  const [avatar, setAvatar] = useState("");
+  //const [avatar, setAvatar] = useState("");
   const [aboutMe, setAboutMe] = useState("");
 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/register", {
+    const response = await fetch("/api/updateSettings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
