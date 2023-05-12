@@ -6,7 +6,7 @@ export default function Optional() {
   const [nickname, setNickname] = useState("");
   const [avatar, setAvatar] = useState("");
   const [aboutMe, setAboutMe] = useState("");
-  //const [private, setPrivate] = useState(false);
+  const [hidden, setPrivate] = useState(false);
 
 
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function Optional() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nickname, aboutMe,avatar }),
+      body: JSON.stringify({ nickname, aboutMe,avatar, hidden}),
     });
     const data = await response.json();
     console.log("Register data:", data);
@@ -41,10 +41,13 @@ export default function Optional() {
 
       <div className="signin-window">
         <form className="" onSubmit={handleSubmit}>
+        
+        <div>
         <label for="image">Choose an image:</label>
-  <input type="file" name="image" id="image"></input>
-  <input type="submit" value="Upload"></input>
-  
+        <input type="file" name="image" id="image"></input>
+        <input type="submit" value="Upload"></input>
+        </div>
+  <br />
           <label htmlFor="aboutMe">About Me</label>
             <div className="aboutMe">
               <textarea
@@ -57,11 +60,7 @@ export default function Optional() {
                 className="aboutMe"
               ></textarea>
             </div>
-          <div>
-                <label for="image">Choose an image:</label>
-              <input type="file" name="image" id="image"></input>
-               <input type="submit" value="Upload"></input>
-            </div>
+
             <div>
             <input type="radio" id="public" name="access" value="public"></input>
             <label for="public">Public</label><br></br>
