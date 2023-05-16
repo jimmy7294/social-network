@@ -3,6 +3,8 @@ import Link from "next/link";
 async function fetchPost() {
   // fetch some post data from a random API
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second
   const post = await res.json();
   return post;
 }

@@ -13,18 +13,14 @@
 //     </div>
 //   );
 // }
-
+import Profile from "./components/Profile"
 import Link from "next/link"
 
 const HomePage = () => {
   return (
     <div>
-      <h1>Meow meow</h1>
-      <ul>
-        <li><Link href='/'>Meow Home</Link></li>
-        <li><Link href='/profile'>Meow Profile</Link></li>
-        <li><Link href='/profile/group'>Meow Group</Link></li>
-      </ul>
+      <h1>Meow meow meow</h1>
+      <Profile />
     </div>
   )
 }
