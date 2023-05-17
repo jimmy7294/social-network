@@ -16,3 +16,12 @@ rjaact
 ## Font Reference
 
 Roboto mono - https://fonts.google.com/specimen/Roboto+Mono
+
+
+## make go terminal commands work
+(in terminal):
+code ~/.zshrc
+
+Then put this line in the file:
+
+export PATH="$PATH:/Users/username here/go/bin"
