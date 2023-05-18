@@ -1,8 +1,8 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `allowedUsers`
 (
-    `postId` INTEGER NOT NULL,
-    `userId` INTEGER NOT NULL
+    `post_id` INTEGER NOT NULL,
+    `uuid` INTEGER NOT NULL
 );
 
 -- +migrate Down

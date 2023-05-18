@@ -1,11 +1,9 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `eventOptionChoices`
 (
-    `id` INTEGER,
-    `eventId` INTEGER NOT NULL,
-    `userId` INTEGER NOT NULL,
-    `choice` TEXT NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `event_id` INTEGER NOT NULL,
+    `uuid` INTEGER NOT NULL,
+    `choice` TEXT NOT NULL
 );
 
 -- +migrate Down

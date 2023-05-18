@@ -1,12 +1,13 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `groupChat`
 (
-    `id` INTEGER,
-    `groupId` INTEGER NOT NULL,
-    `sender` TEXT NOT NULL,
-    `content` TEXT NOT NULL,
-    `date` TIMESTAMP NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `gc_id` INTEGER,
+    `group_id` INTEGER NOT NULL,
+    `gc_sender` INTEGER NOT NULL,
+    `gc_content` TEXT NOT NULL,
+    `gc_image` BLOB,
+    `creation_date` TIMESTAMP NOT NULL,
+    PRIMARY KEY(`gc_id` AUTOINCREMENT)
 );
 
 -- +migrate Down

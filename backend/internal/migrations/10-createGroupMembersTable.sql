@@ -1,10 +1,9 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `groupMembers`
 (
-    `id` INTEGER,
-    `groupId` INTEGER NOT NULL,
-    `userId` INTEGER NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `group_id` INTEGER NOT NULL,
+    `uuid` INTEGER NOT NULL,
+    `role` TEXT NOT NULL
 );
 
 -- +migrate Down

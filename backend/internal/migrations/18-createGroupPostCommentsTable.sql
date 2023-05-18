@@ -1,13 +1,14 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `groupPostComments`
 (
-    `id` INTEGER,
-    `postId` INTEGER NOT NULL,
-    `groupId` INTEGER NOT NULL,
-    `content` TEXT,
-    `image` BLOB,
-    `date` TIMESTAMP NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `gpcomment_id` INTEGER,
+    `gpost_id` INTEGER NOT NULL,
+    `group_id` INTEGER NOT NULL,
+    `gpcomment_author` INTEGER NOT NULL,
+    `gpcomment_content` TEXT,
+    `gpcomment_image` BLOB,
+    `creation_date` TIMESTAMP NOT NULL,
+    PRIMARY KEY(`gpcomment_id` AUTOINCREMENT)
 );
 
 -- +migrate Down

@@ -1,11 +1,12 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `requests`
 (
-    `id` INTEGER,
-    `sender` TEXT NOT NULL,
-    `reciever` TEXT NOT NULL,
-    `type` TEXT NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `req_id` INTEGER,
+    `req_sender` INTEGER NOT NULL,
+    `req_reciever` INTEGER NOT NULL,
+    `req_type` TEXT NOT NULL,
+    `creation_date` TIMESTAMP NOT NULL,
+    PRIMARY KEY(`req_id` AUTOINCREMENT)
 );
 
 -- +migrate Down

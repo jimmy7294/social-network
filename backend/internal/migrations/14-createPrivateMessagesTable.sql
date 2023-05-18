@@ -1,12 +1,13 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `privateMessages`
 (
-    `id` INTEGER,
-    `sender` TEXT NOT NULL,
-    `reciever` TEXT NOT NULL,
-    `content` TEXT NOT NULL,
-    `date` TIMESTAMP NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `pmg_id` INTEGER,
+    `pmg_sender` INTEGER NOT NULL,
+    `pmg_reciever` INTEGER NOT NULL,
+    `pmg_content` TEXT NOT NULL,
+    `pmg_image` BLOB,
+    `creation_date` TIMESTAMP NOT NULL,
+    PRIMARY KEY(`pmg_id` AUTOINCREMENT)
 );
 
 -- +migrate Down

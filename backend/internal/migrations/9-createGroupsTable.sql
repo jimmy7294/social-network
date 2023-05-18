@@ -1,11 +1,11 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `groups`
 (
-    `id` INTEGER,
-    `creator` INTEGER NOT NULL,
-    `name` TEXT NOT NULL,
-    `date` TIMESTAMP NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `group_id` INTEGER,
+    `group_creator` INTEGER NOT NULL,
+    `group_name` TEXT NOT NULL,
+    `creation_date` TIMESTAMP NOT NULL,
+    PRIMARY KEY(`group_id` AUTOINCREMENT)
 );
 
 -- +migrate Down

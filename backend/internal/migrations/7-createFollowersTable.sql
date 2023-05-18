@@ -1,10 +1,8 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `followers`
 (
-    `userId` INTEGER NOT NULL,
-    `followerId` INTEGER NOT NULL,
-    `followDate` TIMESTAMP NOT NULL,
-    PRIMARY KEY(`userId`)
+    `uuid` INTEGER NOT NULL,
+    `follower_id` INTEGER NOT NULL
 );
 
 -- +migrate Down

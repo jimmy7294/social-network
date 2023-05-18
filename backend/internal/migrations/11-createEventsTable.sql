@@ -1,13 +1,13 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `events`
 (
-    `id` INTEGER,
-    `title` TEXT NOT NULL,
-    `content` TEXT NOT NULL,
-    `creationDate` TIMESTAMP NOT NULL,
-    `eventDate` TIMESTAMP NOT NULL,
+    `event_id` INTEGER,
+    `event_title` TEXT NOT NULL,
+    `event_content` TEXT NOT NULL,
+    `creation_date` TIMESTAMP NOT NULL,
+    `event_date` TIMESTAMP NOT NULL,
     `options` TEXT NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    PRIMARY KEY(`event_id` AUTOINCREMENT)
 );
 
 -- +migrate Down

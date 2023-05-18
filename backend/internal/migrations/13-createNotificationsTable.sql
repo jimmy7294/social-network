@@ -1,12 +1,12 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `notifications`
 (
-    `id` INTEGER,
-    `content` TEXT NOT NULL,
-    `date` TIMESTAMP,
-    `userId` INTEGER NOT NULL,
-    `type` INTEGER NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `notif_id` INTEGER,
+    `notif_content` TEXT NOT NULL,
+    `creation_date` TIMESTAMP,
+    `uuid` INTEGER NOT NULL,
+    `type` TEXT NOT NULL,
+    PRIMARY KEY(`notif_id` AUTOINCREMENT)
 );
 
 -- +migrate Down

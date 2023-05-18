@@ -1,14 +1,14 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `posts`
 (
-    `id` INTEGER,
-    `creator` INTEGER NOT NULL,
-    `privacy` TEXT NOT NULL,
-    `image` BLOB,
-    `date` TIMESTAMP NOT NULL,
-    `content` TEXT NOT NULL,
-    `title` TEXT NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `post_id` INTEGER,
+    `post_author` INTEGER NOT NULL,
+    `post_privacy` TEXT NOT NULL,
+    `post_image` BLOB,
+    `creation_date` TIMESTAMP NOT NULL,
+    `post_content` TEXT NOT NULL,
+    `post_title` TEXT NOT NULL,
+    PRIMARY KEY(`post_id` AUTOINCREMENT)
 );
 
 -- +migrate Down

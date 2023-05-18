@@ -1,14 +1,14 @@
 -- +migrate Up
 CREATE TABLE IF NOT EXISTS `groupPosts`
 (
-    `id` INTEGER,
-    `creator` INTEGER NOT NULL,
-    `groupId` INTEGER NOT NULL,
-    `image` BLOB,
-    `date` TIMESTAMP NOT NULL,
-    `content` TEXT NOT NULL,
-    `title` TEXT NOT NULL,
-    PRIMARY KEY(`id` AUTOINCREMENT)
+    `gpost_id` INTEGER,
+    `gpost_author` INTEGER NOT NULL,
+    `group_id` INTEGER NOT NULL,
+    `gpost_image` BLOB,
+    `creation_date` TIMESTAMP NOT NULL,
+    `gpost_content` TEXT NOT NULL,
+    `gpost_title` TEXT NOT NULL,
+    PRIMARY KEY(`gpost_id` AUTOINCREMENT)
 );
 
 -- +migrate Down
