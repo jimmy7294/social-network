@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `users`
 	`avatar`	BLOB,
 	`username`	TEXT,
 	`bio`	TEXT,
-	`session_token`	INTEGER,
+	`session_token`	TEXT,
 	`privacy` TEXT NOT NULL,
 	PRIMARY KEY(`uuid` AUTOINCREMENT)
 );
