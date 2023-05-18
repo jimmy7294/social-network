@@ -24,7 +24,7 @@ func checkEmail(email string) error {
 }
 
 func registerUser(regData reg) error {
-	sqlStmt, err := data.DB.Prepare(`INSERT INTO users(password, email, firstname, lastname, DOB, privacy) values(?,?,?,?,?,?)`)
+	sqlStmt, err := data.DB.Prepare(`INSERT INTO users(passwrd, email, firstname, lastname, DOB, privacy) values(?,?,?,?,?,?)`)
 	if err != nil {
 		return err
 	}

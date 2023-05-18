@@ -2,7 +2,6 @@ package helper
 
 import (
 	"backend/backend/internal/data"
-	"fmt"
 	"net/http"
 )
 
@@ -13,9 +12,8 @@ func WriteResponse(w http.ResponseWriter, status string) {
 
 func EnableCors(w *http.ResponseWriter) {
 	//(*w).Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	fmt.Println(w)
 }
 
 func UpdateTableColumnStringById(table, newData, column string, uid int) error {
