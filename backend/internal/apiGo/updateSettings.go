@@ -34,12 +34,12 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(settData.Nickname) > 0 {
-			nameTaken := helper.CheckIfStringExist("user", "nickname", settData.Nickname)
+			nameTaken := helper.CheckIfStringExist("users", "nickname", settData.Nickname)
 			if nameTaken {
 				helper.WriteResponse(w, "name_taken")
 				return
 			}
-			err = helper.UpdateTableColumnStringById("user", settData.Nickname, "nickname", uid)
+			err = helper.UpdateTableColumnStringById("users", settData.Nickname, "nickname", uid)
 			if err != nil {
 				helper.WriteResponse(w, "nickname")
 				return
@@ -47,7 +47,7 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(settData.AboutMe) > 0 {
-			err = helper.UpdateTableColumnStringById("user", settData.AboutMe, "aboutMe", uid)
+			err = helper.UpdateTableColumnStringById("users", settData.AboutMe, "aboutMe", uid)
 			if err != nil {
 				helper.WriteResponse(w, "aboutMe")
 				return
@@ -55,7 +55,7 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(settData.Image) > 0 {
-			err = helper.UpdateTableColumnByteById("user", settData.Image, "avatar", uid)
+			err = helper.UpdateTableColumnByteById("users", settData.Image, "avatar", uid)
 			if err != nil {
 				helper.WriteResponse(w, "image")
 				return
@@ -63,7 +63,7 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if settData.Privacy == "private" || settData.Privacy == "public" {
-			err = helper.UpdateTableColumnStringById("user", settData.Privacy, "privacy", uid)
+			err = helper.UpdateTableColumnStringById("users", settData.Privacy, "privacy", uid)
 			if err != nil {
 				helper.WriteResponse(w, "privacy")
 				return
