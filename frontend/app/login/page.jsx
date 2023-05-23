@@ -1,28 +1,33 @@
+"use client"
+
 import Link from "next/link";
 import { useState } from "react";
-import Router from "next/router";
-import { signIn } from "next-auth/react";
+import {useRouter} from "next/router";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const router = useRouter();
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Use the signIn function from next-auth/client
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
+    const response = await fetch("http://localhost:8080/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password}),
     });
+    const data = await response.json();
+    console.log("Register data:", data);
 
-    if (result.error) {
-      console.error("Error:", result.error);
+    
+    if (data.error) {
+      console.error("Error:", data.error);
     } else {
-      console.log("login.jsx - Log in Success:", result);
-      console.log("login.jsx - User credentials: ", email, password);
-      Router.push("/main/yours");
+      router.push("/")
     }
   };
   return (
@@ -83,7 +88,7 @@ export default function Login() {
 
         <p className="text">
           Not a user?{" "}
-          <Link href="/entry/register" className="link-up">
+          <Link href="/register" className="link-up">
             Register here
           </Link>
         </p>

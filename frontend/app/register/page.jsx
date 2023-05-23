@@ -1,23 +1,25 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from 'next/navigation';
+
 import Link from "next/link";
 
 export default function Register() {
-  const [email, setEmail] = useState("test@test");
-  const [password, setPassword] = useState("1234");
-  const [firstName, setFirstName] = useState("First Name");
-  const [lastName, setLastName] = useState("Last Name");
-  const [birthDate, setBirthDate] = useState("Birth Date");
-  const [nickname, setNickname] = useState("Nickname");
-  const [avatar, setAvatar] = useState("Avatar");
-  const [aboutMe, setAboutMe] = useState("About Me");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
   const [registrationDone, setRegistrationDone] = useState(false);
+ const router = useRouter();
 
-  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+   
     const response = await fetch("http://localhost:8080/api/register", {
       method: "POST",
       headers: {
@@ -269,7 +271,7 @@ export default function Register() {
       <p className="font-american-type-writer mt-10 text-center text-md text-gray-500">
         Already a user?{" "}
         <Link
-          href="/entry/login"
+          href="/login"
           className="font-american-type-writer leading-6 text-indigo-600 hover:text-indigo-500"
         >
           Login here
