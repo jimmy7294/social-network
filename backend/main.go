@@ -29,6 +29,7 @@ func setupApi() {
 	http.HandleFunc("/api/register", apiGO.Register)
 	http.HandleFunc("/api/login", apiGO.Login)
 	http.HandleFunc("/api/updateSettings", apiGO.UpdateSettings)
+	http.HandleFunc("/api/post", apiGO.PostApi)
 }
 
 func main() {

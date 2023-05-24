@@ -13,12 +13,19 @@ import (
 
 func CreateSessionToken(w http.ResponseWriter) string {
 
+	//w.Header().Set("Access-Control-Allow-Credentials", "true")
+	//w.Header().Set("Access-Control-Allow-Headers", "Content-Type, withCredentials")
+
 	sessionToken := uuid.Must(uuid.NewV4()).String()
 	http.SetCookie(w, &http.Cookie{
-		Name:    "session_token",
-		Value:   sessionToken,
-		Path:    "/",
-		Expires: time.Now().Add(1000000 * time.Second),
+		Name:  "session_token",
+		Value: sessionToken,
+		// Domain:   "localhost",
+		SameSite: http.SameSiteNoneMode,
+		Secure:   false,
+		HttpOnly: true,
+		Path:     "/",
+		Expires:  time.Now().Add(1000000 * time.Second),
 	})
 
 	return sessionToken
@@ -69,9 +76,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("failed password check", err, credentialsMatch, uid)
 			return
 		}
+		// w.Header().Set("Access-Control-Allow-Credentials", "true")
+		// w.Header().Set("Access-Control-Allow-Headers", "Content-Type, withCredentials")
 		token := CreateSessionToken(w)
 		updateSessionToken(token, uid)
 		fmt.Println("it do work")
+		fmt.Println(r.Cookie("session_token"))
+		fmt.Println(r.Cookie("next-auth.csrf-token"))
+		cok := r.Cookies()
+		fmt.Println("cok length", len(cok))
+		//fmt.Println(r.Header)
+		for _, sad := range cok {
+			fmt.Println(sad)
+		}
 		helper.WriteResponse(w, "success")
 	}
 }

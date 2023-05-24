@@ -2,6 +2,8 @@ package helper
 
 import (
 	"backend/backend/internal/data"
+	"errors"
+	"fmt"
 	"net/http"
 )
 
@@ -14,6 +16,9 @@ func EnableCors(w *http.ResponseWriter) {
 	//(*w).Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+	//(*w).Header().Add("Access-Control-Allow-Headers", "Content-Type, withCredentials")
+	fmt.Println((*w).Header())
 }
 
 func UpdateTableColumnStringById(table, newData, column string, uid int) error {
@@ -63,4 +68,20 @@ func CheckIfStringExist(table, column, tableData string) bool {
 	err := data.DB.QueryRow(sqlStmt, tableData).Scan(&dummy)
 
 	return err == nil
+}
+
+func GetUsername(uuid int) (string, error) {
+	sqlStmt := "SELECT username,email FROM users WHERE uuid = ?"
+	var email, username string
+	err := data.DB.QueryRow(sqlStmt, uuid).Scan(&email, &username)
+	if err != nil {
+		return "", err
+	}
+	if len(username) > 0 {
+		return username, nil
+	}
+	if len(email) > 0 {
+		return email, nil
+	}
+	return "", errors.New("user not found")
 }

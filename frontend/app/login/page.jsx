@@ -3,20 +3,27 @@
 import Link from "next/link";
 import { useState } from "react";
 import {useRouter} from "next/navigation";
+import { cookies } from "next/dist/client/components/headers";
+import cookie from "js-cookie"
 
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    cookie.set("test", "dgsihu", {expires: 1 /24})
+    let cok = cookie.get("test")
+    let cok2 = cookie.get()
+    console.log(cok)
+    console.log(cok2)
     const response = await fetch("http://localhost:8080/api/login", {
       method: "POST",
+      credentials: "include",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ email, password}),
     });

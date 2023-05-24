@@ -17,14 +17,14 @@ type reg struct {
 }
 
 func checkEmail(email string) error {
-	sqlStmt := `SELECT id FROM users WHERE email = ?;`
+	sqlStmt := `SELECT uuid FROM users WHERE email = ?;`
 	id := -1
 	err := data.DB.QueryRow(sqlStmt, email).Scan(id)
 	return err
 }
 
 func registerUser(regData reg) error {
-	sqlStmt, err := data.DB.Prepare(`INSERT INTO users(passwrd, email, firstname, lastname, DOB, privacy) values(?,?,?,?,?,?)`)
+	sqlStmt, err := data.DB.Prepare(`INSERT INTO users(password, email, first_name, last_name, DOB, privacy) values(?,?,?,?,?,?)`)
 	if err != nil {
 		return err
 	}
