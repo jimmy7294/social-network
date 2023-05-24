@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req, NextRequest){
     const cookie = req.cookies.get('session_token')
+    const cookie = req.cookies.get('session_token')
     //if there is no cookie pressent at all, redirct to login page
 if(cookie === undefined){
     return NextResponse.redirect("http://localhost:3000/login")
