@@ -5,16 +5,23 @@ export async function middleware(req, NextRequest){
     const cookie = req.cookies.get('SessionToken')
     
 if(cookie === undefined){
-    console.log(cookie ,"bla")
     return NextResponse.redirect("http://localhost:3000/login")
 }
-console.log(cookie ,"bla")
+const response = await fetch("http://localhost:8080/api/cookie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Credentials": "include",
+      },
+      body: JSON.stringify({ email, password}),
+    });
+    const data = await response.json();
+
     
-        // const result = await fetch("http://localhost:8080/api/cookie")
-        // if(!result.ok){
-        //     console.log("problem cookie fetch")
-        //     return NextResponse.redirect("http://localhost:3000/login")
-        //}
+    if (!data.ok) {
+      throw new Error("error in cookie check")
+    } 
+
     return NextResponse.next()
 }
 
