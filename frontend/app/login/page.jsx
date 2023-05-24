@@ -14,7 +14,6 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    cookie.set("test", "dgsihu", {expires: 1 /24})
     let cok = cookie.get("test")
     let cok2 = cookie.get()
     console.log(cok)
@@ -25,7 +24,7 @@ export default function Login() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ email, password}),
+      body: JSON.stringify({email, password}),
     });
     const data = await response.json();
     console.log("Register data:", data);
@@ -35,6 +34,7 @@ export default function Login() {
       console.error("Error:", data.error);
     } else {
       console.log("it runs here in data.error == null")
+      cookie.set("session_token", data.token)
       router.push("/")
     }
   };
