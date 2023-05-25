@@ -5,17 +5,7 @@ export const metadata = {
 // create a dummy data object
 
 const ProfilePage = (data) => {
-  data = {
-    username: "Jennie",
-    email: "chachacha@eurovision.eu",
-    first_name: "Jennie",
-    last_name: "Jay",
-    about_me: "I'm a singer, dancer, rapper, and model",
-    DOB: "1996-01-16",
-    avatar: "https://i.imgur.com/3gYQ3v8.jpg",
-    followers: ["Jimmy", "Jennie", "Rasmus", "Argann", "Christoffer", "Aaron"],
-    following: ["Jimmy", "Jennie", "Rasmus", "Argann", "Christoffer", "Aaron"],
-  };
+  
   return (
     <div>
       ProfilePage
