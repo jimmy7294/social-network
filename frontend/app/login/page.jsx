@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import {useRouter} from "next/navigation";
-import { cookies } from "next/dist/client/components/headers";
 import cookie from "js-cookie"
 
 

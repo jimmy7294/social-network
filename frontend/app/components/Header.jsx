@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const Header = () => {
+const Headers = () => {
   return (
     <header className="header">
       <div className="container">
@@ -18,4 +18,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Headers;
