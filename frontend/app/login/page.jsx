@@ -42,7 +42,7 @@ export default function Login() {
       <div className="headbar">
         <img
           className="logo"  
-          src="../images/Rickrolling.png"
+          src="../public/images/Rickrolling.png"
           alt="Your Company"
         />
         <h1>Irelevant Discussion</h1>

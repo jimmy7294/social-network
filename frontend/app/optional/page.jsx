@@ -1,5 +1,7 @@
+"use client"
+
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Optional() {
@@ -42,7 +44,7 @@ export default function Optional() {
         <form className="sorting" onSubmit={handleSubmit}>
           <div class="container">
             <a class="profilepicture" type="submit" id="pp">
-              <img src="" id="pp"></img>
+              <img src="https://www.streamscheme.com/wp-content/uploads/2020/04/pepehands.png.webp" id="pp" className="pfp"></img>
             </a>
           </div>
           <div>
