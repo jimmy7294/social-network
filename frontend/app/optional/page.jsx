@@ -42,9 +42,9 @@ export default function Optional() {
 
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
-          <div class="container">
-            <a class="profilepicture" type="submit" id="pp">
-              <img src="https://www.streamscheme.com/wp-content/uploads/2020/04/pepehands.png.webp" id="pp" className="pfp"></img>
+          <div className="container">
+            <a  type="submit" id="pp" className="pick-me-profile">
+              <img src="{profile.avatar}" id="pp" className="pfp"></img>
             </a>
           </div>
           <div>
