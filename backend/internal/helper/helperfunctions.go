@@ -85,3 +85,28 @@ func GetUsername(uuid int) (string, error) {
 	}
 	return "", errors.New("user not found")
 }
+
+func GetFollowing(uuid int) ([]string, error) {
+	sqlStmt := `SELECT followers.uuid, users.username
+FROM followers
+JOIN users
+ON users.uuid = followers.uuid
+WHERE follower_id = ?;`
+	//JOIN users on followers.uuid = users.uuid
+	rows, err := data.DB.Query(sqlStmt, uuid)
+	if err != nil {
+		fmt.Println("query error", err)
+	}
+	for rows.Next() {
+		var d1 string
+		var d2 string
+		var d3 string
+		err = rows.Scan(&d1, &d2)
+		if err != nil {
+			fmt.Println("scan error", err)
+		}
+		fmt.Println("var1", d1, "var2", d2, "var3", d3)
+	}
+	var bleh = make([]string, 0)
+	return bleh, nil
+}

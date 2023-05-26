@@ -92,5 +92,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		//helper.WriteResponse(w, "success")
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"status":"success", "token":"` + token + `"}`))
+		helper.GetFollowing(1)
 	}
 }
