@@ -25,12 +25,23 @@ func runMigrations() {
 	fmt.Printf("Applied %d migrations!\n", n)
 }
 
+func testhandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>Whoa, Go is neat!</h1>")
+	fmt.Fprintf(w, "<title>Go</title>")
+	fmt.Fprintf(w, "<img src=images/feelsgoodman.png>")
+}
+
 func setupApi() {
 	http.HandleFunc("/api/register", apiGO.Register)
 	http.HandleFunc("/api/login", apiGO.Login)
 	http.HandleFunc("/api/updateSettings", apiGO.UpdateSettings)
 	http.HandleFunc("/api/createPost", apiGO.PostApi)
 	http.HandleFunc("/api/cookie", apiGO.CheckCookie)
+	http.HandleFunc("/api/getYourImages", apiGO.GetYourImages)
+	img := http.FileServer(http.Dir("internal/images"))
+	http.Handle("/images/", http.StripPrefix("/images/", img))
+	//http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
+	http.HandleFunc("/test", testhandler)
 }
 
 func main() {
