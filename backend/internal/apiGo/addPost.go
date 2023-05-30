@@ -38,6 +38,7 @@ func addGroupPostToTable(postData post) error {
 	return err
 }
 
+// api that takes in a json object and tries to add it in either the group_post or the post table
 func PostApi(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 	if r.Method == http.MethodPost {

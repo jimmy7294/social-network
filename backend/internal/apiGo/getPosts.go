@@ -34,6 +34,9 @@ func gatherSemiPrivatePosts(uuid int) ([]posts, error) {
 	return pData, nil
 }
 
+// gathers all posts that a user has access to (normal, private, semi-private etc..)
+// seperates the different types of posts and sends them back marshalled
+// for now only used for normal posts not group posts
 func GetPosts(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 	if r.Method == http.MethodPost {

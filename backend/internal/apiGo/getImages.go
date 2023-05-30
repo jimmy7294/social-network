@@ -52,6 +52,8 @@ type images struct {
 	Status      string   `json:"status"`
 }
 
+// api that gathers the image paths of images you've uploaded and default/stock images from the backend
+// used for selecting images for profile/comments/posts
 func GetYourImages(w http.ResponseWriter, r *http.Request) {
 	/* 	fmt.Println("got to images")
 	   	imageFile, err := os.Open("../backend/internal/images/feelsgoodman.png")

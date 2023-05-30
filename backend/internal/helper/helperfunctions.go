@@ -7,11 +7,16 @@ import (
 	"net/http"
 )
 
+// func for writing status messages to frontend
+// used for writing error messages in response to fetch requests
 func WriteResponse(w http.ResponseWriter, status string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status":"` + status + `"}`))
 }
 
+// can't forget to enable this piece of shit every time you write an api
+// it should be an added feature that you can get your imformation stolen / account hacked but noooooo cors won't let that happen...
+// lame
 func EnableCors(w *http.ResponseWriter) {
 	//(*w).Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
@@ -21,6 +26,8 @@ func EnableCors(w *http.ResponseWriter) {
 	fmt.Println((*w).Header())
 }
 
+// generic function for updating a table
+// don't know why it needs to be generic though since it's only being called by one api...
 func UpdateTableColumnStringById(table, newData, column string, uid int) error {
 	sqlStmt, err := data.DB.Prepare("UPDATE " + table + " SET " + column + " = ? WHERE id = ?;")
 	if err != nil {
@@ -33,6 +40,8 @@ func UpdateTableColumnStringById(table, newData, column string, uid int) error {
 	return nil
 }
 
+// ctrl + c, ctrl v
+// you get it
 func UpdateTableColumnByteById(table string, newData []byte, column string, uid int) error {
 	sqlStmt, err := data.DB.Prepare("UPDATE " + table + " SET " + column + " = ? WHERE id = ?;")
 	if err != nil {
@@ -45,6 +54,8 @@ func UpdateTableColumnByteById(table string, newData []byte, column string, uid 
 	return nil
 }
 
+// function name says it all really
+// and if you somehow don't understand then maybe you should revoke your reading privileges
 func GetIdBySession(w http.ResponseWriter, r *http.Request) (int, error) {
 	sessionToken, err := r.Cookie("session_token")
 	if err != nil {
@@ -61,6 +72,8 @@ func GetIdBySession(w http.ResponseWriter, r *http.Request) (int, error) {
 	return uid, nil
 }
 
+// checks if a string in a table exists
+// pretty self-explanatory shit son
 func CheckIfStringExist(table, column, tableData string) bool {
 	sqlStmt := "SELECT " + column + " FROM " + table + " WHERE " + column + " = ?;"
 	var dummy string
@@ -70,6 +83,8 @@ func CheckIfStringExist(table, column, tableData string) bool {
 	return err == nil
 }
 
+// checks if a string in a t̶a̶b̶l̶e̶ username exists
+// pretty self-explanatory shit son
 func GetUsername(uuid int) (string, error) {
 	sqlStmt := "SELECT username,email FROM users WHERE uuid = ?"
 	var email, username string
@@ -86,6 +101,7 @@ func GetUsername(uuid int) (string, error) {
 	return "", errors.New("user not found")
 }
 
+// complete fucking shitshow personified that i'm only keeping around because it amuses me
 func GetFollowing(uuid int) ([]string, error) {
 	sqlStmt := `SELECT followers.uuid, users.username
 FROM followers

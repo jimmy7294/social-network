@@ -14,6 +14,8 @@ type settings struct {
 	AboutMe  string `json:"aboutMe"`
 }
 
+// api for updating the settings of a user after he/she/it? registers
+// or when a user is at the profile page
 func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 	if r.Method == http.MethodPost {

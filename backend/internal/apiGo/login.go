@@ -55,6 +55,8 @@ func checkLoginDetails(email, password string) (bool, int) {
 	return err == nil, dum
 }
 
+// compares email and password with the database and creates a session token if it matches
+// pretty self-explanatory shit
 func Login(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 

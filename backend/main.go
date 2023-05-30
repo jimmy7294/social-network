@@ -31,6 +31,8 @@ func testhandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<img src=images/feelsgoodman.png>")
 }
 
+// func setupApi sets up the api handlers
+// who could have possibly imagined
 func setupApi() {
 	http.HandleFunc("/api/register", apiGO.Register)
 	http.HandleFunc("/api/login", apiGO.Login)
@@ -44,6 +46,7 @@ func setupApi() {
 	http.HandleFunc("/test", testhandler)
 }
 
+// if only this piece of shit would work the way you wanted it to...
 func main() {
 	//var db *sql.DB
 	_, err := os.Stat("./database/network.db")
