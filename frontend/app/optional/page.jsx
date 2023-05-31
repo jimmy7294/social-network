@@ -4,11 +4,36 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+
+
+async function Avatars(){
+  const result = await fetch("http://localhost:8080/api/getYourImages",{
+  method: "POST",
+  headers:{
+    credentials: "include",
+    "Content-Type": "application/json"
+  }
+}
+)
+if(!result.ok){
+  throw new Error("Error fetinch avatar login")
+}
+const avatar = await result.json()
+console.log(avatar)
+return (avatar)
+}
+
+
+
+
+
+
 export default function Optional() {
   const [nickname, setNickname] = useState("");
   const [avatar, setAvatar] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [hidden, setPrivate] = useState(false);
+  
 
   const router = useRouter();
 
@@ -44,16 +69,16 @@ export default function Optional() {
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="container">
             <a  type="submit" id="pp" className="pick-me-profile">
-              <img src="{profile.avatar}" id="pp" className="pfp"></img>
+              <img src={Avatars()} id="pp" className="pfp"></img>
             </a>
           </div>
           <div>
-            <label for="image">Choose an image:</label>
+            <label id="image">Choose an image:</label>
             <input type="file" name="image" id="image"></input>
             <input className="imgSubmit" type="submit" value="Upload"></input>
           </div>
           <br />
-          <label htmlFor="aboutMe">About Me</label>
+          <label id="aboutMe">About Me</label>
           <div>
             <textarea
               id="aboutMe"
@@ -66,7 +91,7 @@ export default function Optional() {
             ></textarea>
           </div>
           <br />
-          <label htmlFor="nickname">Nickname</label>
+          <label id="nickname">Nickname</label>
           <div className="mt-2">
             <input
               id="nickname"
@@ -85,7 +110,7 @@ export default function Optional() {
               name="access"
               value="public"
             ></input>
-            <label for="public">Public</label>
+            <label id="public">Public</label>
             <br></br>
             <input
               type="radio"
@@ -93,7 +118,7 @@ export default function Optional() {
               name="access"
               value="private"
             ></input>
-            <label for="private">Private</label>
+            <label id="private">Private</label>
             <br></br>
           </div>
 
