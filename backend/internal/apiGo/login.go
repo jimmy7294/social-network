@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gofrs/uuid"
 )
@@ -17,7 +16,7 @@ func CreateSessionToken(w http.ResponseWriter) string {
 	//w.Header().Set("Access-Control-Allow-Headers", "Content-Type, withCredentials")
 
 	sessionToken := uuid.Must(uuid.NewV4()).String()
-	http.SetCookie(w, &http.Cookie{
+	/* 	http.SetCookie(w, &http.Cookie{
 		Name:  "session_token",
 		Value: sessionToken,
 		// Domain:   "localhost",
@@ -26,7 +25,7 @@ func CreateSessionToken(w http.ResponseWriter) string {
 		HttpOnly: true,
 		Path:     "/",
 		Expires:  time.Now().Add(1000000 * time.Second),
-	})
+	}) */
 
 	return sessionToken
 }
