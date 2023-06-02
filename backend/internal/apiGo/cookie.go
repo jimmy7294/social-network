@@ -2,6 +2,7 @@ package apiGO
 
 import (
 	"backend/backend/internal/helper"
+	"fmt"
 	"net/http"
 )
 
@@ -10,6 +11,8 @@ import (
 func CheckCookie(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 	_, err := helper.GetIdBySession(w, r)
+	fmt.Println(helper.GetIdBySession(w, r))
+	fmt.Println("123456")
 	if err != nil {
 		helper.WriteResponse(w, "incorrect_session")
 		return

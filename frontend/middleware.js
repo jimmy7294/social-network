@@ -6,28 +6,29 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req, NextRequest){
     const cookie = req.cookies.get('session_token')
+    console.log("123",cookie)
     //if there is no cookie pressent at all, redirct to login page
 if(cookie === undefined){
     return NextResponse.redirect("http://localhost:3000/login")
 }
-// if cookie is pressent sends to backend for validation
-const response = await fetch("http://localhost:8080/api/cookie", {
-      method: "POST",
-      headers: {
-        credentials: "include",
-        "Content-Type": "application/json"
-      }
-    });
-    const data = await response.json();
-    console.log(data)
+// // if cookie is pressent sends to backend for validation
+// const response = await fetch("http://localhost:8080/api/cookie", {
+//       method: "POST",
+//       credentials: "include",
+//       headers: {
+//         "Content-Type": "application/json"
+//       }
+//     });
+//     const data = await response.json();
+    
 
-    //if cookie is different from the DB throw error and stay on login
-    if (!data.status === "success") {
-      throw new Error("error in cookie check")
-    } 
-// eveyrthing ok u may continue
-    console.log("cookie check success")
-    return NextResponse.next()
+//     //if cookie is different from the DB throw error and stay on login
+//     if (data.status !== "success") {
+//       return NextResponse.redirect("http://localhost:3000/login")
+//     } 
+// // eveyrthing ok u may continue
+//     console.log("cookie check success")
+//     return NextResponse.next()
 }
 
 

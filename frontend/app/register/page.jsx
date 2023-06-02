@@ -31,6 +31,7 @@ export default function Register() {
 
     //setRegistrationDone(true) and hide the mandatory form, show the optional form
     if (data.status === "success") {
+   
       router.push("/optional");
     }
   };
