@@ -11,8 +11,9 @@ import (
 func CheckCookie(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 	if r.Method == http.MethodPost {
-		cok := r.Cookies()
-		fmt.Println("amount of cookies", len(cok))
+		//cok := r.Cookies()
+		//fmt.Println("header", r.Header)
+		//fmt.Println("amount of cookies", len(cok))
 		_, err := helper.GetIdBySession(w, r)
 		if err != nil {
 			fmt.Println("cookie check failed")

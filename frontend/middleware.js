@@ -8,7 +8,7 @@ import cookie from "js-cookie";
 export async function middleware(req, NextRequest){
     const cookiee = req.cookies.get('session_token')
     let cok = cookie.get("session_token")
-    console.log("should be session",cok)
+    console.log("should be session",cookiee)
     //if there is no cookie pressent at all, redirct to login page
 if(cookiee === undefined){
     return NextResponse.redirect("http://localhost:3000/login")
@@ -18,7 +18,8 @@ const response = await fetch("http://localhost:8080/api/cookie", {
     method: "POST",
     credentials: "include",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Cookie":`${cookiee.name}=${cookiee.value}`
     }
     });
     const data = await response.json();
@@ -28,8 +29,8 @@ const response = await fetch("http://localhost:8080/api/cookie", {
     if (data.status !== "success") {
       console.log("got to throw error")
       //throw new Error("error in cookie check")
-      //return NextResponse.redirect("http://localhost:3000/login")
-    } 
+      return NextResponse.redirect("http://localhost:3000/login")
+    }
 // eveyrthing ok u may continue
     console.log("cookie check success")
     return NextResponse.next()
