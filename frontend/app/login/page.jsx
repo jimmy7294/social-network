@@ -20,7 +20,6 @@ export default function Login() {
     console.log(cok2)
     const response = await fetch("http://localhost:8080/api/login", {
       method: "POST",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json"
       },
@@ -33,7 +32,6 @@ export default function Login() {
     if (data.error) {
       console.error("Error:", data.error);
     } else {
-      console.log("it runs here in data.error == null")
       cookie.set("session_token", data.token)
       router.push("/")
     }
