@@ -10,12 +10,16 @@ import (
 // deleting incorrect sessions should be handled in the frontend since I can't be bothered.
 func CheckCookie(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
-	_, err := helper.GetIdBySession(w, r)
-	fmt.Println(helper.GetIdBySession(w, r))
-	fmt.Println("123456")
-	if err != nil {
-		helper.WriteResponse(w, "incorrect_session")
-		return
+	if r.Method == http.MethodPost {
+		cok := r.Cookies()
+		fmt.Println("amount of cookies", len(cok))
+		_, err := helper.GetIdBySession(w, r)
+		if err != nil {
+			fmt.Println("cookie check failed")
+			helper.WriteResponse(w, "incorrect_session")
+			return
+		}
+		fmt.Println("cookie check successfull", err)
+		helper.WriteResponse(w, "success")
 	}
-	helper.WriteResponse(w, "success")
 }

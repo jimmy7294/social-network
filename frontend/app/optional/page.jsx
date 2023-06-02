@@ -41,6 +41,7 @@ export default function Optional() {
     e.preventDefault();
     const response = await fetch("http://localhost:8080/api/updateSettings", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

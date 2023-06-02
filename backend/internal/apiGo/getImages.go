@@ -55,26 +55,17 @@ type images struct {
 // api that gathers the image paths of images you've uploaded and default/stock images from the backend
 // used for selecting images for profile/comments/posts
 func GetYourImages(w http.ResponseWriter, r *http.Request) {
-	/* 	fmt.Println("got to images")
-	   	imageFile, err := os.Open("../backend/internal/images/feelsgoodman.png")
-	   	//backend/internal/images/feelsgoodman.png
-	   	if err != nil {
-	   		fmt.Println("couldn't open image", err)
-	   		return
-	   	}
-	   	defer imageFile.Close()
-	   	imageData, imageType, err := image.DecodeConfig(imageFile)
-	   	if err != nil {
-	   		fmt.Println("couldn't decode image", err)
-	   		return
-	   	}
-	   	fmt.Println("data", imageData)
-	   	fmt.Println("type", imageType) */
+
 	helper.EnableCors(&w)
+	//fmt.Println(r.Cookie("session_token"))
+
 	if r.Method == http.MethodPost {
+		fmt.Println("got to get your images")
 		var imgData images
+		fmt.Println(r.Cookie("session_token"))
 		uuid, err := helper.GetIdBySession(w, r)
 		if err != nil {
+			fmt.Println("session errir", err)
 			helper.WriteResponse(w, "incorrect_session")
 			return
 		}
@@ -92,8 +83,25 @@ func GetYourImages(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("marshalling error", err)
 			helper.WriteResponse(w, "marshalling_error")
 		}
+		fmt.Println("success")
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(imgDataJson)
 	}
 
 }
+
+/* 	fmt.Println("got to images")
+   	imageFile, err := os.Open("../backend/internal/images/feelsgoodman.png")
+   	//backend/internal/images/feelsgoodman.png
+   	if err != nil {
+   		fmt.Println("couldn't open image", err)
+   		return
+   	}
+   	defer imageFile.Close()
+   	imageData, imageType, err := image.DecodeConfig(imageFile)
+   	if err != nil {
+   		fmt.Println("couldn't decode image", err)
+   		return
+   	}
+   	fmt.Println("data", imageData)
+   	fmt.Println("type", imageType) */

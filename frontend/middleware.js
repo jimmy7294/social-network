@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import cookie from "js-cookie";
 
 
 //runs when ever a file is loaded on the page and checks if the cookie is still valid
@@ -8,7 +9,7 @@ export async function middleware(req, NextRequest){
     const cookie = req.cookies.get('session_token')
     console.log("123",cookie)
     //if there is no cookie pressent at all, redirct to login page
-if(cookie === undefined){
+if(cookiee === undefined){
     return NextResponse.redirect("http://localhost:3000/login")
 }
 // // if cookie is pressent sends to backend for validation

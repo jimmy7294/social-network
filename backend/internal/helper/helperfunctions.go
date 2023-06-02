@@ -19,11 +19,11 @@ func WriteResponse(w http.ResponseWriter, status string) {
 // lame
 func EnableCors(w *http.ResponseWriter) {
 	//(*w).Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, withCredentials, credentials")
 	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
 	//(*w).Header().Add("Access-Control-Allow-Headers", "Content-Type, withCredentials")
-	fmt.Println((*w).Header())
+	//fmt.Println((*w).Header())
 }
 
 // generic function for updating a table
@@ -59,13 +59,13 @@ func UpdateTableColumnByteById(table string, newData []byte, column string, uid 
 func GetIdBySession(w http.ResponseWriter, r *http.Request) (int, error) {
 	sessionToken, err := r.Cookie("session_token")
 	if err != nil {
+		fmt.Println("haaaa?", err)
 		return -1, err
 	}
-
-	sqlStmt := "SELECT id FROM users WHERE session_token = ?;"
+	sqlStmt := "SELECT uuid FROM users WHERE session_token = ?;"
 	var uid int
 
-	err = data.DB.QueryRow(sqlStmt, sessionToken).Scan(&uid)
+	err = data.DB.QueryRow(sqlStmt, sessionToken.Value).Scan(&uid)
 	if err != nil {
 		return -1, err
 	}
