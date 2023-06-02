@@ -66,7 +66,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		}
 		token := CreateSessionToken(w)
 		updateSessionToken(token, uid)
-		helper.WriteResponse(w, "success")
+		//helper.WriteResponse(w, "success")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{"status":"success", "token":"` + token + `"}`))
 	}
 
 }

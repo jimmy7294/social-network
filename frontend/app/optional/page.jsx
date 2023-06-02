@@ -23,6 +23,26 @@ console.log(avatar)
 return (avatar)
 }
 
+function encodeImageFile(element) {
+  console.log("got to encode", element)
+  if (element === undefined) return;
+  console.log("passed the first check")
+  let file = element.files[0];
+  let reader = new FileReader();
+  reader.readAsDataURL(file)
+  reader.onloadend = function() {
+    console.log(reader.result)
+    console.log(typeof reader.result)
+    fetch("http://localhost:8080/api/addImage", {
+      method: "POST",
+      credentials: "include",
+      headers:{
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(reader.result)
+    })
+  }
+}
 
 
 
@@ -70,12 +90,12 @@ export default function Optional() {
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="container">
             <a  type="submit" id={Avatars.range} className="pick-me-profile">
-              <img src={Avatars()} id= {Avatars.range} className="pfp"></img>
+              <img src="http://localhost:8080/images/feelsgoodman.png" id="0" className="pfp"></img>
             </a>
           </div>
           <div>
             <label id="image">Choose an image:</label>
-            <input type="file" name="image" id="image"></input>
+            <input type="file" name="image" id="image" onChange={e => encodeImageFile(e.target)}></input>
             <input className="imgSubmit" type="submit" value="Upload"></input>
           </div>
           <br />

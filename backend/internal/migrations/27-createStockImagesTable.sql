@@ -8,12 +8,12 @@ CREATE TABLE IF NOT EXISTS `stockImages`
 -- +migrate Up
 INSERT INTO stockImages(image_path)
 VALUES
-("images/feelsgoodman.png"),
-("images/lettgefirepurgeusall.png"),
-("images/pepehands.png"),
-("images/philosoraptor.png"),
-("images/elmo.gif"),
-("images/theydobebirds.jpg");
+("http://localhost:8080/images/feelsgoodman.png"),
+("http://localhost:8080/images/lettgefirepurgeusall.png"),
+("http://localhost:8080/images/pepehands.png"),
+("http://localhost:8080/images/philosoraptor.png"),
+("http://localhost:8080/images/elmo.gif"),
+("http://localhost:8080/images/theydobebirds.jpg");
 
 -- +migrate Down
 DROP TABLE `stockImages`;

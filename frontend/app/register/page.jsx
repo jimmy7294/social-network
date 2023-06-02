@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import cookie from "js-cookie";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -31,7 +32,7 @@ export default function Register() {
 
     //setRegistrationDone(true) and hide the mandatory form, show the optional form
     if (data.status === "success") {
-   
+      cookie.set("session_token", data.token)
       router.push("/optional");
     }
   };

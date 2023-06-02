@@ -28,7 +28,6 @@ export default function Login() {
     const data = await response.json();
     console.log("Register data:", data);
 
-    
     if (data.error) {
       console.error("Error:", data.error);
     } else {
