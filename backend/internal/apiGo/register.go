@@ -16,11 +16,11 @@ type reg struct {
 	Birthdate string `json:"birthDate"`
 }
 
-func checkEmail(email string) error {
+func checkEmail(email string) (int, error) {
 	sqlStmt := `SELECT uuid FROM users WHERE email = ?;`
 	id := -1
-	err := data.DB.QueryRow(sqlStmt, email).Scan(id)
-	return err
+	err := data.DB.QueryRow(sqlStmt, email).Scan(&id)
+	return id, err
 }
 
 func registerUser(regData reg) error {
@@ -46,7 +46,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println("body", r.Body)
 		fmt.Println("decoded data from fetch", data)
-		err = checkEmail(data.Email)
+		_, err = checkEmail(data.Email)
 		if err == nil {
 			fmt.Println(err)
 			helper.WriteResponse(w, "email")
@@ -58,6 +58,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "database")
 			return
 		}
+		uid, err := checkEmail(data.Email)
+		if err != nil {
+			fmt.Println("what the fuck", err)
+			helper.WriteResponse(w, "database")
+			return
+		}
+		token := CreateSessionToken(w)
+		updateSessionToken(token, uid)
 		helper.WriteResponse(w, "success")
 	}
 
