@@ -19,20 +19,31 @@ if(!result.ok){
   throw new Error("Error fetching avatar login")
 }
 const avatar = await result.json()
-console.log(avatar)
-return (avatar)
+
+return (
+  <>
+    <div className="post-container">
+        {avatar.stock_images.map((image, index) => (
+            <img src={image} alt={`Avatar ${index}`} className="pfp" />
+        ))}
+    </div>
+  </>
+);
 }
 
+
+
+
 function encodeImageFile(element) {
-  console.log("got to encode", element)
+  //console.log("got to encode", element)
   if (element === undefined) return;
-  console.log("passed the first check")
+  //console.log("passed the first check")
   let file = element.files[0];
   let reader = new FileReader();
   reader.readAsDataURL(file)
   reader.onloadend = function() {
-    console.log(reader.result)
-    console.log(typeof reader.result)
+    //console.log(reader.result)
+    //console.log(typeof reader.result)
     fetch("http://localhost:8080/api/addImage", {
       method: "POST",
       credentials: "include",
@@ -48,16 +59,15 @@ function encodeImageFile(element) {
 
 
 
-export default function Optional() {
+
+export default async function Optional() {
   const [nickname, setNickname] = useState("");
   const [avatar, setAvatar] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [hidden, setPrivate] = useState(false);
-  let pictures = Avatars()
-  console.log(pictures.stock_images)
 
   const router = useRouter();
-
+  console.log(avatar)
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await fetch("http://localhost:8080/api/updateSettings", {
@@ -70,7 +80,6 @@ export default function Optional() {
     });
     const data = await response.json();
     console.log("Register data:", data);
-
     //setRegistrationDone(true) and hide the mandatory form, show the optional form
     if (data.status === "success") {
       router.push("/");
@@ -90,8 +99,8 @@ export default function Optional() {
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="container">
-            <a  type="submit" id={0} className="pick-me-profile">
-              <img src={pictures.stock_images} id= {0} className="pfp"></img>
+            <a  type="highlight" onClick={e => setAvatar(e.target.value)} id={0} className="pick-me-profile">
+              <Avatars></Avatars>
             </a>
           </div>
           <div>

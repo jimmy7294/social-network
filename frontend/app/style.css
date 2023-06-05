@@ -17,6 +17,8 @@
 .pfp {
   height: 50px;
   width: 50px;
+  margin: 5px;
+  border: #ccc solid 2px;
 }
 .pick-me.profile {
   width: fit-content;
@@ -36,7 +38,7 @@
   font-size: large;
   position: relative;
   top: 40%;
-  padding: 3px;
+  padding: 5px;
 }
 
 body {
@@ -85,7 +87,7 @@ body {
 }
 
 .text {
-    margin: 5px;
+  margin: 5px;
 
 }
 
@@ -96,10 +98,12 @@ body {
 .container {
   display: inline-flex;
   grid-template-columns: max-content;
-  margin: 10px;
-  padding: 10px;
+  padding: 2px;
   border: black solid 2px;
-  }
+  width: -webkit-fill-available;
+  overflow-y: visible;
+  margin-bottom: 2px;
+}
 
 .links {
   width: 300px;
