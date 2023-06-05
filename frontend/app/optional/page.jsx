@@ -16,7 +16,7 @@ async function Avatars(){
 }
 )
 if(!result.ok){
-  throw new Error("Error fetinch avatar login")
+  throw new Error("Error fetching avatar login")
 }
 const avatar = await result.json()
 console.log(avatar)
@@ -53,7 +53,8 @@ export default function Optional() {
   const [avatar, setAvatar] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [hidden, setPrivate] = useState(false);
-  
+  let pictures = Avatars()
+  console.log(pictures.stock_images)
 
   const router = useRouter();
 
@@ -89,8 +90,8 @@ export default function Optional() {
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="container">
-            <a  type="submit" id={Avatars.range} className="pick-me-profile">
-              <img src="http://localhost:8080/images/feelsgoodman.png" id="0" className="pfp"></img>
+            <a  type="submit" id={0} className="pick-me-profile">
+              <img src={pictures.stock_images} id= {0} className="pfp"></img>
             </a>
           </div>
           <div>
@@ -139,7 +140,7 @@ export default function Optional() {
               name="access"
               value="private"
             ></input>
-            <label id="private">Private</label>
+            <label id="private">balsxd</label>
             <br></br>
           </div>
 
@@ -152,7 +153,7 @@ export default function Optional() {
 
         <p className="text">
           don't wanna expose yourself?{" "}
-          <Link href="/entry/login" className="link-up">
+          <Link href="/login" className="link-up">
             Skip
           </Link>
         </p>

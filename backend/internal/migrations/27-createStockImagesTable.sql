@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `stockImages`
 INSERT INTO stockImages(image_path)
 VALUES
 ("http://localhost:8080/images/feelsgoodman.png"),
-("http://localhost:8080/images/lettgefirepurgeusall.png"),
+("http://localhost:8080/images/letthefirepurgeusall.png"),
 ("http://localhost:8080/images/pepehands.png"),
 ("http://localhost:8080/images/philosoraptor.png"),
 ("http://localhost:8080/images/elmo.gif"),

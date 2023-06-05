@@ -149,7 +149,7 @@ export default function Register() {
         </form>
         <p className="text">
           Already a user?{" "}
-          <Link href="/entry/login" className="link-up">
+          <Link href="/login" className="link-up">
             Login here
           </Link>
         </p>
