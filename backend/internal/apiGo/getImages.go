@@ -34,6 +34,7 @@ func getUserImages(uuid int) ([]string, error) {
 	rows, err := data.DB.Query(sqlStmt, uuid)
 	if err != nil {
 		fmt.Println("query error usrImg", err)
+		return imgPaths, err
 	}
 	for rows.Next() {
 		var imgPath string

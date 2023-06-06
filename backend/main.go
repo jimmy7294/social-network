@@ -41,6 +41,8 @@ func setupApi() {
 	http.HandleFunc("/api/cookie", apiGO.CheckCookie)
 	http.HandleFunc("/api/getYourImages", apiGO.GetYourImages)
 	http.HandleFunc("/api/addImage", apiGO.AddImage)
+	http.HandleFunc("/api/getGroupnames", apiGO.GetGroupnames)
+	http.HandleFunc("/api/getUsernames", apiGO.GetUsernames)
 	img := http.FileServer(http.Dir("internal/images"))
 	http.Handle("/images/", http.StripPrefix("/images/", img))
 	//http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
