@@ -5,8 +5,8 @@ import Link from "next/link";
 const PostPage = async () => {
       const result = await fetch("http://localhost:8080/api/getAllPosts", {
         method: "POST",
+        credentials: "include",
         headers:{
-          credentials: "include",
         "Content-Type": "application/json"
         }
       }
@@ -27,7 +27,7 @@ const PostPage = async () => {
               <p>{post.content}</p>
               <p>{post.image}</p>
               <p>{post.created}</p>
-              <p>{post.autor}</p>
+              <p>{post.author}</p>
             </li>
       </ul>
     </div>
