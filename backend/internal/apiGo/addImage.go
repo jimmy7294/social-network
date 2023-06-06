@@ -5,12 +5,18 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"image"
-	_ "image/gif"
-	_ "image/jpeg"
-	_ "image/png"
+	"image/gif"
+
+	//_ "image/gif"
+	"image/jpeg"
+	//_ "image/jpeg"
+	"image/png"
+	//_ "image/png"
 	"net/http"
+	"os"
 	"strings"
+
+	"github.com/gofrs/uuid"
 )
 
 func AddImage(w http.ResponseWriter, r *http.Request) {
@@ -25,17 +31,69 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 		data2 := strings.Split(data64, ",")
 		fmt.Println("len of data", len(data64), len(data2))
 
-		reader := base64.NewDecoder(base64.URLEncoding, strings.NewReader(data2[1]))
+		reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data2[1]))
 
 		//os.Create(uuid.Must(uuid.NewV4()).String())
 
-		imageData, imageType, err := image.DecodeConfig(reader)
+		//imageData, imageType, err := image.Decode(reader)
 		//imgBytes, _ := base64.StdEncoding.DecodeString(data2[1])
 		//_, imageType, err := image.Decode(bytes.NewReader(imgBytes))
 		if err != nil {
 			fmt.Println("well fuck", err)
+			return
 		}
-		fmt.Println("Format:", imageType, "len", imageData.Height, imageData.Width)
+		//fmt.Println("Format:", imageType, "len")
+		currDir, _ := os.Getwd()
+		//imgFile, err := os.Create(currDir + "/internal/images/" + uuid.Must(uuid.NewV4()).String() + "." + imageType)
+		if err != nil {
+			fmt.Println("error lol", err)
+			return
+		}
+		// TODO: fix whatever the fuck this is supposed to be
+		switch {
+		case strings.Contains(data2[0], "png"):
+			imageData, err := png.Decode(reader)
+			if err != nil {
+				fmt.Println(err)
+			}
+			imgFile, _ := os.Create(currDir + "/internal/images/" + uuid.Must(uuid.NewV4()).String() + "." + "png")
+			err = png.Encode(imgFile, imageData)
+			if err != nil {
+				fmt.Println("aaaaaauuuuuughhhh", err)
+				return
+			}
+			break
+		case strings.Contains(data2[0], "jpeg"):
+			imageData, err := jpeg.Decode(reader)
+			if err != nil {
+				fmt.Println(err)
+			}
+			imgFile, _ := os.Create(currDir + "/internal/images/" + uuid.Must(uuid.NewV4()).String() + "." + "jpeg")
+			err = jpeg.Encode(imgFile, imageData, nil)
+			if err != nil {
+				fmt.Println("aaaaaauuuuuughhhh", err)
+				return
+			}
+			break
+		case strings.Contains(data2[0], "gif"):
+			gifData, err := gif.DecodeAll(reader)
+			if err != nil {
+				fmt.Println(err)
+			}
+			imgFile, _ := os.Create(currDir + "/internal/images/" + uuid.Must(uuid.NewV4()).String() + "." + "gif")
+			err = gif.EncodeAll(imgFile, gifData)
+			if err != nil {
+				fmt.Println("aaaaaauuuuuughhhh", err)
+				return
+			}
+			break
+		default:
+			fmt.Println("incorrect type")
+			return
+		}
+
+		//fmt.Println(currDir + "/internal/images/" + "testo" + "." + imageType)
+		helper.WriteResponse(w, "success")
 	}
 }
 
