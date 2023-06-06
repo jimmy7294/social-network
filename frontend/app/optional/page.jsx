@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 
 
 
-async function Avatars(){
+async function fetchAvatars(){
   const result = await fetch("http://localhost:8080/api/getYourImages",{
   method: "POST",
   credentials: "include",
@@ -20,16 +21,36 @@ if(!result.ok){
 }
 const avatar = await result.json()
 
-return (
-  <>
-    <div className="post-container">
-        {avatar.stock_images.map((image, index) => (
-            <img src={image} alt={`Avatar ${index}`} className="pfp" />
-        ))}
-    </div>
-  </>
-);
+if (!avatar.stock_images) {
+  return null; // or any other action you want to take when stock_images is not defined
 }
+return avatar.stock_images;
+}
+function Avatars() {
+  const [stockImages, setStockImages] = useState([]);
+
+  useEffect(() => {
+    fetchAvatars()
+      .then((images) => {
+        if (images) {
+          setStockImages(images);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  return (
+    <>
+      <div className="post-container">
+        {stockImages.map((image, index) => (
+          <img src={image} key={index} alt={`Avatar ${index}`} className="pfp" />
+        ))}
+      </div>
+    </>
+  );
+        }
 
 
 
@@ -67,9 +88,9 @@ export default async function Optional() {
   const [hidden, setPrivate] = useState(false);
 
   const router = useRouter();
-  console.log(avatar)
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(avatar)
     const response = await fetch("http://localhost:8080/api/updateSettings", {
       method: "POST",
       credentials: "include",
@@ -99,8 +120,8 @@ export default async function Optional() {
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="container">
-            <a  type="highlight" onClick={e => setAvatar(e.target.value)} id={0} className="pick-me-profile">
-              <Avatars></Avatars>
+            <a  type="highlight" onClick={e => setAvatar(e.target.value)} id={0} className="pick-me-profile" >
+              <Avatars> onClick={e => setAvatar(e.target.value)} </Avatars>
             </a>
           </div>
           <div>

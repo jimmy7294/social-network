@@ -3,17 +3,17 @@ import Profile from "./components/Profile"
 import Link from "next/link"
 
 const PostPage = async () => {
-  const result = await fetch("http://localhost:8080/api/getAllPosts", {
+  const result = await fetch("http://localhost:8080/api/getPosts", {
     method: "POST",
+    credentials: "include",
     headers:{
-      credentials: "include",
     "Content-Type": "application/json"
     }
   }
 
   )
   if (!result.ok) {
-    throw new Error("Error fetching posts");
+    return console.log("fuck")
   }
   const post = await result.json();
   console.log(post)
@@ -41,7 +41,7 @@ const HomePage = () => {
   return (
     <div>
       <h1>Meow meow meow</h1>
-      <Profile />
+      <PostPage />
     </div>
   )
 
