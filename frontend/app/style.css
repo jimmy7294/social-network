@@ -20,6 +20,13 @@
   margin: 5px;
   border: #ccc solid 2px;
 }
+
+.avatar_preview {
+  height: 100px;
+  width: 100px;
+  border: ridge #ccc 2px;
+}
+
 .pick-me.profile {
   width: fit-content;
   height: fit-content;
@@ -67,6 +74,9 @@ body {
 
 .padder {
   margin: 3px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
 }
 
 .finish {
@@ -98,7 +108,6 @@ body {
 .container {
   display: inline-flex;
   grid-template-columns: max-content;
-  padding: 2px;
   border: black solid 2px;
   width: -webkit-fill-available;
   overflow-y: visible;

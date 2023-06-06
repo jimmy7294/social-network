@@ -26,8 +26,15 @@ if (!avatar.stock_images) {
 }
 return avatar.stock_images;
 }
-function Avatars() {
+function updateProfileImage(link, setAvatar) {
+  console.log(link)
+  setAvatar(link)
+  return link
+}
+
+function Avatars({arg}) {
   const [stockImages, setStockImages] = useState([]);
+  console.log()
 
   useEffect(() => {
     fetchAvatars()
@@ -45,7 +52,7 @@ function Avatars() {
     <>
       <div className="post-container">
         {stockImages.map((image, index) => (
-          <img src={image} key={index} alt={`Avatar ${index}`} className="pfp" />
+          <img src={image} onClick={(e) => arg(image)} key={index} alt={`Avatar ${index}`} className="pfp" />
         ))}
       </div>
     </>
@@ -83,9 +90,10 @@ function encodeImageFile(element) {
 
 export default async function Optional() {
   const [nickname, setNickname] = useState("");
-  const [avatar, setAvatar] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [hidden, setPrivate] = useState(false);
+  const [avatar, setAvatar] = useState("");
+
 
   const router = useRouter();
   const handleSubmit = async (e) => {
@@ -119,9 +127,12 @@ export default async function Optional() {
 
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
+          <div className="padder">
+          <img src={avatar} alt="" value={0} className="avatar_preview" />  
+          </div>
           <div className="container">
-            <a  type="highlight" onClick={e => setAvatar(e.target.value)} id={0} className="pick-me-profile" >
-              <Avatars> onClick={e => setAvatar(e.target.value)} </Avatars>
+            <a  type="submit" id={0} className="pick-me-profile" >
+              <Avatars arg={setAvatar}></Avatars>
             </a>
           </div>
           <div>
@@ -170,13 +181,13 @@ export default async function Optional() {
               name="access"
               value="private"
             ></input>
-            <label id="private">balsxd</label>
+            <label id="private">Private</label>
             <br></br>
           </div>
 
           <div className="finish">
             <button type="submit" className="">
-              Finnish
+              Finish
             </button>
           </div>
         </form>
