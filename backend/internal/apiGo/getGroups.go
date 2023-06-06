@@ -39,6 +39,7 @@ func GetGroupnames(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "database_error")
 			return
 		}
+		groupData.Status = "success"
 		groupDataJson, err := json.Marshal(groupData)
 		if err != nil {
 			fmt.Println("marshalling error", err)

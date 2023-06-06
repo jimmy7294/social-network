@@ -44,6 +44,7 @@ func GetUsernames(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "database_error")
 			return
 		}
+		userData.Status = "success"
 		userDataJson, err := json.Marshal(userData)
 		if err != nil {
 			fmt.Println("marshalling error", err)
