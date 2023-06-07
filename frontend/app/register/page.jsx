@@ -48,9 +48,9 @@ export default function Register() {
         <h1> Irelevant Discussion </h1>
       </div>
       <div className="signin-window">
-        <form className="" onSubmit={handleSubmit}>
+        <form className="organ" onSubmit={handleSubmit}>
           {/*Email*/}
-          <div>
+          <div className="gibspace">
             <label htmlFor="email">Email address</label>
             <div className="mt-2">
               <input
@@ -66,11 +66,8 @@ export default function Register() {
             </div>
           </div>
           {/*First Name*/}
-          <div>
-            <div>
+          <div className="gibspace">
               <label htmlFor="firstName">First Name</label>
-              <div className="text-md"></div>
-            </div>
             <div className="mt-2">
               <input
                 id="firstName"
@@ -85,11 +82,8 @@ export default function Register() {
             </div>
           </div>
           {/* Last Name */}
-          <div>
-            <div>
+          <div className="gibspace">
               <label htmlFor="lastName">Last Name</label>
-              <div className="text-md"></div>
-            </div>
             <div className="mt-2">
               <input
                 id="lastName"
@@ -104,10 +98,8 @@ export default function Register() {
             </div>
           </div>
           {/* Birth Date */}
-          <div>
-            <div>
+          <div className="gibspace">
               <label htmlFor="birthDate">Date of Birth</label>
-            </div>
             <div className="mt-2">
               <input
                 id="birthDate"
@@ -123,10 +115,8 @@ export default function Register() {
             </div>
           </div>
           {/* Password */}
-          <div>
-            <div>
+          <div className="gibspace">
               <label htmlFor="password">Password</label>
-            </div>
             <div className="mt-2">
               <input
                 id="password"
@@ -141,7 +131,7 @@ export default function Register() {
             </div>
           </div>
           {/* Submit Button */}
-          <div>
+          <div className="gibspace">
             <button type="submit" className="padder">
               Register
             </button>

@@ -50,7 +50,7 @@ function Avatars({arg}) {
 
   return (
     <>
-      <div className="post-container">
+      <div className="padder">
         {stockImages.map((image, index) => (
           <img src={image} onClick={(e) => arg(image)} key={index} alt={`Avatar ${index}`} className="pfp" />
         ))}
@@ -116,14 +116,16 @@ export default async function Optional() {
   };
   return (
     <>
-      <div className="headbar">
+      <header className="headbar">
+        <div className="identity">
         <img
           className="logo"
-          src="../images/Rickrolling.png"
+          src="http://localhost:8080/images/Rickrolling.png"
           alt="Your Company"
         />
-        <h1> Irelevant Discussion </h1>
-      </div>
+        <h1 className="name"> Irelevant Discussion </h1>
+        </div>
+      </header>
 
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
@@ -136,12 +138,12 @@ export default async function Optional() {
             </a>
           </div>
           <div>
-            <label id="image">Choose an image:</label>
+            <label for="image">Choose an image:</label>
             <input type="file" name="image" id="image" onChange={e => encodeImageFile(e.target)}></input>
             <input className="imgSubmit" type="submit" value="Upload"></input>
           </div>
           <br />
-          <label id="aboutMe">About Me</label>
+          <label for="aboutMe">About Me</label>
           <div>
             <textarea
               id="aboutMe"
@@ -154,7 +156,7 @@ export default async function Optional() {
             ></textarea>
           </div>
           <br />
-          <label id="nickname">Nickname</label>
+          <label for="nickname">Nickname</label>
           <div className="mt-2">
             <input
               id="nickname"
@@ -173,7 +175,7 @@ export default async function Optional() {
               name="access"
               value="public"
             ></input>
-            <label id="public">Public</label>
+            <label for="public">Public</label>
             <br></br>
             <input
               type="radio"
@@ -181,7 +183,7 @@ export default async function Optional() {
               name="access"
               value="private"
             ></input>
-            <label id="private">Private</label>
+            <label for="private">Private</label>
             <br></br>
           </div>
 

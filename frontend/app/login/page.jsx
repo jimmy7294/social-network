@@ -53,7 +53,7 @@ export default function Login() {
           method="POST"
           onSubmit={handleSubmit}
         >
-          <div>
+          <div className="gibspace">
             <label htmlFor="email">Email address</label>
             <div className="mt-2">
               <input
@@ -68,9 +68,8 @@ export default function Login() {
               ></input>
             </div>
           </div>
-          <div>
+          <div className="gibspace">
             <label htmlFor="password">Password</label>
-          </div>
           <div className="mt-2">
             <input
               id="password"
@@ -88,6 +87,7 @@ export default function Login() {
           </a>
           <div className="padder">
             <button type="submit">Sign in</button>
+          </div>
           </div>
         </form>
 
