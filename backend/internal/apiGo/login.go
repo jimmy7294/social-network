@@ -95,5 +95,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"status":"success", "token":"` + token + `"}`))
 		helper.GetFollowing(1)
+		res, err := gatherPrivatePosts(1)
+		fmt.Println("gather result", res, err)
 	}
 }

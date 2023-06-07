@@ -1,7 +1,9 @@
 package apiGO
 
 import (
+	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -24,13 +26,40 @@ func gatherPosts() ([]posts, error) {
 	return pData, nil
 }
 
-func gatherPrivatePosts(uuid int) ([]posts, error) {
+func gatherSemiPrivatePosts(uuid int) ([]posts, error) {
 	var pData []posts
 	return pData, nil
 }
 
-func gatherSemiPrivatePosts(uuid int) ([]posts, error) {
+func gatherPrivatePosts(uuid int) ([]posts, error) {
 	var pData []posts
+	sqlStmt := `SELECT COALESCE(users.username, users.email),
+post_image,
+creation_date,
+post_content,
+post_title
+FROM posts
+JOIN users
+ON users.uuid = posts.post_author
+WHERE post_privacy = 'private' AND post_author IN (
+SELECT uuid
+FROM followers
+WHERE follower_id = ?
+);`
+	rows, err := data.DB.Query(sqlStmt, uuid)
+	if err != nil {
+		fmt.Println("query error", err)
+		return pData, err
+	}
+	for rows.Next() {
+		var privPost posts
+		//var authId int
+		err = rows.Scan(&privPost.Author, &privPost.Image, &privPost.CreationDate, &privPost.Content, &privPost.Title)
+		if err != nil {
+			fmt.Println("scan privatePost err", err)
+		}
+		pData = append(pData, privPost)
+	}
 	return pData, nil
 }
 
@@ -46,20 +75,21 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		var pData allposts
-		pData.Posts, err = gatherPosts()
-		if err != nil {
-			helper.WriteResponse(w, "gatherPosts_error")
-			return
-		}
+		/* 		pData.Posts, err = gatherPosts()
+		   		if err != nil {
+		   			helper.WriteResponse(w, "gatherPosts_error")
+		   			return
+		   		} */
 		pData.PrivatePosts, err = gatherPrivatePosts(uuid)
 		if err != nil {
 			helper.WriteResponse(w, "gatherPrivatePosts_error")
 			return
 		}
-		pData.SemiPrivatePosts, err = gatherSemiPrivatePosts(uuid)
-		if err != nil {
-			helper.WriteResponse(w, "gatherSemiPrivatePosts_error")
-			return
-		}
+		/* 		pData.SemiPrivatePosts, err = gatherSemiPrivatePosts(uuid)
+		   		if err != nil {
+		   			helper.WriteResponse(w, "gatherSemiPrivatePosts_error")
+		   			return
+		   		} */
+		fmt.Println(len(pData.PrivatePosts))
 	}
 }
