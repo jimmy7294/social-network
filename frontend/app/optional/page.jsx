@@ -88,7 +88,7 @@ function encodeImageFile(element) {
 
 
 
-export default async function Optional() {
+export default function Optional() {
   const [nickname, setNickname] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [hidden, setPrivate] = useState(false);
