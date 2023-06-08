@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `users`
 	`first_name`	TEXT NOT NULL,
 	`last_name`	TEXT NOT NULL,
 	`DOB`	TIMESTAMP NOT NULL,
-	`avatar`	BLOB,
+	`avatar`	TEXT,
 	`username`	TEXT,
 	`bio`	TEXT,
 	`session_token`	TEXT,

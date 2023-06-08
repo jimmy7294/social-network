@@ -29,11 +29,11 @@ func EnableCors(w *http.ResponseWriter) {
 // generic function for updating a table
 // don't know why it needs to be generic though since it's only being called by one api...
 func UpdateTableColumnStringById(table, newData, column string, uid int) error {
-	sqlStmt, err := data.DB.Prepare("UPDATE " + table + " SET " + column + " = ? WHERE id = ?;")
+	sqlStmt, err := data.DB.Prepare("UPDATE " + table + " SET " + column + " = ? WHERE uuid = ?;")
 	if err != nil {
 		return err
 	}
-	_, err = sqlStmt.Exec(newData)
+	_, err = sqlStmt.Exec(newData, uid)
 	if err != nil {
 		return err
 	}
@@ -43,11 +43,11 @@ func UpdateTableColumnStringById(table, newData, column string, uid int) error {
 // ctrl + c, ctrl v
 // you get it
 func UpdateTableColumnByteById(table string, newData []byte, column string, uid int) error {
-	sqlStmt, err := data.DB.Prepare("UPDATE " + table + " SET " + column + " = ? WHERE id = ?;")
+	sqlStmt, err := data.DB.Prepare("UPDATE " + table + " SET " + column + " = ? WHERE uuid = ?;")
 	if err != nil {
 		return err
 	}
-	_, err = sqlStmt.Exec(newData)
+	_, err = sqlStmt.Exec(newData, uid)
 	if err != nil {
 		return err
 	}

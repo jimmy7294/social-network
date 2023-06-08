@@ -8,7 +8,7 @@ import (
 )
 
 type settings struct {
-	Image    []byte `json:"avatar"`
+	Image    string `json:"avatar"`
 	Privacy  string `json:"privacy"`
 	Nickname string `json:"nickname"`
 	AboutMe  string `json:"aboutMe"`
@@ -28,6 +28,7 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 		var settData settings
 
 		err = json.NewDecoder(r.Body).Decode(&settData)
+		fmt.Println("data to update", settData)
 
 		if err != nil {
 			fmt.Println(err)
@@ -36,20 +37,21 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(settData.Nickname) > 0 {
-			nameTaken := helper.CheckIfStringExist("users", "nickname", settData.Nickname)
+			nameTaken := helper.CheckIfStringExist("users", "username", settData.Nickname)
 			if nameTaken {
 				helper.WriteResponse(w, "name_taken")
 				return
 			}
-			err = helper.UpdateTableColumnStringById("users", settData.Nickname, "nickname", uid)
+			err = helper.UpdateTableColumnStringById("users", settData.Nickname, "username", uid)
 			if err != nil {
-				helper.WriteResponse(w, "nickname")
+				helper.WriteResponse(w, "username_error")
+				fmt.Println(err)
 				return
 			}
 		}
 
 		if len(settData.AboutMe) > 0 {
-			err = helper.UpdateTableColumnStringById("users", settData.AboutMe, "aboutMe", uid)
+			err = helper.UpdateTableColumnStringById("users", settData.AboutMe, "bio", uid)
 			if err != nil {
 				helper.WriteResponse(w, "aboutMe")
 				return
@@ -57,7 +59,7 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(settData.Image) > 0 {
-			err = helper.UpdateTableColumnByteById("users", settData.Image, "avatar", uid)
+			err = helper.UpdateTableColumnStringById("users", settData.Image, "avatar", uid)
 			if err != nil {
 				helper.WriteResponse(w, "image")
 				return

@@ -91,7 +91,7 @@ function encodeImageFile(element) {
 export default function Optional() {
   const [nickname, setNickname] = useState("");
   const [aboutMe, setAboutMe] = useState("");
-  const [hidden, setPrivate] = useState(false);
+  const [privacy, setPrivate] = useState("");
   const [avatar, setAvatar] = useState("");
 
 
@@ -105,7 +105,7 @@ export default function Optional() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nickname, aboutMe, avatar, hidden }),
+      body: JSON.stringify({ nickname, aboutMe, avatar, privacy }),
     });
     const data = await response.json();
     console.log("Register data:", data);
@@ -174,6 +174,7 @@ export default function Optional() {
               id="public"
               name="access"
               value="public"
+              onClick={(e) => setPrivate(e.target.value)}
             ></input>
             <label for="public">Public</label>
             <br></br>
@@ -182,6 +183,7 @@ export default function Optional() {
               id="private"
               name="access"
               value="private"
+              onClick={(e) => setPrivate(e.target.value)}
             ></input>
             <label for="private">Private</label>
             <br></br>

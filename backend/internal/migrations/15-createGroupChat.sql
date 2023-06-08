@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `groupChat`
     `group_id` INTEGER NOT NULL,
     `gc_sender` INTEGER NOT NULL,
     `gc_content` TEXT NOT NULL,
-    `gc_image` BLOB,
+    `gc_image` TEXT,
     `creation_date` TIMESTAMP NOT NULL,
     PRIMARY KEY(`gc_id` AUTOINCREMENT)
 );

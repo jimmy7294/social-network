@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `privateMessages`
     `pmg_sender` INTEGER NOT NULL,
     `pmg_reciever` INTEGER NOT NULL,
     `pmg_content` TEXT NOT NULL,
-    `pmg_image` BLOB,
+    `pmg_image` TEXT,
     `creation_date` TIMESTAMP NOT NULL,
     PRIMARY KEY(`pmg_id` AUTOINCREMENT)
 );

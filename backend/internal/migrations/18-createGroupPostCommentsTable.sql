@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `groupPostComments`
     `group_id` INTEGER NOT NULL,
     `gpcomment_author` INTEGER NOT NULL,
     `gpcomment_content` TEXT,
-    `gpcomment_image` BLOB,
+    `gpcomment_image` TEXT,
     `creation_date` TIMESTAMP NOT NULL,
     PRIMARY KEY(`gpcomment_id` AUTOINCREMENT)
 );
