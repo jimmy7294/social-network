@@ -35,9 +35,8 @@ func registerUser(regData reg) error {
 // just registers you...
 // i guess it also checks if an email is already taken, but c'mon you should know what the fuck this does just by the name of the function
 func Register(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("body before", r.Body)
+	//fmt.Println("body before", r.Body)
 	helper.EnableCors(&w)
-	fmt.Println(r.Method)
 	if r.Method == http.MethodPost {
 		var data reg
 		err := json.NewDecoder(r.Body).Decode(&data)
