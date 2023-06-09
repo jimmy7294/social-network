@@ -5,12 +5,14 @@ export const metadata = {
 // create a dummy data object
 
 function getProfile() {
+  const { slug } = router.query;
   const response = fetch("http://localhost:8080/api/getProfile", {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-    }
+    },
+    body: JSON.stringify({ slug }),
   })
   .then(data => data.json())
   .then(data => {
