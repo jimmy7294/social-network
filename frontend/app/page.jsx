@@ -61,7 +61,7 @@ function GetPosts(){
 
 
       <div className="mfprivate">
-        <h2>this is private post section</h2>
+        <h2>this is private posts</h2>
 {private_posts.map((post, index) => (
   <div key={index}>
 <p> {post.author}</p>

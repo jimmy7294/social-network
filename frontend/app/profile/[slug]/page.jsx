@@ -5,13 +5,13 @@ export const metadata = {
 // create a dummy data object
 
 function getProfile() {
-  const response = fetch("http://localhost:8080/api/getUsernames", {
+  const response = fetch("http://localhost:8080/api/getProfile", {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
     }
-  })  
+  })
   .then(data => data.json())
   .then(data => {
     if (data.status == "success"){
