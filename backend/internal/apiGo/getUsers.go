@@ -27,7 +27,7 @@ func getUsernameAndEmail() (users, error) {
 	}
 	for rows.Next() {
 		var usr user
-		err = rows.Scan(usr.Email, usr.Username)
+		err = rows.Scan(&usr.Email, &usr.Username)
 		if err != nil {
 			return userDat, err
 		}
