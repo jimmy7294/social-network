@@ -138,12 +138,12 @@ export default function Optional() {
             </a>
           </div>
           <div>
-            <label for="image">Choose an image:</label>
+            <label id="image">Choose an image:</label>
             <input type="file" name="image" id="image" onChange={e => encodeImageFile(e.target)}></input>
             <input className="imgSubmit" type="submit" value="Upload"></input>
           </div>
           <br />
-          <label for="aboutMe">About Me</label>
+          <label id="aboutMe">About Me</label>
           <div>
             <textarea
               id="aboutMe"
@@ -156,7 +156,7 @@ export default function Optional() {
             ></textarea>
           </div>
           <br />
-          <label for="nickname">Nickname</label>
+          <label id="nickname">Nickname</label>
           <div className="mt-2">
             <input
               id="nickname"
@@ -176,7 +176,7 @@ export default function Optional() {
               value="public"
               onClick={(e) => setPrivate(e.target.value)}
             ></input>
-            <label for="public">Public</label>
+            <label id="public">Public</label>
             <br></br>
             <input
               type="radio"
@@ -185,7 +185,7 @@ export default function Optional() {
               value="private"
               onClick={(e) => setPrivate(e.target.value)}
             ></input>
-            <label for="private">Private</label>
+            <label id="private">Private</label>
             <br></br>
           </div>
 
