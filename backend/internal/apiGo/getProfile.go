@@ -35,7 +35,7 @@ func getProfileFromDataBase(email string) (profile, int, error) {
 	first_name,
 	last_name,
 	DOB,
-	avatar,
+	avatar IS NOT NULL,
 	username,
 	bio,
 	privacy
@@ -51,7 +51,7 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		var eInfo qInfo
 		fmt.Println(r.URL.Path)
-		err := json.NewDecoder(r.Body).Decode(&eInfo)
+		err := json.NewDecoder(r.Body).Decode(&eInfo.Email)
 		if err != nil {
 			fmt.Println(err)
 		}

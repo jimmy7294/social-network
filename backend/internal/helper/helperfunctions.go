@@ -133,7 +133,7 @@ WHERE follower_id = ?;`
 }
 
 func GetYourGroups(uuid int) ([]string, error) {
-	sqlStmt := `SELECT group_id,
+	sqlStmt := `SELECT groupMembers.group_id,
 	groups.group_name
 	FROM groupMembers
 	JOIN groups
@@ -146,7 +146,8 @@ func GetYourGroups(uuid int) ([]string, error) {
 	}
 	for rows.Next() {
 		var temp string
-		err = rows.Scan(&temp)
+		var useless int
+		err = rows.Scan(&useless, &temp)
 		if err != nil {
 			fmt.Println("scan getYourGroups error", err)
 			return res, err
