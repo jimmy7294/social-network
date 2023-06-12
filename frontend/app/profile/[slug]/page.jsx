@@ -3,6 +3,35 @@
 import { useState, useEffect } from "react";
 
 
+function followCheck(slug){
+  useEffect(() => {
+    fetch ("http:localhost:8080/api/followCheck"), {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  })
+  .then((data) => data.json())
+  .then ((data) => {
+    if (!data.ok){
+      return console.log(data)
+    }
+    })
+
+    return (
+      <>
+      <div className="follow">
+        <h2>Follow</h2>
+        <button>Follow</button>
+        </div>
+        </>
+    )
+  
+}
+
+
 function getProfile(slug) {
   const user = decodeURIComponent(slug.params.slug)
   console.log("user:", user)
