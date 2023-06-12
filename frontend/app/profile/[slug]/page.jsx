@@ -4,34 +4,46 @@ import { useState, useEffect } from "react";
 
 
 function followCheck(slug){
+  const [following, setFollwing] = useState(Boolean)
   const user = decodeURIComponent(slug.params.slug)
   useEffect(() => {
-    fetch ("http:localhost:8080/api/followCheck"), {
+    fetch("http://localhost:8080/api/followCheck", {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
-    }
-  })
-  .then((data) => data.json())
-  .then ((data) => {
-    if (!data.ok){
-      return console.log(data)
-    }
     })
-
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data.status)
+        if (data.satus !== "success") {
+         console.log("lahdslsad")
+          return
+        }
+        setFollwing(data.following)
+      });
+    
+  }, []);
+  if (following){
     return (
       <>
-      <div className="follow">
-        <h2>Follow</h2>
-        <button>Follow</button>
-        </div>
-        </>
+      <button>Unfollow</button>
+
+      </>
     )
-  
+  } else {
+    return (
+      <>
+      <button>Follow</button>
+      </>
+    )
+  }
+
+
 }
+
 
 
 function getProfile(slug) {
@@ -85,22 +97,17 @@ function getProfile(slug) {
         );
         }
         
-        function HomePage() {
-        
-          return (
-            <div>
-              <h1>Meow meow meow</h1>
-              <GetPosts />
-            </div>
-          )
-
-
-
-}
 
 function ProfilePage(slug){
-const page = getProfile(slug);
-return page
+
+
+return (<>
+  <div className="ProfilePage">
+    {getProfile(slug)}
+    {followCheck(slug)}
+  </div>
+</>)
+
 
 }
 
