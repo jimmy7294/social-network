@@ -126,7 +126,6 @@ export default function Optional() {
         <h1 className="name"> Irelevant Discussion </h1>
         </div>
       </header>
-
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="padder">
