@@ -103,26 +103,55 @@ func GetUsername(uuid int) (string, error) {
 
 // complete fucking shitshow personified that i'm only keeping around because it amuses me
 func GetFollowing(uuid int) ([]string, error) {
-	sqlStmt := `SELECT followers.uuid, users.username
+	sqlStmt := `SELECT followers.uuid,
+COALESCE(users.username, users.email)
 FROM followers
 JOIN users
 ON users.uuid = followers.uuid
 WHERE follower_id = ?;`
 	//JOIN users on followers.uuid = users.uuid
+	var bleh = make([]string, 0)
 	rows, err := data.DB.Query(sqlStmt, uuid)
 	if err != nil {
 		fmt.Println("query error", err)
+		return bleh, err
 	}
+
 	for rows.Next() {
 		var d1 string
 		var d2 string
-		var d3 string
 		err = rows.Scan(&d1, &d2)
 		if err != nil {
 			fmt.Println("scan error", err)
+			return bleh, err
 		}
-		fmt.Println("var1", d1, "var2", d2, "var3", d3)
+		//fmt.Println("var1", d1, "var2", d2)
+		bleh = append(bleh, d2)
 	}
-	var bleh = make([]string, 0)
-	return bleh, nil
+
+	return bleh, err
+}
+
+func GetYourGroups(uuid int) ([]string, error) {
+	sqlStmt := `SELECT group_id,
+	groups.group_name
+	FROM groupMembers
+	JOIN groups
+	ON groups.group_id = groupMembers.group_id
+	WHERE uuid = ?`
+	var res = make([]string, 0)
+	rows, err := data.DB.Query(sqlStmt, uuid)
+	if err != nil {
+		fmt.Println("query getYourGroups error", err)
+	}
+	for rows.Next() {
+		var temp string
+		err = rows.Scan(&temp)
+		if err != nil {
+			fmt.Println("scan getYourGroups error", err)
+			return res, err
+		}
+		res = append(res, temp)
+	}
+	return res, err
 }
