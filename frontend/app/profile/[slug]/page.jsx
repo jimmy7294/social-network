@@ -1,11 +1,15 @@
+"use client"
 
+import { useState, useEffect } from "react";
 
 
 function getProfile(slug) {
   const user = decodeURIComponent(slug.params.slug)
   console.log("user:", user)
 
-  
+  const [stuff, setStuff] = useState([]);
+
+  useEffect(() => {
     fetch("http://localhost:8080/api/getProfile", {
       method: "POST",
       credentials: "include",
@@ -18,27 +22,54 @@ function getProfile(slug) {
       .then((data) => {
         if (data.status === "success") {
           console.log(data);
+          setStuff(data); // Update the state with fetched data
         } else {
           console.log(data);
         }
       });
+  }, []);
   
-return user;
+      return (
+        <>
+        <div className="Profile">
+          <h2>Profile</h2>
+       
+        <p> {stuff.email}</p>
+        <p> {stuff.first_name}</p>
+        <p> {stuff.last_name}</p>
+        <p> {stuff.dob}</p>
+        <p> {stuff.avatar}</p>
+        <p> {stuff.username}</p>
+        <p> {stuff.bio}</p>
+        <p> {stuff.privacy}</p>
+        <p> {stuff.followers}</p>
+        <p> {stuff.following}</p>
+        <p> {stuff.groups}</p>
+            </div>
+            
+      
+     
+                
+          </>
+        );
+        }
+        
+        function HomePage() {
+        
+          return (
+            <div>
+              <h1>Meow meow meow</h1>
+              <GetPosts />
+            </div>
+          )
 
 
-  // const profile = response.json();
-  // console.log("profile:", profile);
-  // if(profile.status == "success"){
-  // console.log("profile data:", profile);
-  // } else {
-  //   console.log("error profile fetch")
-  // }
-  // return profile;
+
 }
 
 function ProfilePage(slug){
 const page = getProfile(slug);
-return null
+return page
 
 }
 
