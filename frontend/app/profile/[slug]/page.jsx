@@ -1,28 +1,29 @@
-export const metadata = {
-  title: "About Me",
-};
 
-// create a dummy data object
 
-function getProfile() {
-  const { slug } = router.query;
-  const response = fetch("http://localhost:8080/api/getProfile", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ slug }),
-  })
-  .then(data => data.json())
-  .then(data => {
-    if (data.status == "success"){
-      console.log(data)
-    } else {
-      console.log(data)
-    }
+
+function getProfile(slug) {
+  const user = decodeURIComponent(slug.params.slug)
+  console.log("user:", user)
+
+  
+    fetch("http://localhost:8080/api/getProfile", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
     })
-
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.status === "success") {
+          console.log(data);
+        } else {
+          console.log(data);
+        }
+      });
+  
+return user;
 
 
   // const profile = response.json();
@@ -35,9 +36,9 @@ function getProfile() {
   // return profile;
 }
 
-function ProfilePage(){
-const page = getProfile();
-return (console.log(page))
+function ProfilePage(slug){
+const page = getProfile(slug);
+return null
 
 }
 
