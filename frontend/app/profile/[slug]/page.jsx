@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 
 function followCheck(slug){
+  const user = decodeURIComponent(slug.params.slug)
   useEffect(() => {
     fetch ("http:localhost:8080/api/followCheck"), {
       method: "POST",
@@ -11,6 +12,7 @@ function followCheck(slug){
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(user),
     }
   })
   .then((data) => data.json())
