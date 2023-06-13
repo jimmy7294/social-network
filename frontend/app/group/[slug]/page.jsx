@@ -1,4 +1,6 @@
-import React, { useEffect,useState } from "react";
+"use client"
+
+import React, { use, useEffect,useState } from "react";
 
 
 function getEvents() {
