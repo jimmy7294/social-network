@@ -175,7 +175,7 @@ function GetPosts(){
 <div className="postUser">{semi.author}</div>
 <div className="postTitle">{semi.title}</div>
 <div classeName="postContent">{semi.content}</div>
-<button className="buttonComment" onClick={function() {}}>comment</button>
+<button className="buttonComment" onClick={{}}>comment</button>
     </div>
 ))}
 </div>
@@ -196,6 +196,44 @@ function GetPosts(){
 </>
   )
   
+}
+
+
+function GetComments(id) {
+    const [comments, setComments] = useState([]);
+  fetch("http://localhost:8080/api/getComments",{
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(id)
+  })
+  .then(data => data.json())
+  .then(data => {
+    if(data.status === "success") {
+      console.log(data)
+      setComments(data.comments)
+    } else { 
+      console.log("failed to get comments", data) 
+    }
+  })
+  return (
+    <>
+    <div className="comments">
+    {comments.map((comment, index) => (
+      <div key={index} className="comment">
+        <div className="commentUser">{comment.author}</div>
+        <div className="commentContent">{comment.content}</div>
+        <div className="commentDate">{comment.creation_date}</div>
+      </div>
+    ))}
+    </div>
+    </>
+
+
+)
+
 }
 
 export default HomePage      
