@@ -5,12 +5,12 @@
   width: -webkit-fill-available;
   align-items: center;
   background-color: #144b56;
-  margin-bottom: 10vh;
+  margin-bottom: 0.5vh;
 }
 
 .identity {
   display: flex;
-  background-color: #96aace;
+  background-color: #4c6ca4;
   width: 350px;
   height: 80px;
   align-items: flex-end;
@@ -18,10 +18,23 @@
 
 }
 
+.navigate {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  background-color: #213049;
+  height: 40px;
+  align-items:center ;
+  margin-left: 5px;
+  position: relative;
+  top: 1.5vh;
+}
+
 .name {
-  font-size: x-large;
+  font-size: larger;
   text-decoration: underline;
   margin-bottom: 0px;
+  color: inherit;
 }
 
 .logo {
@@ -91,6 +104,8 @@ body {
 .forgot,
 .link-up {
   color: #b5afb3;
+  margin: 5px;
+
 }
 
 .gibspace {
@@ -154,4 +169,109 @@ body {
 .links {
   width: 300px;
   margin: 5px;
+}
+
+.post {
+  border: solid 2px #4faa92;
+  padding: 5px;
+  max-width: 60%;
+  margin-left: 20%;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
+}
+
+.public {
+  display: block;
+}
+
+.semi {
+  display: block;
+}
+
+.private {
+  display: block;
+}
+
+.mfposts {
+  text-align: center;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.mfsemi {
+  text-align: center;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.mfprivate {
+  text-align: center;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.groupeOfButtons {
+  margin-left: 20%;
+  text-align: left;
+}
+
+.buttonPublic {
+  background: #4faa92; 
+  border-color: #4faa92;
+  border-style: double;
+  color: #e3f2ee;
+  margin-right: 0.5%;
+  width: 80px;
+  height: 20px;
+}
+
+.buttonSemi {
+  background: #4faa92; 
+  border-color: #4faa92;
+  border-style: double;
+  color: #e3f2ee;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+  width: 80px;
+  height: 20px;
+}
+
+.buttonPrivate {
+  background: #4faa92; 
+  border-color: #4faa92;
+  border-style: double;
+  color: #e3f2ee;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+  width: 80px;
+  height: 20px;
+}
+
+.buttonComment {
+  background: #4faa92; 
+  border-color: #4faa92;
+  border-style: none;
+  color: #e3f2ee;
+  margin-left: 85%;
+  width: 15%;
+  height: 20px;
+}
+
+.postDate {
+  text-align: right;
+  font-size: 15px;
+  float: right;
+}
+
+.postUser {
+  text-align: left;
+  font-size: 15px;
+}
+
+.postTitle {
+
+}
+
+.postContent {
+
 }
