@@ -16,6 +16,7 @@ type allposts struct {
 	Status           string  `json:"status"`
 }
 type posts struct {
+	PostId       int       `json:"post_id"`
 	Author       string    `json:"author"`
 	Image        []byte    `json:"image"`
 	CreationDate time.Time `json:"creation_date"`
@@ -25,7 +26,8 @@ type posts struct {
 
 func gatherPosts() ([]posts, error) {
 	var pData []posts
-	sqlStmt := `SELECT COALESCE(users.username, users.email),
+	sqlStmt := `SELECT post_id,
+COALESCE(users.username, users.email),
 post_image,
 creation_date,
 post_content,
@@ -40,20 +42,21 @@ WHERE post_privacy = 'public';`
 		return pData, err
 	}
 	for rows.Next() {
-		var privPost posts
+		var normPost posts
 		//var authId int
-		err = rows.Scan(&privPost.Author, &privPost.Image, &privPost.CreationDate, &privPost.Content, &privPost.Title)
+		err = rows.Scan(&normPost.PostId, &normPost.Author, &normPost.Image, &normPost.CreationDate, &normPost.Content, &normPost.Title)
 		if err != nil {
-			fmt.Println("scan privatePost err", err)
+			fmt.Println("scan normal Post err", err)
 		}
-		pData = append(pData, privPost)
+		pData = append(pData, normPost)
 	}
 	return pData, nil
 }
 
 func gatherSemiPrivatePosts(uuid int) ([]posts, error) {
 	var pData []posts
-	sqlStmt := `SELECT COALESCE(users.username, users.email),
+	sqlStmt := `SELECT post_id,
+COALESCE(users.username, users.email),
 post_image,
 creation_date,
 post_content,
@@ -72,20 +75,21 @@ WHERE uuid = ?
 		return pData, err
 	}
 	for rows.Next() {
-		var privPost posts
+		var semiPost posts
 		//var authId int
-		err = rows.Scan(&privPost.Author, &privPost.Image, &privPost.CreationDate, &privPost.Content, &privPost.Title)
+		err = rows.Scan(&semiPost.PostId, &semiPost.Author, &semiPost.Image, &semiPost.CreationDate, &semiPost.Content, &semiPost.Title)
 		if err != nil {
-			fmt.Println("scan privatePost err", err)
+			fmt.Println("scan semi private Post err", err)
 		}
-		pData = append(pData, privPost)
+		pData = append(pData, semiPost)
 	}
 	return pData, nil
 }
 
 func gatherPrivatePosts(uuid int) ([]posts, error) {
 	var pData []posts
-	sqlStmt := `SELECT COALESCE(users.username, users.email),
+	sqlStmt := `SELECT post_id,
+COALESCE(users.username, users.email),
 post_image,
 creation_date,
 post_content,
@@ -106,7 +110,7 @@ WHERE follower_id = ?
 	for rows.Next() {
 		var privPost posts
 		//var authId int
-		err = rows.Scan(&privPost.Author, &privPost.Image, &privPost.CreationDate, &privPost.Content, &privPost.Title)
+		err = rows.Scan(&privPost.PostId, &privPost.Author, &privPost.Image, &privPost.CreationDate, &privPost.Content, &privPost.Title)
 		if err != nil {
 			fmt.Println("scan privatePost err", err)
 		}
