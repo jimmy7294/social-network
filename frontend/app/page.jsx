@@ -3,6 +3,69 @@
 import { useState, useEffect } from "react";
 import Headers from "./components/Header"
 
+
+function HomePage() {
+
+  return (
+    <div>
+      <Headers />
+      <MakePost />
+      <GetPosts />
+    </div>
+  )
+
+}
+
+
+function MakePost(){
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [private_post, setPrivate_post] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch("http://localhost:8080/api/makePost", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, content, private_post }),
+    });
+    const data = await res.json();
+    if (data.status !== "success") {
+      console.log("failed to make post");
+      return;
+    }
+    console.log("success");
+  };
+  return(
+    <>
+    <div className="makePost">
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="title"
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="content"
+          onChange={(e) => setContent(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="private"
+          onChange={(e) => setPrivate_post(e.target.value)}
+        />
+        <button type="submit">submit</button>
+      </form>
+    </div>
+    </>
+  )
+}
+
+
+
 function GetPosts(){
   const [posts, setPosts] = useState([]);
   const [semi_private, setSemi_private] = useState([]);
@@ -133,18 +196,6 @@ function GetPosts(){
 </>
   )
   
-}
-
-function HomePage() {
-
-  return (
-    <div>
-      {/* Temp Head bar */}
-      <Headers />
-      <GetPosts />
-    </div>
-  )
-
 }
 
 export default HomePage      
