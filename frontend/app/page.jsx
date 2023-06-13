@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Headers from "./components/Header"
+import { Noto_Sans_Masaram_Gondi } from "next/font/google";
 
 
 function HomePage() {
@@ -21,6 +22,7 @@ function MakePost(){
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [private_post, setPrivate_post] = useState("");
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await fetch("http://localhost:8080/api/makePost", {
@@ -70,6 +72,7 @@ function GetPosts(){
   const [posts, setPosts] = useState([]);
   const [semi_private, setSemi_private] = useState([]);
   const [private_posts, setPrivate_posts] = useState([]);
+  const [comments, setComments] = useState([]);
   useEffect(() => {
   fetch("http://localhost:8080/api/getPosts",{
     method: "POST",
@@ -200,7 +203,6 @@ function GetPosts(){
 
 
 function GetComments(id) {
-    const [comments, setComments] = useState([]);
   fetch("http://localhost:8080/api/getComments",{
     method: "POST",
     credentials: "include",
