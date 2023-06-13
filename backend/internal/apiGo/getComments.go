@@ -37,7 +37,7 @@ func gatherCommentsFromDB(postId int) (comments, error) {
 	}
 	for rows.Next() {
 		var cData comment
-		err = rows.Scan(&cData.Author, &cData.Content, &cData.Created, &cData.Image)
+		err = rows.Scan(&cData.Author, &cData.Content, &cData.Image, &cData.Created)
 		if err != nil {
 			return commentsData, err
 		}
