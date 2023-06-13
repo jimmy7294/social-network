@@ -38,5 +38,5 @@ const response = await fetch("http://localhost:8080/api/cookie", {
 
 
 export const config = {
-    matcher: ['/', '/post', '/profile']
+    matcher: ['/', '/post', '/profile/:path*']
 }

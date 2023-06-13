@@ -3,6 +3,29 @@
 import { useState, useEffect } from "react";
 
 
+function follow(slug){
+useEffect(()=>{
+  fetch("http://localhost:8080/api/followthis",{
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(slug.params.slug),
+  })
+  .then((data) => data.json())
+  .then((data) => {
+    if (data.status !== "success"){
+      console.log("unfollow/follow failed")
+      return
+    }
+    console.log("unfollow/follow success")
+})
+},[])
+return
+}
+
+
 function followCheck(slug){
   const [following, setFollwing] = useState(Boolean)
   const user = decodeURIComponent(slug.params.slug)

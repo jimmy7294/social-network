@@ -47,7 +47,7 @@ function GetPosts(){
 
       <div className="mfsemi">
         <h2>this is semi post section</h2>
-{semi_private.map((semi, index) => (
+{semi_private && semi_private.map((semi, index) => (
   <div key={index}>
 <p> {semi.author}</p>
 <p> {semi.title}</p>
@@ -62,7 +62,7 @@ function GetPosts(){
 
       <div className="mfprivate">
         <h2>this is private posts</h2>
-{private_posts.map((post, index) => (
+{private_posts && private_posts.map((post, index) => (
   <div key={index}>
 <p> {post.author}</p>
 <p> {post.title}</p>
