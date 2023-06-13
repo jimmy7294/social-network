@@ -1,3 +1,8 @@
+
+"use client"
+
+import React, {useState} from "react";
+
 function getYourProfile(){
     const [profile, setProfile] = useState([]);
     fetch("http://localhost:8080/api/getYourProfile", {
