@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
+import Headers from "./components/Header";
 
 
 function GetPosts(){
@@ -82,6 +83,7 @@ function HomePage() {
 
   return (
     <div>
+      <Headers />
       <h1>Meow meow meow</h1>
       <GetPosts />
     </div>
