@@ -1,26 +1,39 @@
-import Link from "next/link";
+import React, { useState } from "react"
 
-const GroupListPage = ({ data }) => {
-  // create a dummy list of groups
-  data = Array.from({ length: 10 }, (_, i) => ({
-    group_id: i + 1,
-    group_name: `Group ${i + 1}`,
-  }));
 
+function yourGroups(){
+  const [groups, setGroups] = useState([]);
+fetch("http://localhost:8080/api/yourGroups", {
+  method: "POST",
+  credentials: "include",
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+  .then((data) => data.json())
+  .then((data) => {
+    if(data.status !== "success"){
+      console.log("error")
+      return
+    }
+    console.log(data)
+    setGroups(data.groups)
+  })
   return (
-    <div>
-      <h1>Group List Page</h1>
-      <ul>
-        {data.map((group) => (
-          <li key={group.group_id}>
-            <Link href={`/profile/group/${group.group_id}`}>
-              {group.group_name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <>
+    <div className="groups">
+    <h1>Your Groups</h1>
+    {groups.map((group) => (
+      <div className="group">
+      <h2>{group.name}</h2>
+      <p>{group.description}</p>
+      <p>{group.members}</p>
+      <p>{group.events}</p>
+      </div>
+    ))}
     </div>
-  );
-};
+    </>
+  )
 
-export default GroupListPage;
+    
+}
