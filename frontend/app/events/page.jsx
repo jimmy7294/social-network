@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 
 function getAllPublicEvents() {
+    const [events, setEvents] = useState([{}])
     useEffect(() => {
         fetch("http://localhost:8080/api/getAllEvents", {
             method: "POST",
@@ -23,7 +24,18 @@ function getAllPublicEvents() {
         <>
         <div className="allEvents">
             <h2>all events</h2>
+            <h2>this is public post section</h2>
+            {events.map((event, index) => (
+                <div key={index}>
+                    <p> {event.title}</p>
+                    <p> {event.description}</p>
+                    <p> {event.location}</p>
+                    <p> {event.time}</p>
+                    <p> {event.date}</p>
+                </div>
+            ))}
         </div>
+        
         </>
     )
 }
@@ -70,6 +82,18 @@ function makeEvent(){
             </form>
         </div>
         </>
-        
+
     )
+}
+
+function eventPage(){
+    return(
+        <>
+        <div className="eventPage">
+            <h2>event page</h2>
+
+        </div>
+        </>
+    )
+
 }
