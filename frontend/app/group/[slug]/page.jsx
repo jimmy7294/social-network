@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 
 
 function getEvents() {
@@ -18,6 +18,7 @@ function getEvents() {
                     return
                 }
                 console.log(data)
+                setEvents(data.events)
             })
     }, [])
     return(
@@ -121,12 +122,12 @@ function getGroup(slug) {
 }
 
 
-function groupPage(slug){
+function GroupPage(slug){
     return(
         <>
         <div className="groupPage">
             <h1>group page</h1>
-            <{getGroup(slug)} />
+            {getGroup(slug)}
             <makeEvent />
             <getEvents />
         </div>
@@ -136,4 +137,4 @@ function groupPage(slug){
 
 }
 
-export default groupPage
+export default GroupPage
