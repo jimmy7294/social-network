@@ -1,9 +1,9 @@
 "use client"
 
-import React, { use, useEffect,useState } from "react";
+import React, { useEffect,useState } from "react";
 
 
-function getEvents() {
+function GetEvents() {
     const [events, setEvents] = useState([{}])
     useEffect(() => {
         fetch("http://localhost:8080/api/getAllEvents", {
@@ -44,7 +44,7 @@ function getEvents() {
 }
 
 
-function makeEvent(){
+function MakeEvent(){
     const[title, setTitle] = useState("")
     const[description, setDescription] = useState("")
     const[location, setLocation] = useState("")
@@ -89,7 +89,7 @@ function makeEvent(){
     )
 }
 
-function getGroup(slug) {
+function GetGroup(slug) {
     const [group, setGroup] = useState([{}])
     useEffect(() => {
         fetch("http://localhost:8080/api/getGroup", {
@@ -129,9 +129,9 @@ function GroupPage(slug){
         <>
         <div className="groupPage">
             <h1>group page</h1>
-            {getGroup(slug)}
-            <makeEvent />
-            <getEvents />
+            {GetGroup(slug)}
+            <MakeEvent />
+            <GetEvents />
         </div>
         </>
     )
