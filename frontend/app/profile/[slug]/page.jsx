@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 
 
-function follow(slug){
+function follow(slug, action){
 useEffect(()=>{
   fetch("http://localhost:8080/api/followthis",{
     method: "POST",
@@ -11,7 +11,7 @@ useEffect(()=>{
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(slug.params.slug),
+    body: JSON.stringify(slug.params.slug, action),
   })
   .then((data) => data.json())
   .then((data) => {

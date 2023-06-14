@@ -94,6 +94,28 @@ function GetPosts(){
     }
     })
   }, []);
+ 
+
+  const handleGetComments = (postId) => {
+    console.log("hello" , postId)
+    fetch("http://localhost:8080/api/getComments", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postId),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.status === "success") {
+          console.log(data);
+          setComments(data.comments);
+        } else {
+          console.log("failed to get comments", data);
+        }
+      });
+  };
  return (
 <>
 <div className="groupeOfButtons">
@@ -165,7 +187,7 @@ function GetPosts(){
 <div className="postUser">{post.author}</div>
 <div className="postTitle">{post.title}</div>
 <div classeName="postContent">{post.content}</div>
-<button className="buttonComment" onClick={function() {}}>comment</button>
+<button className="buttonComment" onClick={() => handleGetComments(post.post_id)}>comment</button>
     </div>
 ))}
 </div>
@@ -178,20 +200,20 @@ function GetPosts(){
 <div className="postUser">{semi.author}</div>
 <div className="postTitle">{semi.title}</div>
 <div classeName="postContent">{semi.content}</div>
-<button className="buttonComment" onClick={{}}>comment</button>
+<button className="buttonComment" onClick={() => handleGetComments(semi.post_id)}>comment</button>
     </div>
 ))}
 </div>
 </div>
 <div className="private">
       <div className="mfprivate">
-{private_posts && private_posts.map((post, index) => (
+{private_posts && private_posts.map((private_post, index) => (
   <div key={index} className="post">
-<div className="postDate">Private | {post.creation_date}</div>
-<div className="postUser">{post.author}</div>
-<div className="postTitle">{post.title}</div>
-<div classeName="postContent">{post.content}</div>
-<button className="buttonComment" onClick={function() {}}>comment</button>
+<div className="postDate">Private | {private_post.creation_date}</div>
+<div className="postUser">{private_post.author}</div>
+<div className="postTitle">{private_post.title}</div>
+<div classeName="postContent">{private_post.content}</div>
+<button className="buttonComment" onClick={() => handleGetComments(private_post.post_id)}>comment</button>
     </div>
 ))}
 </div>
@@ -202,40 +224,6 @@ function GetPosts(){
 }
 
 
-function GetComments(id) {
-  fetch("http://localhost:8080/api/getComments",{
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(id)
-  })
-  .then(data => data.json())
-  .then(data => {
-    if(data.status === "success") {
-      console.log(data)
-      setComments(data.comments)
-    } else { 
-      console.log("failed to get comments", data) 
-    }
-  })
-  return (
-    <>
-    <div className="comments">
-    {comments.map((comment, index) => (
-      <div key={index} className="comment">
-        <div className="commentUser">{comment.author}</div>
-        <div className="commentContent">{comment.content}</div>
-        <div className="commentDate">{comment.creation_date}</div>
-      </div>
-    ))}
-    </div>
-    </>
 
 
-)
-
-}
-
-export default HomePage      
+export default HomePage       
