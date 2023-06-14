@@ -3,6 +3,7 @@ package apiGO
 import (
 	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -37,14 +38,17 @@ func gatherCommentsFromDB(postId int) (comments, error) {
 	}
 	for rows.Next() {
 		var cData comment
-		err = rows.Scan(&cData.Author, &cData.Content, &cData.Image, &cData.Created)
+		var commentImage sql.NullString
+		err = rows.Scan(&cData.Author, &cData.Content, &commentImage, &cData.Created)
 		if err != nil {
 			return commentsData, err
 		}
+		cData.Image = commentImage.String
 		commentsData.AllComments = append(commentsData.AllComments, cData)
 	}
 	return commentsData, err
 }
+
 
 func GetComments(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
