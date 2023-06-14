@@ -3,27 +3,10 @@
 import { useState, useEffect } from "react";
 
 
-function follow(slug, action){
-useEffect(()=>{
-  fetch("http://localhost:8080/api/followthis",{
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(slug.params.slug, action),
-  })
-  .then((data) => data.json())
-  .then((data) => {
-    if (data.status !== "success"){
-      console.log("unfollow/follow failed")
-      return
-    }
-    console.log("unfollow/follow success")
-})
-},[])
-return
-}
+
+  
+
+
 
 
 function followCheck(slug){
@@ -41,7 +24,7 @@ function followCheck(slug){
       .then((data) => data.json())
       .then((data) => {
         console.log(data.status)
-        if (data.satus !== "success") {
+        if (data.status !== "success") {
          console.log("lahdslsad")
           return
         }
@@ -49,17 +32,38 @@ function followCheck(slug){
       });
     
   }, []);
+  console.log(following)
+
+  const handleFollow = (action) => {
+    console.log(action)
+    fetch("http://localhost:8080/api/followthis",{
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(slug.params.slug, action),
+  })
+  .then((data) => data.json())
+  .then((data) => {
+    if (data.status !== "success"){
+      console.log("unfollow/follow failed")
+      return
+    }
+    console.log("unfollow/follow success")
+  })
+}
   if (following){
     return (
       <>
-      <button>Unfollow</button>
+      <button value ="unfollow" onClick={(e) => handleFollow(e.target.value)}>Unfollow</button>
 
       </>
     )
   } else {
     return (
       <>
-      <button>Follow</button>
+      <button value="follow" onClick={(e) => handleFollow(e.target.value)}>Follow</button>
       </>
     )
   }
