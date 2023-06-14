@@ -167,42 +167,9 @@ function GetPosts() {
           console.log("failed to get comments", data);
         }
       });
-      return (
-        <>
-        <div className="commentos">
-        {comments.map((dat, index) => (
-          <a href={dat.author} key={index}/>
-        ))}
-      </div>
-        </>
-      )
+
   };
 
-  // handle the click onto the post sections by privacy
-
-  const handlePublicClick = () => {
-    if (!display.private && !display.semi) {
-      setDisplay({ public: true, semi: true, private: true });
-    } else {
-      setDisplay({ public: true, semi: false, private: false });
-    }
-  };
-
-  const handleSemiClick = () => {
-    if (!display.private && !display.public) {
-      setDisplay({ public: true, semi: true, private: true });
-    } else {
-      setDisplay({ public: false, semi: true, private: false });
-    }
-  };
-
-  const handlePrivateClick = () => {
-    if (!display.public && !display.semi) {
-      setDisplay({ public: true, semi: true, private: true });
-    } else {
-      setDisplay({ public: false, semi: false, private: true });
-    }
-  };
   return (
     <>
       <div className="groupeOfButtons">
@@ -257,7 +224,7 @@ function GetPosts() {
       <div className="public">
         <div className="mfposts">
           {posts.map((post) => (
-            <Posto arg={post} key={post.post_id}></Posto>
+            <Posto arg={post}></Posto>
           ))}
         </div>
       </div>
