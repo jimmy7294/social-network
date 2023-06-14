@@ -31,13 +31,13 @@ function Posto(post) {
     })
       .then((data) => data.json())
       .then((data) => {
-        if (data.status === "success") {
-          console.log(data);
-          setComments(data.comments);
-          setShowMore(!showMore)
-        } else {
-          console.log("failed to get comments", data);
-        }
+        if (data.status !== "success") {
+        console.log("failed to get comments", data);
+        } 
+        console.log(data);
+        setComments(data.comments);
+        setShowMore(!showMore)
+
       })
     
   }
@@ -53,11 +53,17 @@ function Posto(post) {
                 onClick={handleClick}
               >{showMore ? 'Hide' : 'Show'} comments
               </button>
-              {showMore && <div className="commentos">
+              {showMore && comments && <div className="commentos">
                               {comments.map((dat, index) => (
+                                <div className="commentos">
                               <a href={dat.author} key={index}/>
+                              <div className="commentDate">{dat.created}</div>
+                              <div className="commentUser">{dat.author}</div>
+                              <div className="commentContent">{dat.content}</div>
+                              </div>
                                 ))}
                 </div>}
+                {showMore && !comments && <div>no comments</div>}
             </div>
             </>
   )
@@ -202,7 +208,6 @@ function GetPosts() {
       <div className="groupeOfButtons">
         <button
           className="buttonPublic"
-          style={{ background: buttonColor.public }}
           onClick={() => {
             setDisplay((prevState) => ({
               ...prevState,
@@ -219,7 +224,6 @@ function GetPosts() {
 
         <button
           className="buttonSemi"
-          style={{ background: buttonColor.semi }}
           onClick={() => {
             setDisplay((prevState) => ({
               ...prevState,
@@ -236,7 +240,6 @@ function GetPosts() {
 
         <button
           className="buttonPrivate"
-          style={{ background: buttonColor.private }}
           onClick={() => {
             setDisplay((prevState) => ({
               ...prevState,
