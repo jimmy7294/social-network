@@ -16,6 +16,7 @@ const Headers = () => {
           <Link className="link-up" href="/profile/group">Group</Link>
           <Link className="link-up" href="/chat">Chat</Link>
           <Link className="link-up" href="/post/">Post</Link>
+          <Link className="link-up" href="/post/"><div className="logout">log out</div></Link>
         </div>
     </header>
   );

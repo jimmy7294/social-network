@@ -39,7 +39,7 @@ function Posto(post) {
         setShowMore(!showMore)
 
       })
-    
+     
   }
   return (
     <>
@@ -51,11 +51,11 @@ function Posto(post) {
               <button
                 className="buttonComment"
                 onClick={handleClick}
-              >{showMore ? 'Hide' : 'Show'} comments
+              >comments
               </button>
               {showMore && comments && <div className="commentos">
                               {comments.map((dat, index) => (
-                                <div className="commentos">
+                                <div className="commenting">
                               <a href={dat.author} key={index}/>
                               <div className="commentDate">{dat.created}</div>
                               <div className="commentUser">{dat.author}</div>

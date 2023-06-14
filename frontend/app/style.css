@@ -15,19 +15,15 @@
   height: 80px;
   align-items: flex-end;
   position: relative;
-
 }
 
 .navigate {
   display: flex;
   justify-content: space-between;
-  width: 50%;
+  width: -webkit-fill-available;
+  vertical-align: center;
   background-color: #213049;
-  height: 40px;
-  align-items:center ;
-  margin-left: 5px;
   position: relative;
-  top: 1.5vh;
 }
 
 .name {
@@ -259,7 +255,7 @@ body {
 
 .postDate {
   text-align: right;
-  font-size: 15px;
+  font-size: 13px;
   float: right;
 }
 
@@ -269,9 +265,49 @@ body {
 }
 
 .postTitle {
-
+  font-size: 20px;
 }
 
 .postContent {
+  font-size: 15px;
+}
 
+.commenting {
+  border: dotted 1px #4faa92;
+  padding: 5px;
+  max-width: 60%;
+  margin-left: 20%;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
+}
+
+.commentDate {
+  text-align: right;
+  font-size: 12px;
+  float: right;
+}
+
+.commentUser {
+  text-align: left;
+  font-size: 15px;
+}
+
+.commentTitle {
+  font-size: 15px;
+}
+
+.commentContent {
+  font-size: 15px;
+}
+
+.link-up {
+  margin-left: 8%;
+  margin-right: 8%;
+}
+
+.logout {
+  border: solid #4c6ca4;
+  width: 60px;
+  height: 20px; 
+  text-align: center;
 }
