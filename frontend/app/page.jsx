@@ -67,6 +67,17 @@ function GetPosts() {
   const [semi_private, setSemi_private] = useState([]);
   const [private_posts, setPrivate_posts] = useState([]);
   const [comments, setComments] = useState([]);
+  const [display, setDisplay] = useState({
+    public: true,
+    semi: true,
+    private: true,
+  });
+  const [buttonColor, setButtonColor] = useState({
+    public: "#4faa92",
+    semi: "#4faa92",
+    private: "#4faa92",
+  });
+
   useEffect(() => {
     fetch("http://localhost:8080/api/getPosts", {
       method: "POST",
@@ -109,38 +120,47 @@ function GetPosts() {
         }
       });
   };
+
+  // handle the click onto the post sections by privacy
+
+  const handlePublicClick = () => {
+    if (!display.private && !display.semi) {
+      setDisplay({ public: true, semi: true, private: true });
+    } else {
+      setDisplay({ public: true, semi: false, private: false });
+    }
+  };
+
+  const handleSemiClick = () => {
+    if (!display.private && !display.public) {
+      setDisplay({ public: true, semi: true, private: true });
+    } else {
+      setDisplay({ public: false, semi: true, private: false });
+    }
+  };
+
+  const handlePrivateClick = () => {
+    if (!display.public && !display.semi) {
+      setDisplay({ public: true, semi: true, private: true });
+    } else {
+      setDisplay({ public: false, semi: false, private: true });
+    }
+  };
   return (
     <>
       <div className="groupeOfButtons">
         <button
           className="buttonPublic"
-          onClick={function () {
-            if (
-              document.querySelector(".private").style.display == "none" &&
-              document.querySelector(".semi").style.display == "none"
-            ) {
-              document.querySelector(".public").style.display = "block";
-              document.querySelector(".private").style.display = "block";
-              document.querySelector(".semi").style.display = "block";
-
-              document.querySelector(".buttonPublic").style.background =
-                "#4faa92";
-              document.querySelector(".buttonSemi").style.background =
-                "#4faa92";
-              document.querySelector(".buttonPrivate").style.background =
-                "#4faa92";
-            } else {
-              document.querySelector(".public").style.display = "block";
-              document.querySelector(".private").style.display = "none";
-              document.querySelector(".semi").style.display = "none";
-
-              document.querySelector(".buttonPublic").style.background =
-                "#144b56";
-              document.querySelector(".buttonSemi").style.background =
-                "#4faa92";
-              document.querySelector(".buttonPrivate").style.background =
-                "#4faa92";
-            }
+          style={{ background: buttonColor.public }}
+          onClick={() => {
+            setDisplay((prevState) => ({
+              ...prevState,
+              public: !prevState.public,
+            }));
+            setButtonColor((prevColor) => ({
+              ...prevColor,
+              public: display.public ? "#144b56" : "#4faa92",
+            }));
           }}
         >
           Public
@@ -148,33 +168,16 @@ function GetPosts() {
 
         <button
           className="buttonSemi"
-          onClick={function () {
-            if (
-              document.querySelector(".private").style.display == "none" &&
-              document.querySelector(".public").style.display == "none"
-            ) {
-              document.querySelector(".public").style.display = "block";
-              document.querySelector(".private").style.display = "block";
-              document.querySelector(".semi").style.display = "block";
-
-              document.querySelector(".buttonPublic").style.background =
-                "#4faa92";
-              document.querySelector(".buttonSemi").style.background =
-                "#4faa92";
-              document.querySelector(".buttonPrivate").style.background =
-                "#4faa92";
-            } else {
-              document.querySelector(".semi").style.display = "block";
-              document.querySelector(".public").style.display = "none";
-              document.querySelector(".private").style.display = "none";
-
-              document.querySelector(".buttonPublic").style.background =
-                "#4faa92";
-              document.querySelector(".buttonSemi").style.background =
-                "#144b56";
-              document.querySelector(".buttonPrivate").style.background =
-                "#4faa92";
-            }
+          style={{ background: buttonColor.semi }}
+          onClick={() => {
+            setDisplay((prevState) => ({
+              ...prevState,
+              semi: !prevState.semi,
+            }));
+            setButtonColor((prevColor) => ({
+              ...prevColor,
+              semi: display.semi ? "#144b56" : "#4faa92",
+            }));
           }}
         >
           Semi
@@ -182,100 +185,111 @@ function GetPosts() {
 
         <button
           className="buttonPrivate"
-          onClick={function () {
-            if (
-              document.querySelector(".public").style.display == "none" &&
-              document.querySelector(".semi").style.display == "none"
-            ) {
-              document.querySelector(".public").style.display = "block";
-              document.querySelector(".private").style.display = "block";
-              document.querySelector(".semi").style.display = "block";
-
-              document.querySelector(".buttonPublic").style.background =
-                "#4faa92";
-              document.querySelector(".buttonSemi").style.background =
-                "#4faa92";
-              document.querySelector(".buttonPrivate").style.background =
-                "#4faa92";
-            } else {
-              document.querySelector(".private").style.display = "block";
-              document.querySelector(".semi").style.display = "none";
-              document.querySelector(".public").style.display = "none";
-
-              document.querySelector(".buttonPublic").style.background =
-                "#4faa92";
-              document.querySelector(".buttonSemi").style.background =
-                "#4faa92";
-              document.querySelector(".buttonPrivate").style.background =
-                "#144b56";
-            }
+          style={{ background: buttonColor.private }}
+          onClick={() => {
+            setDisplay((prevState) => ({
+              ...prevState,
+              private: !prevState.private,
+            }));
+            setButtonColor((prevColor) => ({
+              ...prevColor,
+              private: display.private ? "#144b56" : "#4faa92",
+            }));
           }}
         >
           Private
         </button>
       </div>
-      <div className="public">
-        <div className="mfposts">
-          {posts.map((post, index) => (
+
+      {display.public && (
+        <PublicPosts handleGetComments={handleGetComments} posts={posts} />
+      )}
+      {display.semi && (
+        <SemiPosts handleGetComments={handleGetComments} semi={semi_private} />
+      )}
+      {display.private && (
+        <PrivatePosts
+          handleGetComments={handleGetComments}
+          private_posts={private_posts}
+        />
+      )}
+    </>
+  );
+}
+
+const PublicPosts = ({ posts, handleGetComments }) => {
+  return (
+    <div className="public">
+      <div className="mfposts">
+        {posts.map((post, index) => (
+          <div key={index} className="post">
+            <div className="postDate">Public | {post.creation_date}</div>
+            <div className="postUser">{post.author}</div>
+            <div className="postTitle">{post.title}</div>
+            <div className="postContent">{post.content}</div>
+            <button
+              className="buttonComment"
+              onClick={() => handleGetComments(post.post_id)}
+            >
+              comment
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const SemiPosts = ({ semi, handleGetComments }) => {
+  return (
+    <div className="semi">
+      <div className="mfsemi">
+        {semi &&
+          semi.map((semi, index) => (
             <div key={index} className="post">
-              <div className="postDate">Public | {post.creation_date}</div>
-              <div className="postUser">{post.author}</div>
-              <div className="postTitle">{post.title}</div>
-              <div className="postContent">{post.content}</div>
+              <div className="postDate">
+                Semi-Private | {semi.creation_date}
+              </div>
+              <div className="postUser">{semi.author}</div>
+              <div className="postTitle">{semi.title}</div>
+              <div className="postContent">{semi.content}</div>
               <button
                 className="buttonComment"
-                onClick={() => handleGetComments(post.post_id)}
+                onClick={() => handleGetComments(semi.post_id)}
               >
                 comment
               </button>
             </div>
           ))}
-        </div>
       </div>
-      <div className="semi">
-        <div className="mfsemi">
-          {semi_private &&
-            semi_private.map((semi, index) => (
-              <div key={index} className="post">
-                <div className="postDate">
-                  Semi-Private | {semi.creation_date}
-                </div>
-                <div className="postUser">{semi.author}</div>
-                <div className="postTitle">{semi.title}</div>
-                <div className="postContent">{semi.content}</div>
-                <button
-                  className="buttonComment"
-                  onClick={() => handleGetComments(semi.post_id)}
-                >
-                  comment
-                </button>
-              </div>
-            ))}
-        </div>
-      </div>
-      <div className="private">
-        <div className="mfprivate">
-          {private_posts &&
-            private_posts.map((private_post, index) => (
-              <div key={index} className="post">
-                <div className="postDate">
-                  Private | {private_post.creation_date}
-                </div>
-                <div className="postUser">{private_post.author}</div>
-                <div className="postTitle">{private_post.title}</div>
-                <div className="postContent">{private_post.content}</div>
-                <button
-                  className="buttonComment"
-                  onClick={() => handleGetComments(private_post.post_id)}
-                >
-                  comment
-                </button>
-              </div>
-            ))}
-        </div>
-      </div>
-    </>
+    </div>
   );
-}
+};
+
+const PrivatePosts = ({ private_posts, handleGetComments }) => {
+  return (
+    <div className="private">
+      <div className="mfprivate">
+        {private_posts &&
+          private_posts.map((private_post, index) => (
+            <div key={index} className="post">
+              <div className="postDate">
+                Private | {private_post.creation_date}
+              </div>
+              <div className="postUser">{private_post.author}</div>
+              <div className="postTitle">{private_post.title}</div>
+              <div className="postContent">{private_post.content}</div>
+              <button
+                className="buttonComment"
+                onClick={() => handleGetComments(private_post.post_id)}
+              >
+                comment
+              </button>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+};
 
 export default HomePage;
