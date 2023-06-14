@@ -14,6 +14,55 @@ function HomePage() {
   );
 }
 
+function Posto(post) {
+
+  post = post.arg
+  const [showMore, setShowMore] = useState(false)
+  const [comments, setComments] = useState({})
+  console.log("sgot to posto", post, comments)
+  function handleClick() {
+    fetch("http://localhost:8080/api/getComments", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(post.post_id),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.status === "success") {
+          console.log(data);
+          setComments(data.comments);
+          setShowMore(!showMore)
+        } else {
+          console.log("failed to get comments", data);
+        }
+      })
+    
+  }
+  return (
+    <>
+    <div key={post.post_id} className="post">
+              <div className="postDate">Public | {post.creation_date}</div>
+              <div className="postUser">{post.author}</div>
+              <div className="postTitle">{post.title}</div>
+              <div className="postContent">{post.content}</div>
+              <button
+                className="buttonComment"
+                onClick={handleClick}
+              >{showMore ? 'Hide' : 'Show'} comments
+              </button>
+              {showMore && <div className="commentos">
+                              {comments.map((dat, index) => (
+                              <a href={dat.author} key={index}/>
+                                ))}
+                </div>}
+            </div>
+            </>
+  )
+}
+
 function MakePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -67,17 +116,10 @@ function GetPosts() {
   const [semi_private, setSemi_private] = useState([]);
   const [private_posts, setPrivate_posts] = useState([]);
   const [comments, setComments] = useState([]);
-  const [display, setDisplay] = useState({
-    public: true,
-    semi: true,
-    private: true,
-  });
-  const [buttonColor, setButtonColor] = useState({
-    public: "#4faa92",
-    semi: "#4faa92",
-    private: "#4faa92",
-  });
-
+  const [showMore, setShowMore] = useState(false)
+  function handleClick() {
+    setShowMore(!showMore)
+  }
   useEffect(() => {
     fetch("http://localhost:8080/api/getPosts", {
       method: "POST",
@@ -119,6 +161,15 @@ function GetPosts() {
           console.log("failed to get comments", data);
         }
       });
+      return (
+        <>
+        <div className="commentos">
+        {comments.map((dat, index) => (
+          <a href={dat.author} key={index}/>
+        ))}
+      </div>
+        </>
+      )
   };
 
   // handle the click onto the post sections by privacy
@@ -200,95 +251,58 @@ function GetPosts() {
           Private
         </button>
       </div>
+      <div className="public">
+        <div className="mfposts">
+          {posts.map((post) => (
+            <Posto arg={post} key={post.post_id}></Posto>
+          ))}
+        </div>
+      </div>
+      <div className="semi">
+        <div className="mfsemi">
+          {semi_private &&
+            semi_private.map((semi, index) => (
+              <div key={index} className="post">
+                <div className="postDate">
+                  Semi-Private | {semi.creation_date}
+                </div>
+                <div className="postUser">{semi.author}</div>
+                <div className="postTitle">{semi.title}</div>
+                <div className="postContent">{semi.content}</div>
+                <button
+                  className="buttonComment"
+                  onClick={() => handleGetComments(semi.post_id)}
+                >
 
-      {display.public && (
-        <PublicPosts handleGetComments={handleGetComments} posts={posts} />
-      )}
-      {display.semi && (
-        <SemiPosts handleGetComments={handleGetComments} semi={semi_private} />
-      )}
-      {display.private && (
-        <PrivatePosts
-          handleGetComments={handleGetComments}
-          private_posts={private_posts}
-        />
-      )}
+                  comment
+                </button>
+
+              </div>
+            ))}
+        </div>
+      </div>
+      <div className="private">
+        <div className="mfprivate">
+          {private_posts &&
+            private_posts.map((private_post, index) => (
+              <div key={index} className="post">
+                <div className="postDate">
+                  Private | {private_post.creation_date}
+                </div>
+                <div className="postUser">{private_post.author}</div>
+                <div className="postTitle">{private_post.title}</div>
+                <div className="postContent">{private_post.content}</div>
+                <button
+                  className="buttonComment"
+                  onClick={() => handleGetComments(private_post.post_id)}
+                >
+                  comment
+                </button>
+              </div>
+            ))}
+        </div>
+      </div>
     </>
-  );
-}
-
-const PublicPosts = ({ posts, handleGetComments }) => {
-  return (
-    <div className="public">
-      <div className="mfposts">
-        {posts.map((post, index) => (
-          <div key={index} className="post">
-            <div className="postDate">Public | {post.creation_date}</div>
-            <div className="postUser">{post.author}</div>
-            <div className="postTitle">{post.title}</div>
-            <div className="postContent">{post.content}</div>
-            <button
-              className="buttonComment"
-              onClick={() => handleGetComments(post.post_id)}
-            >
-              comment
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const SemiPosts = ({ semi, handleGetComments }) => {
-  return (
-    <div className="semi">
-      <div className="mfsemi">
-        {semi &&
-          semi.map((semi, index) => (
-            <div key={index} className="post">
-              <div className="postDate">
-                Semi-Private | {semi.creation_date}
-              </div>
-              <div className="postUser">{semi.author}</div>
-              <div className="postTitle">{semi.title}</div>
-              <div className="postContent">{semi.content}</div>
-              <button
-                className="buttonComment"
-                onClick={() => handleGetComments(semi.post_id)}
-              >
-                comment
-              </button>
-            </div>
-          ))}
-      </div>
-    </div>
-  );
-};
-
-const PrivatePosts = ({ private_posts, handleGetComments }) => {
-  return (
-    <div className="private">
-      <div className="mfprivate">
-        {private_posts &&
-          private_posts.map((private_post, index) => (
-            <div key={index} className="post">
-              <div className="postDate">
-                Private | {private_post.creation_date}
-              </div>
-              <div className="postUser">{private_post.author}</div>
-              <div className="postTitle">{private_post.title}</div>
-              <div className="postContent">{private_post.content}</div>
-              <button
-                className="buttonComment"
-                onClick={() => handleGetComments(private_post.post_id)}
-              >
-                comment
-              </button>
-            </div>
-          ))}
-      </div>
-    </div>
   );
 };
 

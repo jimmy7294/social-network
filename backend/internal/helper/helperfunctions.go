@@ -156,3 +156,9 @@ func GetYourGroups(uuid int) ([]string, error) {
 	}
 	return res, err
 }
+
+func GetYourPosts(uuid int) error {
+	sqlStmt := `SELECT `
+	_ = sqlStmt
+	return nil
+}
