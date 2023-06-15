@@ -20,10 +20,10 @@
 .navigate {
   display: flex;
   justify-content: space-between;
-  width: -webkit-fill-available;
-  vertical-align: center;
+  width: 500px;
   background-color: #213049;
   position: relative;
+  top: 2.1vh;
 }
 
 .name {
@@ -101,6 +101,8 @@ body {
 .link-up {
   color: #b5afb3;
   margin: 5px;
+  margin-left: 8px;
+  margin-right: 8px;
 
 }
 
@@ -300,14 +302,11 @@ body {
   font-size: 15px;
 }
 
-.link-up {
-  margin-left: 8%;
-  margin-right: 8%;
-}
-
 .logout {
-  border: solid #4c6ca4;
-  width: 60px;
-  height: 20px; 
+  border: solid #4faa92;
+  background-color: #4c6ca4;
+  width: max-content;
+  height: max-content; 
   text-align: center;
+  padding-bottom: 2px;
 }

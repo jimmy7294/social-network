@@ -52,6 +52,7 @@ const Headers = () => {
         <div className="tinyname">
           <Link className="link-up" href="/profile">{data.username}</Link>
         </div>
+        <div className="logout"><Link className="link-up" href="/post/">log out</Link></div>
     </header>
   );
 };
