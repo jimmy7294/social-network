@@ -43,16 +43,16 @@ const Headers = () => {
           <Link className="link-up" href="/chat">Chat</Link>
           <Link className="link-up" href="/post/">Post</Link>
         </div>
-        <div className="tinyavatar">
+        {/* <div className="tinyavatar">
           <img
-            className="avatar"
+            className="pfp"
             src={data.avatar}
             />
         </div>
-        <div className="tinyname">
+        <div className="">
           <Link className="link-up" href="/profile">{data.username}</Link>
         </div>
-        <div className="logout"><Link className="link-up" href="/post/">log out</Link></div>
+        <div className="logout"><Link className="link-up" href="/post/">log out</Link></div> */}
     </header>
   );
 };
