@@ -1,38 +1,53 @@
-
 "use client"
+import React, { useState, useEffect } from "react";
 
-import React, {useState} from "react";
-
-function getYourProfile(){
-    const [profile, setProfile] = useState([]);
-    fetch("http://localhost:8080/api/getYourProfile", {
+function getProfile() {
+    const [stuff, setStuff] = useState([]);
+  
+    useEffect(() => {
+      fetch("http://localhost:8080/api/getProfile", {
         method: "POST",
         credentials: "include",
         headers: {
-            "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-    })
-        .then ((data) => data.json())
+        body: JSON.stringify("voff"),
+      })
+        .then((data) => data.json())
         .then((data) => {
-            if(data.status !== "success"){
-                console.log("failed to get profile")
-                return
-            }
-            console.log(data)
-            setProfile(data.profile)
-        })
-    return(
-        <>
-        <div className="profile">
-            <h1>your profile</h1>
-            <h2>{profile.name}</h2>
-            <p>{profile.email}</p>
-            <p>{profile.first_name}</p>
-            <p>{profile.last_name}</p>
-            <p>{profile.following}</p>
-            <p>{profile.followers}</p>
-        </div>
-        </>
-    )
-}
-export default getYourProfile
+          if (data.status === "success") {
+            console.log(data);
+            setStuff(data); // Update the state with fetched data
+          } else {
+            console.log(data);
+          }
+        });
+    }, []);
+    
+        return (
+          <>
+          <div className="Profile">
+            <h2>Profile</h2>
+         
+          <p> {stuff.email}</p>
+          <p> {stuff.first_name}</p>
+          <p> {stuff.last_name}</p>
+          <p> {stuff.dob}</p>
+          <p> {stuff.avatar}</p>
+          <p> {stuff.username}</p>
+          <p> {stuff.bio}</p>
+          <p> {stuff.privacy}</p>
+          <p> {stuff.followers}</p>
+          <p> {stuff.following}</p>
+          <p> {stuff.groups}</p>
+              </div>
+              
+        
+       
+                  
+            </>
+          );
+          }
+
+
+export default getProfile;
