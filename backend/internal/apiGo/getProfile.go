@@ -80,6 +80,7 @@ func GetHeadBar(w http.ResponseWriter, r *http.Request) {
 		}
 		sqlStmt := `SELECT IFNULL(avatar, 'http://localhost:8080/images/default.jpeg'),
 		COALESCE(username, email)
+		FROM users
 		WHERE uuid = ?`
 		err = data.DB.QueryRow(sqlStmt, uuid).Scan(&usrDat.Avatar, &usrDat.Username)
 		if err != nil {
