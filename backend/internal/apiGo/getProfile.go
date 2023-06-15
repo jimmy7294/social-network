@@ -31,6 +31,12 @@ type profilePrivate struct {
 	Status string `json:"status"`
 }
 
+type headBarProf struct {
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
+	Status   string `json:"status"`
+}
+
 func getEmailById(uuid int) (string, error) {
 	sqlStmt := `SELECT email
 	FROM users
@@ -59,6 +65,37 @@ func getProfileFromDataBase(email string) (profile, int, error) {
 	WHERE email = ?`
 	err := data.DB.QueryRow(sqlStmt, email).Scan(&uuid, &usrProfile.Email, &usrProfile.Firstname, &usrProfile.Lastname, &usrProfile.DOB, &usrProfile.Avatar, &usrProfile.UserName, &usrProfile.Bio, &usrProfile.Privacy)
 	return usrProfile, uuid, err
+}
+
+func GetHeadBar(w http.ResponseWriter, r *http.Request) {
+	helper.EnableCors(&w)
+
+	if r.Method == http.MethodPost {
+		var usrDat headBarProf
+		uuid, err := helper.GetIdBySession(w, r)
+		if err != nil {
+			fmt.Println("get head bar prof error", err)
+			helper.WriteResponse(w, "session_error")
+			return
+		}
+		sqlStmt := `SELECT IFNULL(avatar, 'http://localhost:8080/images/default.jpeg'),
+		COALESCE(username, email)
+		WHERE uuid = ?`
+		err = data.DB.QueryRow(sqlStmt, uuid).Scan(&usrDat.Avatar, &usrDat.Username)
+		if err != nil {
+			fmt.Println("get headbar db error", err)
+			helper.WriteResponse(w, "database_error")
+		}
+		usrDat.Status = "success"
+		usrDatJson, err := json.Marshal(usrDat)
+		if err != nil {
+			fmt.Println("marshalling error", err)
+			helper.WriteResponse(w, "marshalling_error")
+		}
+		fmt.Println("profile get success")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(usrDatJson)
+	}
 }
 
 func GetProfile(w http.ResponseWriter, r *http.Request) {
