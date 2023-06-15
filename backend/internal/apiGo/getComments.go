@@ -24,7 +24,7 @@ func gatherCommentsFromDB(postId int) (comments, error) {
 	var commentsData comments
 	sqlStmt := `SELECT COALESCE(users.username, users.email),
 	comment_content,
-	comment_image IS NOT NULL,
+	IFNULL(comment_image, 'http://localhost:8080/images/default.jpeg'),
 	creation_date
 	FROM comments
 	JOIN users

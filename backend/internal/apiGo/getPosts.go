@@ -28,7 +28,7 @@ func gatherPosts() ([]posts, error) {
 	var pData []posts
 	sqlStmt := `SELECT post_id,
 COALESCE(users.username, users.email),
-post_image IS NOT NULL,
+IFNULL(post_image, 'http://localhost:8080/images/default.jpeg'),
 creation_date,
 post_content,
 post_title
@@ -57,7 +57,7 @@ func gatherSemiPrivatePosts(uuid int) ([]posts, error) {
 	var pData []posts
 	sqlStmt := `SELECT post_id,
 COALESCE(users.username, users.email),
-post_image IS NOT NULL,
+IFNULL(post_image, 'http://localhost:8080/images/default.jpeg'),
 creation_date,
 post_content,
 post_title
@@ -90,7 +90,7 @@ func gatherPrivatePosts(uuid int) ([]posts, error) {
 	var pData []posts
 	sqlStmt := `SELECT post_id,
 COALESCE(users.username, users.email),
-post_image IS NOT NULL,
+IFNULL(post_image, 'http://localhost:8080/images/default.jpeg'),
 creation_date,
 post_content,
 post_title

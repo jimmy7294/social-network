@@ -51,7 +51,7 @@ func getProfileFromDataBase(email string) (profile, int, error) {
 	first_name,
 	last_name,
 	DOB,
-	avatar IS NOT NULL,
+	IFNULL(avatar, 'http://localhost:8080/images/default.jpeg'),
 	username,
 	bio,
 	privacy
