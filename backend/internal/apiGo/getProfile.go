@@ -26,6 +26,22 @@ type profile struct {
 	Groups    []string `json:"groups"`
 	Status    string   `json:"status"`
 }
+type profilePrivate struct {
+	Email  string `json:"email"`
+	Status string `json:"status"`
+}
+
+func getEmailById(uuid int) (string, error) {
+	sqlStmt := `SELECT email
+	FROM users
+	WHERE uuid = ?`
+
+	var result string
+
+	err := data.DB.QueryRow(sqlStmt, uuid).Scan(&result)
+
+	return result, err
+}
 
 func getProfileFromDataBase(email string) (profile, int, error) {
 	var usrProfile profile
@@ -50,20 +66,52 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodPost {
 		var eInfo qInfo
+		var yourProf = false
 		fmt.Println(r.URL.Path)
 		err := json.NewDecoder(r.Body).Decode(&eInfo.Email)
 		if err != nil {
 			fmt.Println(err)
 		}
-		emailExists := helper.CheckIfStringExist("users", "email", eInfo.Email)
-		if !emailExists {
-			helper.WriteResponse(w, "user_does_not_exist")
-			return
+		//voff
+		if eInfo.Email == "voff" {
+			uuid, err := helper.GetIdBySession(w, r)
+			if err != nil {
+				fmt.Println("get your profile session error", err)
+				helper.WriteResponse(w, "session_error")
+				return
+			}
+			eInfo.Email, err = getEmailById(uuid)
+			if err != nil {
+				helper.WriteResponse(w, "database_error")
+				fmt.Println("get your profile db error", err)
+				return
+			}
+			yourProf = true
+
+		} else {
+			emailExists := helper.CheckIfStringExist("users", "email", eInfo.Email)
+			if !emailExists {
+				helper.WriteResponse(w, "user_does_not_exist")
+				return
+			}
 		}
+
 		usrProfile, uuid, err := getProfileFromDataBase(eInfo.Email)
 		if err != nil {
 			fmt.Println("database err", err)
 			helper.WriteResponse(w, "profile_error")
+			return
+		}
+		if (usrProfile.Privacy == "private" && !checkDBIfFollowing(uuid, usrProfile.Email)) || !yourProf {
+			var privProf profilePrivate
+			privProf.Email = usrProfile.Email
+			privProf.Status = "private"
+			privProfJson, err := json.Marshal(privProf)
+			if err != nil {
+				helper.WriteResponse(w, "marshalling_error")
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(privProfJson)
 			return
 		}
 		usrProfile.Followers, err = helper.GetFollowing(uuid)
