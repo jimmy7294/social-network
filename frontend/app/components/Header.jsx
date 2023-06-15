@@ -1,7 +1,10 @@
 import Link from "next/link";
+import  { useState } from "react";
 
- function getTinyProfile() {
-  fetch("http://localhost:8080/api/getProfile", {
+function GetTinyProfile() {
+  const [username, setUsername] = useState([]);
+  const [avatar, setAvatar] = useState([]);
+  fetch("http://localhost:8080/api/getHeadbar", {
     method: "POST",
     credentials: "include",
     headers: {
@@ -16,8 +19,24 @@ import Link from "next/link";
         return;
       }
       console.log(data);
-      return data;
+      setUsername(data.username);
+      setAvatar(data.avatar);
     });
+
+    return (
+      <>
+        <div className="tinyavatar">
+          <img
+            className="pfp"
+            src= {avatar}
+            alt="Your Company"
+          />
+        </div>
+        <div className="tinyprofile">
+          <Link className="link-up" href="/profile">{username}</Link>
+        </div>
+      </>
+    );  
 }
 
 
@@ -26,7 +45,6 @@ import Link from "next/link";
 
 
 const Headers = () => {
-  const data = getTinyProfile()
   return (
     <header className="headbar">
       <div className="identity">
@@ -46,13 +64,13 @@ const Headers = () => {
         <div className="tinyavatar">
           <img
             className="pfp"
-            src={data.avatar}
             />
         </div>
         <div className="">
-          <Link className="link-up" href="/profile">{data.username}</Link>
+          <Link className="link-up" href="/profile"></Link>
         </div>
         <div className="logout"><Link className="link-up" href="/post/">log out</Link></div>
+        <GetTinyProfile/>
     </header>
   );
 };
