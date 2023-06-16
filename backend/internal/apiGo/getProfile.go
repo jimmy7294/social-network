@@ -105,20 +105,19 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		var eInfo qInfo
 		var yourProf = false
+		yourId, err := helper.GetIdBySession(w, r)
+		if err != nil {
+			fmt.Println("get profile session error", err)
+			helper.WriteResponse(w, "session_error")
+		}
 		fmt.Println(r.URL.Path)
-		err := json.NewDecoder(r.Body).Decode(&eInfo.Email)
+		err = json.NewDecoder(r.Body).Decode(&eInfo.Email)
 		if err != nil {
 			fmt.Println(err)
 		}
 		//voff
 		if eInfo.Email == "voff" {
-			uuid, err := helper.GetIdBySession(w, r)
-			if err != nil {
-				fmt.Println("get your profile session error", err)
-				helper.WriteResponse(w, "session_error")
-				return
-			}
-			eInfo.Email, err = getEmailById(uuid)
+			eInfo.Email, err = getEmailById(yourId)
 			if err != nil {
 				helper.WriteResponse(w, "database_error")
 				fmt.Println("get your profile db error", err)
@@ -140,7 +139,7 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "profile_error")
 			return
 		}
-		if (usrProfile.Privacy == "private" && !checkDBIfFollowing(uuid, usrProfile.Email)) || !yourProf {
+		if (usrProfile.Privacy == "private" && !checkDBIfFollowing(yourId, usrProfile.Email)) && !yourProf {
 			var privProf profilePrivate
 			privProf.Email = usrProfile.Email
 			privProf.Status = "private"
