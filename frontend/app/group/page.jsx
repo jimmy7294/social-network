@@ -1,10 +1,11 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 
-function yourGroups(){
+function YourGroups(){
   const [groups, setGroups] = useState([]);
-fetch("http://localhost:8080/api/yourGroups", {
+  useEffect(() => {
+fetch("http://localhost:8080/api/getGroupnames", {
   method: "POST",
   credentials: "include",
   headers: {
@@ -17,24 +18,36 @@ fetch("http://localhost:8080/api/yourGroups", {
       console.log("error")
       return
     }
-    console.log(data)
     setGroups(data.groups)
   })
+  }, [])
   return (
     <>
+    <div className="yourGroups">
+    <h2>Your Groups</h2>
     <div className="groups">
-    <h1>Your Groups</h1>
-    {groups.map((group) => (
-      <div className="group">
-      <h2>{group.name}</h2>
-      <p>{group.description}</p>
-      <p>{group.members}</p>
-      <p>{group.events}</p>
+    {groups.map((group, index) => (
+      <div className="group" key={index}>
+      <h3>{group}</h3>
+      <div/>
       </div>
     ))}
-    </div>
-    </>
+      </div>
+      </div>
+      </>
+   
   )
 
     
 }
+
+
+function Groups(){
+  return (
+    <>
+    <YourGroups/>
+    </>
+  )
+}
+
+export default Groups;
