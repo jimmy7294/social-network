@@ -6,11 +6,11 @@ import { Noto_Sans_Masaram_Gondi } from "next/font/google";
 
 function HomePage() {
   return (
-    <div>
+    <>
       <Headers />
       <MakePost />
       <GetPosts />
-    </div>
+    </>
   );
 }
 

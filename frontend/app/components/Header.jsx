@@ -30,11 +30,10 @@ function GetTinyProfile() {
             className="pfp"
             src= {avatar}
             alt="Your Company"
-          />
+          /> 
+        <Link className="link-up" href="/profile">{username}</Link>
         </div>
-        <div className="tinyprofile">
-          <Link className="link-up" href="/profile">{username}</Link>
-        </div>
+         
       </>
     );  
 }
@@ -47,6 +46,7 @@ function GetTinyProfile() {
 const Headers = () => {
   return (
     <header className="headbar">
+      
       <div className="identity">
       <img
           className="logo"
@@ -55,22 +55,18 @@ const Headers = () => {
         />
           <Link className="name" href="/">Dummy Antisocial Network</Link>
       </div>
+      <GetTinyProfile/>
         <div className="navigate">
           <Link className="link-up" href="/profile">Profile</Link>
           <Link className="link-up" href="/group">Group</Link>
           <Link className="link-up" href="/chat">Chat</Link>
           <Link className="link-up" href="/post/">Post</Link>
         </div>
-        <div className="tinyavatar">
-          <img
-            className="pfp"
-            />
+          
+        <div className="logout">
+          <Link className="link-up" href="/post/">log out</Link>
         </div>
-        <div className="">
-          <Link className="link-up" href="/profile"></Link>
-        </div>
-        <div className="logout"><Link className="link-up" href="/post/">log out</Link></div>
-        <GetTinyProfile/>
+        
     </header>
   );
 };
