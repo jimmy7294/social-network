@@ -134,7 +134,7 @@ export default function Optional() {
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="padder">
-          <img src= "" alt="" value={0} className="avatar_preview" />  
+          <img src= {avatar} alt="" value={0} className="avatar_preview" />  
           </div>
           <div className="container">
             <a  type="submit" id={0} className="pick-me-profile" >

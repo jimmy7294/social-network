@@ -50,7 +50,6 @@ function MakeEvent(){
     const[location, setLocation] = useState("")
     const[time, setTime] = useState("")
     const[date, setDate] = useState("")
-    const[open, setOpen] = useState(false)
     
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -127,6 +126,7 @@ function GetGroup(slug) {
 function GroupPage(slug){
     return(
         <>
+        {GetGroup(slug)}
         <div className="groupPage">
             <h1>group page</h1>
             {GetGroup(slug)}

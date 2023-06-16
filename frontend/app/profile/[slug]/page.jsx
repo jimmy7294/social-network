@@ -23,19 +23,16 @@ function followCheck(slug){
     })
       .then((data) => data.json())
       .then((data) => {
-        console.log(data.status)
         if (data.status !== "success") {
-         console.log("lahdslsad")
+          console.log("follow check failed")
           return
         }
         setFollwing(data.following)
       });
     
   }, []);
-  console.log(following)
 
   const handleFollow = (action) => {
-    console.log(action)
     fetch("http://localhost:8080/api/followthis",{
     method: "POST",
     credentials: "include",
@@ -73,10 +70,9 @@ function followCheck(slug){
 
 
 
-function getProfile(slug) {
+function GetProfile(slug) {
   const user = decodeURIComponent(slug.params.slug)
-  console.log("user:", user)
-
+console.log("hello")
   const [stuff, setStuff] = useState([]);
 
   useEffect(() => {
@@ -90,14 +86,16 @@ function getProfile(slug) {
     })
       .then((data) => data.json())
       .then((data) => {
-        if (data.status === "success") {
-          console.log(data);
-          setStuff(data); // Update the state with fetched data
-        } else {
-          console.log(data);
-        }
+        if (data.status !== "success") {
+          console.log("get profile failed", data); // Update the state with fetched data
+        } 
+        setStuff(data);
+
+        
       });
   }, []);
+  console.log(stuff)
+  if(stuff.status !== "private"){
   
       return (
         <>
@@ -115,14 +113,22 @@ function getProfile(slug) {
         <p> {stuff.followers}</p>
         <p> {stuff.following}</p>
         <p> {stuff.groups}</p>
-            </div>
-            
-      
-     
-                
+            </div>   
           </>
         );
         }
+        console.log(stuff)
+        return(
+          <>
+          <div>
+            <h2>Profile</h2>
+            <div>
+              {stuff.email}
+              </div>
+          </div>
+          </>
+        )
+      }
         
 
 function ProfilePage(slug){
@@ -130,7 +136,7 @@ function ProfilePage(slug){
 
 return (<>
   <div className="ProfilePage">
-    {getProfile(slug)}
+    {GetProfile(slug)}
     {followCheck(slug)}
   </div>
 </>)
