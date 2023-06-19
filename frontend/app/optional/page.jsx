@@ -116,21 +116,6 @@ export default function Optional() {
   };
   return (
     <>
-      <header className="headbar">
-        <div className="identity">
-        <img
-          className="logo"
-          src="http://localhost:8080/images/Rickrolling.png"
-          alt="Your Company"
-        />
-        <h1 className="name"> Irelevant Discussion </h1>
-        </div>
-        <div className="navigate">
-          <a>Post Page</a>
-          <a>Group Page</a>
-          <a>Log out</a>
-        </div>
-      </header>
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="padder">
