@@ -55,7 +55,7 @@ function Posto(post) {
               </button>
               {showMore && comments && <div className="commentos">
                               {comments.map((dat, index) => (
-                                <div className="commenting">
+                                <div key={index} className="commenting">
                               <a href={dat.author} key={index}/>
                               <div className="commentDate">{dat.created}</div>
                               <div className="commentUser">{dat.author}</div>

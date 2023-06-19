@@ -311,3 +311,15 @@ body {
   text-align: center;
   padding-bottom: 2px;
 }
+.notification{
+  width: 16px;
+  height: 16px;
+  background:red;
+  border-radius:50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius:50%;
+  line-height:20px;
+  vertical-align:middle;
+  text-align:center;
+  color:white;
+  }

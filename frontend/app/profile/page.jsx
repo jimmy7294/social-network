@@ -33,7 +33,9 @@ function getProfile() {
           <p> {stuff.first_name}</p>
           <p> {stuff.last_name}</p>
           <p> {stuff.dob}</p>
-          <p> {stuff.avatar}</p>
+        
+             <img src = {stuff.avatar}/>
+      
           <p> {stuff.username}</p>
           <p> {stuff.bio}</p>
           <p> {stuff.privacy}</p>

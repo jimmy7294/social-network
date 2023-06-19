@@ -1,9 +1,11 @@
 import Link from "next/link";
-import  { useState } from "react";
+import  { use, useEffect, useState } from "react";
 
 function GetTinyProfile() {
   const [username, setUsername] = useState([]);
   const [avatar, setAvatar] = useState([]);
+  const [notification, setNotification] = useState(false);
+  useEffect(() => {
   fetch("http://localhost:8080/api/getHeadbar", {
     method: "POST",
     credentials: "include",
@@ -22,9 +24,11 @@ function GetTinyProfile() {
       setUsername(data.username);
       setAvatar(data.avatar);
     });
-
+}, []);
     return (
       <>
+      {notification && <div className="notification"> </div>
+      }
         <div className="tinyavatar">
           <img
             className="pfp"
