@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 // func for writing status messages to frontend
@@ -161,4 +162,25 @@ func GetYourPosts(uuid int) error {
 	sqlStmt := `SELECT `
 	_ = sqlStmt
 	return nil
+}
+func AddNotificationToDB(content, nType string, usr, sender int) error {
+	sqlStmt := `INSERT INTO notifications (notif_content,creation_date,uuid,sender_id,type)
+	VALUES(?,?,?,?,?)
+	WHERE NOT EXISTS(
+		SELECT 1 FROM notifications
+		WHERE uuid = ? AND sender_id = ? AND type = ?
+	);`
+	_, err := data.DB.Exec(sqlStmt, content, time.Now, usr, sender, nType, usr, sender, nType)
+	return err
+}
+
+func GetuuidByString(tabType, value string) (int, error) {
+	sqlStmt := `SELECT uuid
+	FROM users
+	WHERE ` + tabType + ` = ?`
+
+	var result int
+	err := data.DB.QueryRow(sqlStmt, value).Scan(&result)
+
+	return result, err
 }

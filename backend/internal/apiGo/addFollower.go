@@ -8,6 +8,15 @@ import (
 	"net/http"
 )
 
+func isPrivate(email string) bool {
+	sqlStmt := `SELECT privacy
+	FROM users
+	WHERE email = ?`
+	var res string
+	data.DB.QueryRow(sqlStmt, email).Scan(&res)
+	return res == "private"
+}
+
 func addFollower(followerId int, email string) error {
 
 	sqlStmt, err := data.DB.Prepare(`INSERT INTO followers (uuid,follower_id)
@@ -74,7 +83,18 @@ func AddOrRemoveFollow(w http.ResponseWriter, r *http.Request) {
 		if alreadyFollowing {
 			err = removeFollower(yourID, email)
 		} else {
-			err = addFollower(yourID, email)
+			if isPrivate(email) {
+				fmt.Println("private lol")
+				theirId, err := helper.GetuuidByString("email", email)
+				if err != nil {
+					fmt.Println("tfasbjkasfbljkfablsjkbafjsl")
+					helper.WriteResponse(w, "wrong")
+					return
+				}
+				helper.AddNotificationToDB("You have a new Follow request!", "follow_request", theirId, yourID)
+			} else {
+				err = addFollower(yourID, email)
+			}
 		}
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
