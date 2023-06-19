@@ -11,15 +11,16 @@ import (
 func addFollower(followerId int, email string) error {
 
 	sqlStmt, err := data.DB.Prepare(`INSERT INTO followers (uuid,follower_id)
-	SELECT users.uuid,
-	users.uuid
-	FROM users
-	WHERE users.uuid = ? OR users.email = ?`)
+	SELECT b.uuid,
+	a.uuid
+	FROM users a
+	INNER JOIN users b ON b.email = ?
+	WHERE a.uuid = ?`)
 	if err != nil {
 		fmt.Println("AUUUUUGHHH", err)
 		return err
 	}
-	_, err = sqlStmt.Exec(followerId, email)
+	_, err = sqlStmt.Exec(email, followerId)
 
 	return err
 }
@@ -67,7 +68,9 @@ func AddOrRemoveFollow(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		alreadyFollowing := checkDBIfFollowing(yourID, email)
-
+		fmt.Println("to follow / unfollow email", email)
+		fmt.Println("your id", yourID)
+		fmt.Println("your email", yourEmail)
 		if alreadyFollowing {
 			err = removeFollower(yourID, email)
 		} else {
