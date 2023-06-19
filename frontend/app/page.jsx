@@ -44,7 +44,7 @@ function Posto(post) {
   return (
     <>
    
-              <div className="postDate">Public | {post.creation_date}</div>
+              <div className="postDate">Post | {post.creation_date}</div>
               <div className="postUser">{post.author}</div>
               <div className="postTitle">{post.title}</div>
               <div className="postContent">{post.content}</div>

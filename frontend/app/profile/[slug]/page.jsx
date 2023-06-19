@@ -32,14 +32,14 @@ function followCheck(slug){
     
   }, []);
 
-  const handleFollow = (action) => {
-    fetch("http://localhost:8080/api/followthis",{
+  const handleFollow = () => {
+    fetch("http://localhost:8080/api/addOrRemoveFollow",{
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(slug.params.slug, action),
+    body: JSON.stringify(user),
   })
   .then((data) => data.json())
   .then((data) => {
@@ -53,14 +53,14 @@ function followCheck(slug){
   if (following){
     return (
       <>
-      <button value ="unfollow" onClick={(e) => handleFollow(e.target.value)}>Unfollow</button>
+      <button value ="unfollow" onClick={(e) => handleFollow()}>Unfollow</button>
 
       </>
     )
   } else {
     return (
       <>
-      <button value="follow" onClick={(e) => handleFollow(e.target.value)}>Follow</button>
+      <button value="follow" onClick={(e) => handleFollow()}>Follow</button>
       </>
     )
   }
