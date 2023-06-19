@@ -43,7 +43,7 @@ function Posto(post) {
   }
   return (
     <>
-    <div key={post.post_id} className="post">
+   
               <div className="postDate">Public | {post.creation_date}</div>
               <div className="postUser">{post.author}</div>
               <div className="postTitle">{post.title}</div>
@@ -64,7 +64,7 @@ function Posto(post) {
                                 ))}
                 </div>}
                 {showMore && !comments && <div>no comments</div>}
-            </div>
+           
             </>
   )
 }
@@ -224,8 +224,11 @@ function GetPosts() {
       <div className="public">
         <div className="mfposts">
           {posts.map((post) => (
+            <div key={post.post_id} className="post">
             <Posto arg={post}></Posto>
+            </div>
           ))}
+
         </div>
       </div>
       <div className="semi">
@@ -233,20 +236,7 @@ function GetPosts() {
           {semi_private &&
             semi_private.map((semi, index) => (
               <div key={index} className="post">
-                <div className="postDate">
-                  Semi-Private | {semi.creation_date}
-                </div>
-                <div className="postUser">{semi.author}</div>
-                <div className="postTitle">{semi.title}</div>
-                <div className="postContent">{semi.content}</div>
-                <button
-                  className="buttonComment"
-                  onClick={() => handleGetComments(semi.post_id)}
-                >
-
-                  comment
-                </button>
-
+                <Posto arg={semi}></Posto>
               </div>
             ))}
         </div>
@@ -256,18 +246,7 @@ function GetPosts() {
           {private_posts &&
             private_posts.map((private_post, index) => (
               <div key={index} className="post">
-                <div className="postDate">
-                  Private | {private_post.creation_date}
-                </div>
-                <div className="postUser">{private_post.author}</div>
-                <div className="postTitle">{private_post.title}</div>
-                <div className="postContent">{private_post.content}</div>
-                <button
-                  className="buttonComment"
-                  onClick={() => handleGetComments(private_post.post_id)}
-                >
-                  comment
-                </button>
+             <Posto arg={private_post}></Posto>
               </div>
             ))}
         </div>
