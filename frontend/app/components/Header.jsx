@@ -50,11 +50,6 @@ function GetTinyProfile() {
 
 function Logout() {
   Cookies.set('session_token', 'value', { expires: 0, path: '/' })
-  console.log("logout bitch")
-
-  
-  
-
 }
 
 
@@ -75,14 +70,10 @@ const Headers = () => {
           <Link className="name" href="/">Dummy Antisocial Network</Link>
       </div>
       <GetTinyProfile/>
-        <div className="navigate">
-          <Link className="link-up" href="/profile">Profile</Link>
-          <Link className="link-up" href="/group">Group</Link>
-          <Link className="link-up" href="/chat">Chat</Link>
-        </div>
+          <Link className="navigate" href="/group">Group</Link>
           
         <div className="logout" >
-       <a onClick ={() => {Logout()}} href="/login">log out</a>
+       <a className="link-up" onClick ={() => {Logout()}} href="/login">log out</a>
        </div>
         
     </header>

@@ -21,14 +21,12 @@
 
 .navigate {
   display: flex;
-  justify-content: space-between;
-  width: 500px;
+  width: max-content;
+  color: #ccc;
   background-color: #213049;
-  position: relative;
-  top: 2.1vh;
-  margin: 0.2vh;
-  margin-top: 0;
-  z-index: 9000;
+  justify-content: center;
+  border: #4faa92 solid 2px;
+  padding: 4px;
 }
 
 .name {
@@ -325,8 +323,8 @@ body {
   width: 150px;
   height: 50px;
   justify-content: center;
-  position: relative;
-  bottom: 1.25vh;
+  background-color: #213049;
+  border: #4faa92 solid 2px;
 }
 .notification {
   width: 16px;
@@ -355,6 +353,7 @@ body {
   display: grid;
   margin: 1vh;
   margin-top: 0;
+  padding: 2px;
 }
 
 .layouter {
