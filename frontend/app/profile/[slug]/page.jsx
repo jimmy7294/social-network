@@ -106,7 +106,9 @@ console.log("hello")
         <p> {stuff.first_name}</p>
         <p> {stuff.last_name}</p>
         <p> {stuff.dob}</p>
-        <p> {stuff.avatar}</p>
+        <div>
+        <img src={stuff.avatar}/>
+        </div>
         <p> {stuff.username}</p>
         <p> {stuff.bio}</p>
         <p> {stuff.privacy}</p>

@@ -1,5 +1,7 @@
 "use client"
 import React, { useState, useEffect } from "react";
+import Headers from "../components/Header";
+import Link from "next/link";
 
 function getProfile() {
     const [profile, setprofile] = useState([]);
@@ -30,7 +32,9 @@ function getProfile() {
     console.log(followers,"moo")
         return (
           <>
-          <div className="Profile">
+          <Headers />
+    <div className="layouter">
+        <div className="Profile">
             <h2>Profile</h2>
          
           <p> {profile.email}</p>
@@ -72,6 +76,25 @@ function getProfile() {
         
        
                   
+          {/* <p> {stuff.email}</p>
+          <p> {stuff.first_name}</p>
+          <p> {stuff.last_name}</p>
+          <p> {stuff.dob}</p>
+          <p> {stuff.username}</p>
+          <p> {stuff.bio}</p>
+          <p> {stuff.privacy}</p>
+         
+          <p> {stuff.groups}</p>
+          <Link href="/optional" className="link-up">
+          Alter self
+          </Link>
+        </div>
+      <div className="folow">
+        <p className="list-up"> Followers: <br/>{stuff.followers}</p>
+        <p className="list-up"> Following: <br/>{stuff.following}</p>
+      </div>
+       */}
+    </div>
             </>
           );
           }

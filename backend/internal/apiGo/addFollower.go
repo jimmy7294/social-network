@@ -16,8 +16,8 @@ func removeFollower(followerId, followingId int) error {
 func AddOrRemoveFollower(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 
-	if r.Method == http.MethodPost {
-		yourID, err := helper.GetIdBySession(w, r)
+	// if r.Method == http.MethodPost {
+	// 	yourID, err := helper.GetIdBySession(w, r)
 
-	}
+	// }
 }
