@@ -4,14 +4,17 @@ import { useState, useEffect } from "react";
 
 
 
+
   
 
 
 
 
 function followCheck(slug){
+
   const [following, setFollwing] = useState(Boolean)
   const user = decodeURIComponent(slug.params.slug)
+  console.log(user)
   useEffect(() => {
     fetch("http://localhost:8080/api/followCheck", {
       method: "POST",
@@ -47,20 +50,24 @@ function followCheck(slug){
       console.log("unfollow/follow failed")
       return
     }
-    console.log("unfollow/follow success")
+    console.log("unfollow/follow success 123213 12", user)
+   
   })
 }
   if (following){
     return (
       <>
-      <button value ="unfollow" onClick={(e) => handleFollow()}>Unfollow</button>
-
+      <a href={`${user}`}>
+      <button  onClick={() => handleFollow()}>Unfollow</button>
+      </a>
       </>
     )
   } else {
     return (
       <>
-      <button value="follow" onClick={(e) => handleFollow()}>Follow</button>
+      <a href={`${user}`}>
+      <button onClick={() => handleFollow()} href="">Follow</button>
+      </a>
       </>
     )
   }

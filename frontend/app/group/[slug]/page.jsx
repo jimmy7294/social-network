@@ -89,7 +89,9 @@ function MakeEvent(){
 }
 
 function GetGroup(slug) {
+    const current = decodeURIComponent(slug.params.slug)
     const [group, setGroup] = useState([{}])
+    console.log(current)
     useEffect(() => {
         fetch("http://localhost:8080/api/getGroup", {
             method: "POST",
@@ -97,7 +99,7 @@ function GetGroup(slug) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(slug.params.slug)
+            body: JSON.stringify(current)
         })
             .then(data => data.json()) 
             .then(data => {
