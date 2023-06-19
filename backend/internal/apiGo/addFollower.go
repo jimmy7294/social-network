@@ -78,6 +78,5 @@ func AddOrRemoveFollow(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		helper.WriteResponse(w, "success")
-
-	// }
+	}
 }
