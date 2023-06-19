@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from "react";
 
 function getProfile() {
-    const [stuff, setStuff] = useState([]);
+    const [profile, setprofile] = useState([]);
     const [followers, setFollowers] = useState([]);
+    const [following, setFollowing] = useState([]);
   
     useEffect(() => {
       fetch("http://localhost:8080/api/getProfile", {
@@ -20,8 +21,9 @@ function getProfile() {
             console.log(data);
           } 
             console.log(data);
-            setStuff(data);
+            setprofile(data);
             setFollowers(data.followers);
+            setFollowing(data.following);
           
         });
     }, []);
@@ -31,28 +33,41 @@ function getProfile() {
           <div className="Profile">
             <h2>Profile</h2>
          
-          <p> {stuff.email}</p>
-          <p> {stuff.first_name}</p>
-          <p> {stuff.last_name}</p>
-          <p> {stuff.dob}</p>
+          <p> {profile.email}</p>
+          <p> {profile.first_name}</p>
+          <p> {profile.last_name}</p>
+          <p> {profile.dob}</p>
         
-             <img src = {stuff.avatar}/>
+             <img src = {profile.avatar}/>
       
-          <p> {stuff.username}</p>
-          <p> {stuff.bio}</p>
-          <p> {stuff.privacy}</p>
-          <p> {stuff.following}</p>
-          <p> {stuff.groups}</p>
+          <p> {profile.username}</p>
+          <p> {profile.bio}</p>
+          <p> {profile.privacy}</p>
+          <p> {profile.following}</p>
+          <p> {profile.groups}</p>
               </div>
 
               <div>
               <h2>Followers</h2>
+              {followers && <div>
               {followers.map((follower,index) => (
                 <div  key={index} className="follower">
                   <p>{follower}</p>
               </div>
               ))}
               </div>
+}
+              </div>
+              
+              {following && <div>
+              <h2>Following</h2>
+              {following.map((follow,index) => (
+                <div key={index} className="follow">
+                  <p>{follow}</p>
+              </div>
+              ))}
+              </div>
+              }
               
         
        
