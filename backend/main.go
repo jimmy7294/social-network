@@ -48,6 +48,7 @@ func setupApi() {
 	http.HandleFunc("/api/followCheck", apiGO.CheckFollowing)
 	http.HandleFunc("/api/getComments", apiGO.GetComments)
 	http.HandleFunc("/api/getHeadbar", apiGO.GetHeadBar)
+	http.HandleFunc("/api/addOrRemoveFollow", apiGO.AddOrRemoveFollow)
 	img := http.FileServer(http.Dir("internal/images"))
 	http.Handle("/images/", http.StripPrefix("/images/", img))
 	//http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
