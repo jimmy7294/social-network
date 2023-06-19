@@ -1,7 +1,11 @@
+"use client";
 import Link from "next/link";
 import  { use, useEffect, useState } from "react";
-import {Cookie} from "js-cookie";
-import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+
+
+
+
 
 function GetTinyProfile() {
   const [username, setUsername] = useState([]);
@@ -44,10 +48,13 @@ function GetTinyProfile() {
     );  
 }
 
-function logout() {
-  const router = useRouter();
-  Cookie.remove("session_token")
-  router.push("/")
+function Logout() {
+  Cookies.set('session_token', 'value', { expires: 0, path: '/' })
+  console.log("logout bitch")
+
+  
+  
+
 }
 
 
@@ -72,12 +79,11 @@ const Headers = () => {
           <Link className="link-up" href="/profile">Profile</Link>
           <Link className="link-up" href="/group">Group</Link>
           <Link className="link-up" href="/chat">Chat</Link>
-          <Link className="link-up" href="/post/">Post</Link>
         </div>
           
-        <div className="logout">
-          <div className="link-up" onClick = {logout}>log out</div>
-        </div>
+        <div className="logout" >
+       <a onClick ={() => {Logout()}} href="/login">log out</a>
+       </div>
         
     </header>
   );
