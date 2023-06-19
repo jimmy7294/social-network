@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 
 function getProfile() {
     const [stuff, setStuff] = useState([]);
+    const [followers, setFollowers] = useState([]);
   
     useEffect(() => {
       fetch("http://localhost:8080/api/getProfile", {
@@ -15,15 +16,16 @@ function getProfile() {
       })
         .then((data) => data.json())
         .then((data) => {
-          if (data.status === "success") {
+          if (data.status !== "success") {
             console.log(data);
-            setStuff(data); // Update the state with fetched data
-          } else {
+          } 
             console.log(data);
-          }
+            setStuff(data);
+            setFollowers(data.followers);
+          
         });
     }, []);
-    
+    console.log(followers,"moo")
         return (
           <>
           <div className="Profile">
@@ -39,9 +41,17 @@ function getProfile() {
           <p> {stuff.username}</p>
           <p> {stuff.bio}</p>
           <p> {stuff.privacy}</p>
-          <p> {stuff.followers}</p>
           <p> {stuff.following}</p>
           <p> {stuff.groups}</p>
+              </div>
+
+              <div>
+              <h2>Followers</h2>
+              {followers.map((follower,index) => (
+                <div  key={index} className="follower">
+                  <p>{follower}</p>
+              </div>
+              ))}
               </div>
               
         

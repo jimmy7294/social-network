@@ -1,5 +1,7 @@
 import Link from "next/link";
 import  { use, useEffect, useState } from "react";
+import {Cookie} from "js-cookie";
+import { useRouter } from "next/router";
 
 function GetTinyProfile() {
   const [username, setUsername] = useState([]);
@@ -42,6 +44,12 @@ function GetTinyProfile() {
     );  
 }
 
+function logout() {
+  const router = useRouter();
+  Cookie.remove("session_token")
+  router.push("/")
+}
+
 
 
 
@@ -68,7 +76,7 @@ const Headers = () => {
         </div>
           
         <div className="logout">
-          <Link className="link-up" href="/post/">log out</Link>
+          <div className="link-up" onClick = {logout}>log out</div>
         </div>
         
     </header>
