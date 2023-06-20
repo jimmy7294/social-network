@@ -17,6 +17,15 @@ func addGroupToDB(name, description string, creatorId int) error {
 	return err
 }
 
+func addGroupMemberToDB(uuid int, memberType string) error {
+	sqlStmt := `INSERT INTO groupMembers (group_id,uuid,role)
+	VALUES
+	(?,?,?)`
+
+	_, err := data.DB.Exec(sqlStmt, uuid, memberType)
+	return err
+}
+
 type groupInfo struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -36,11 +45,13 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
 		uuid, err := helper.GetIdBySession(w, r)
 		if err != nil {
 			helper.WriteResponse(w, "session_error")
+			return
 		}
 
 		err = addGroupToDB(gInfo.Name, gInfo.Description, uuid)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
+			return
 		}
 
 		helper.WriteResponse(w, "success")
