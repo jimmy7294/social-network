@@ -96,26 +96,28 @@ function MakePost() {
       <div className="makePost">
         <form onSubmit={handleSubmit}>
           <input
+            className="titleCreation"
             type="text"
             placeholder="title"
             onChange={(e) => setTitle(e.target.value)}
           />
           <select
+          className="dropdown"
             placeholder="private"
             onChange={(e) => setPrivate_post(e.target.value)}
           >
             {/*your job*/}
             <option value="">Public</option>
             <option value="">Semi-Private</option>
-            <option value="">Private</option>
+            <option value="">Private</option>a
           </select>   
           <textarea 
             type="text"
             placeholder="content"
-            className="aboutMe"
+            className="postContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
-          <button type="submit">submit</button>
+          <button type="submit" className="postCreationButton">submit</button>
         </form>
       </div>
     </>
