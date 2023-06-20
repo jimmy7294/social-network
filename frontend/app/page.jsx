@@ -100,15 +100,20 @@ function MakePost() {
             placeholder="title"
             onChange={(e) => setTitle(e.target.value)}
           />
-          <input
-            type="text"
-            placeholder="content"
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <input
-            type="text"
+          <select
             placeholder="private"
             onChange={(e) => setPrivate_post(e.target.value)}
+          >
+            {/*your job*/}
+            <option value="">Public</option>
+            <option value="">Semi-Private</option>
+            <option value="">Private</option>
+          </select>   
+          <textarea 
+            type="text"
+            placeholder="content"
+            className="aboutMe"
+            onChange={(e) => setContent(e.target.value)}
           />
           <button type="submit">submit</button>
         </form>
