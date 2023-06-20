@@ -1,10 +1,12 @@
 "use client"
 import React, { useEffect, useState } from "react"
+import Headers from "../components/Header";
 
 
 function MakeGroup(){
   const [groupname, setGroupname] = useState("");
   const [groupdescription, setGroupdescription] = useState("");
+
 
 const handleNewGroup = () => {
   e.preventDefault();
@@ -57,6 +59,7 @@ fetch("http://localhost:8080/api/getGroupnames", {
   }, [])
   return (
     <>
+    
     <div className="yourGroups">
     <h2>Your Groups</h2>
     <div className="groups">
@@ -79,6 +82,7 @@ fetch("http://localhost:8080/api/getGroupnames", {
 function Groups(){
   return (
     <>
+    <Headers/>
     <MakeGroup/>
     <YourGroups/>
     </>
