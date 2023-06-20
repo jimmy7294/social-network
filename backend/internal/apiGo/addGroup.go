@@ -8,21 +8,26 @@ import (
 	"time"
 )
 
-func addGroupToDB(name string, creatorId int) error {
-	sqlStmt := `INSERT INTO groups (group_creator,group_name,creation_date)
+func addGroupToDB(name, description string, creatorId int) error {
+	sqlStmt := `INSERT INTO groups (group_creator,group_name,group_description,creation_date)
 	VALUES
-	(?,?,?)`
+	(?,?,?,?)`
 
-	_, err := data.DB.Exec(sqlStmt, creatorId, name, time.Now())
+	_, err := data.DB.Exec(sqlStmt, creatorId, name, description, time.Now())
 	return err
+}
+
+type groupInfo struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
 
 func AddGroup(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 
 	if r.Method == http.MethodPost {
-		var groupName string
-		err := json.NewDecoder(r.Body).Decode(&groupName)
+		var gInfo groupInfo
+		err := json.NewDecoder(r.Body).Decode(&gInfo)
 		if err != nil {
 			helper.WriteResponse(w, "decoding_error")
 			return
@@ -33,7 +38,7 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "session_error")
 		}
 
-		err = addGroupToDB(groupName, uuid)
+		err = addGroupToDB(gInfo.Name, gInfo.Description, uuid)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
 		}

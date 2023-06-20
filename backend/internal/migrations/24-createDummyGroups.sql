@@ -1,9 +1,9 @@
 -- +migrate Up
-INSERT INTO groups(group_creator, group_name, creation_date)
+INSERT INTO groups(group_creator, group_name, group_description, creation_date)
 VALUES 
-(1, 'The Bullies', '2023-04-19'),
-(3, 'The Bullied', '2023-04-20'),
-(5, 'The Mediator', '2022-12-22');
+(1, 'The Bullies', 'nerds need not apply', '2023-04-19'),
+(3, 'The Bullied', 'do not come to school tomorrow', '2023-04-20'),
+(5, 'The Mediator', 'peace and love', '2022-12-22');
 
 -- +migrate Down
 DELETE FROM groups
