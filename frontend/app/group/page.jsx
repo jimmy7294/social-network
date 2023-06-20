@@ -62,14 +62,11 @@ fetch("http://localhost:8080/api/getGroupnames", {
     
     <div className="yourGroups">
     <h2>Your Groups</h2>
-    <div className="groups">
     {groups.map((group, index) => (
       <div className="group" key={index}>
-      <a href={`group/${group}`}>{group}</a>
-      <div/>
+      <a className="link-up" href={`group/${group}`}>{group}</a>
       </div>
     ))}
-      </div>
       </div>
       </>
    

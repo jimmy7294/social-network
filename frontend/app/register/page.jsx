@@ -144,6 +144,6 @@ export default function Register() {
           </Link>
         </p>
       </div>
-    </>
+    </> 
   );
 }
