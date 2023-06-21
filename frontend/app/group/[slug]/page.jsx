@@ -75,13 +75,16 @@ function MakeEvent(){
         <div className="makeEvent">
             <h2>Make event</h2>
             <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="title" onChange={(e) => setTitle(e.target.value)} />
-                <input type="text" placeholder="description" onChange={(e) => setDescription(e.target.value)} />
-                <input type="text" placeholder="location" onChange={(e) => setLocation(e.target.value)} />
-                <input type="text" placeholder="time" onChange={(e) => setTime(e.target.value)} />
-                <input type="text" placeholder="date" onChange={(e) => setDate(e.target.value)} />
-                <input type="text" placeholder="open" onChange={(e) => setOpen(e.target.value)} />
-                <button type="submit">submit</button>
+                <input type="text" className="titleCreation" placeholder="title" onChange={(e) => setTitle(e.target.value)} />
+                <input type="text" className="titleCreation" placeholder="description" onChange={(e) => setDescription(e.target.value)} />
+                <input type="text" className="titleCreation" placeholder="location" onChange={(e) => setLocation(e.target.value)} />
+                <input type="text" className="titleCreation" placeholder="time" onChange={(e) => setTime(e.target.value)} />
+                <input type="text" className="titleCreation" placeholder="date" onChange={(e) => setDate(e.target.value)} />
+                <select type="text" className="dropdown" placeholder="open" onChange={(e) => setOpen(e.target.value)}>
+                <option value="">Open</option>
+                <option value="">not Open</option>
+                </select>
+                <button className="postCreationButton" type="submit">submit</button>
             </form>
         </div>
         </>
@@ -115,7 +118,6 @@ function GetGroup(slug) {
     return(
         <>
         <div className="group">
-            <h2>group</h2>
             <h2>{group.name}</h2>
             <p>{group.description}</p>
             <p>{group.members}</p>
@@ -130,7 +132,6 @@ function GroupPage(slug){
     return(
         <>
         <Headers />
-        {GetGroup(slug)}
         <div className="groupPage">
             <h1>group page</h1>
             {GetGroup(slug)}

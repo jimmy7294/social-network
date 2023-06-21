@@ -37,11 +37,11 @@ const handleNewGroup = (e) => {
   return (
     <>
     <form className="groupmaker" onSubmit={(e) => handleNewGroup(e)}>
-    <input className="mt-2" type="text" placeholder="Group Name" onChange={(e) => setGroupname(e.target.value)}></input>
+    <input className="titleCreation" type="text" placeholder="Group Name" onChange={(e) => setGroupname(e.target.value)}></input>
     <br />
     <textarea className="aboutMe" type="text" placeholder="Group Description" onChange={(e) => setGroupdescription(e.target.value)}></textarea>
     <br />
-    <button type="submit">Make Group</button>
+    <button type="submit" className="postCreationButton">Make Group</button>
     </form>
     </>
   )
