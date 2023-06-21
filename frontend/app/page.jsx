@@ -14,12 +14,9 @@ function HomePage() {
   );
 }
 
-function Posto(post) {
-
-  post = post.arg
-  const [showMore, setShowMore] = useState(false)
-  const [comments, setComments] = useState({})
-  console.log("sgot to posto", post, comments)
+function ToggleComments({ post_id }) {
+  const [showMore, setShowMore] = useState(false);
+  const [comments, setComments] = useState([]);
   function handleClick() {
     fetch("http://localhost:8080/api/getComments", {
       method: "POST",
@@ -27,52 +24,44 @@ function Posto(post) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(post.post_id),
+      body: JSON.stringify(post_id),
     })
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-        console.log("failed to get comments", data);
-        } 
+          console.log("failed to get comments", data);
+        }
         console.log(data);
         setComments(data.comments);
-        setShowMore(!showMore)
-
-      })
-     
+        setShowMore(!showMore);
+      });
   }
   return (
     <>
-   
-              <div className="postDate">Post | {post.creation_date}</div>
-              <div className="postUser"> <a href={`/profile/${post.author}`}>{post.author}</a></div>
-              <div className="postTitle">{post.title}</div>
-              <div className="postContent">{post.content}</div>
-              <button
-                className="buttonComment"
-                onClick={handleClick}
-              >comments
-              </button>
-              {showMore && comments && <div className="commentos">
-                              {comments.map((dat, index) => (
-                                <div key={index} className="commenting">
-                              <a href={dat.author} key={index}/>
-                              <div className="commentDate">{dat.created}</div>
-                              <div className="commentUser">{dat.author}</div>
-                              <div className="commentContent">{dat.content}</div>
-                              </div>
-                                ))}
-                </div>}
-                {showMore && !comments && <div>no comments</div>}
-           
-            </>
-  )
+      <button className="buttonComment" onClick={handleClick}>
+        comments
+      </button>
+      {showMore && comments && (
+        <div className="commentos">
+          {comments.map((dat, index) => (
+            <div key={index} className="commenting">
+              <a href={dat.author} key={index} />
+              <div className="commentDate">{dat.created}</div>
+              <div className="commentUser">{dat.author}</div>
+              <div className="commentContent">{dat.content}</div>
+            </div>
+          ))}
+        </div>
+      )}
+      {showMore && !comments && <div>no comments</div>}
+    </>
+  );
 }
 
 function MakePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [visibility, setVisibility] = useState("");
+  const [private_post, setPrivate_post] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,16 +71,14 @@ function MakePost() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, content, visibility }),
+      body: JSON.stringify({ title, content, private_post }),
     });
     const data = await res.json();
     if (data.status !== "success") {
-      console.log((visibility,content,title))
       console.log("failed to make post");
       return;
     }
     console.log("success");
-    console.log((visibility,content,title))
   };
   return (
     <>
@@ -104,22 +91,24 @@ function MakePost() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <select
-          className="dropdown"
+            className="dropdown"
             placeholder="private"
-            onChange={(e) => setVisibility(e.target.value)}
+            onChange={(e) => setPrivate_post(e.target.value)}
           >
             {/*your job*/}
             <option value="">Public</option>
             <option value="">Semi-Private</option>
             <option value="">Private</option>a
-          </select>   
-          <textarea 
+          </select>
+          <textarea
             type="text"
             placeholder="content"
             className="postContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
-          <button type="submit" className="postCreationButton">submit</button>
+          <button type="submit" className="postCreationButton">
+            submit
+          </button>
         </form>
       </div>
     </>
@@ -127,14 +116,21 @@ function MakePost() {
 }
 
 function GetPosts() {
-  const [posts, setPosts] = useState([]);
-  const [semi_private, setSemi_private] = useState([]);
+  const [public_posts, setPublic_posts] = useState([]);
+  const [semi_private_posts, setSemi_private_posts] = useState([]);
   const [private_posts, setPrivate_posts] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [showMore, setShowMore] = useState(false)
-  function handleClick() {
-    setShowMore(!showMore)
-  }
+  const [display, setDisplay] = useState({
+    public: true,
+    semi: true,
+    private: true,
+  });
+
+  const [buttonColor, setButtonColor] = useState({
+    public: "#4faa92",
+    semi: "#4faa92",
+    private: "#4faa92",
+  });
+
   useEffect(() => {
     fetch("http://localhost:8080/api/getPosts", {
       method: "POST",
@@ -146,44 +142,25 @@ function GetPosts() {
       .then((data) => data.json())
       .then((data) => {
         if (data.status == "success") {
-          setPosts(data.posts);
-          setSemi_private(data.semi_private_posts);
+          setPublic_posts(data.posts);
+          setSemi_private_posts(data.semi_private_posts);
           setPrivate_posts(data.private_posts);
           console.log(data);
         } else {
-          console.log(data);
-          ("fuck you");
+          console.log(
+            "Error fetching data from http://localhost:8080/api/getPosts",
+            data
+          );
         }
       });
   }, []);
-
-  const handleGetComments = (postId) => {
-    console.log("hello", postId);
-    fetch("http://localhost:8080/api/getComments", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postId),
-    })
-      .then((data) => data.json())
-      .then((data) => {
-        if (data.status === "success") {
-          console.log(data);
-          setComments(data.comments);
-        } else {
-          console.log("failed to get comments", data);
-        }
-      });
-
-  };
 
   return (
     <>
       <div className="groupeOfButtons">
         <button
           className="buttonPublic"
+          style={{ backgroundColor: buttonColor.public }}
           onClick={() => {
             setDisplay((prevState) => ({
               ...prevState,
@@ -200,6 +177,7 @@ function GetPosts() {
 
         <button
           className="buttonSemi"
+          style={{ backgroundColor: buttonColor.semi }}
           onClick={() => {
             setDisplay((prevState) => ({
               ...prevState,
@@ -216,6 +194,7 @@ function GetPosts() {
 
         <button
           className="buttonPrivate"
+          style={{ backgroundColor: buttonColor.private }}
           onClick={() => {
             setDisplay((prevState) => ({
               ...prevState,
@@ -230,38 +209,76 @@ function GetPosts() {
           Private
         </button>
       </div>
-      <div className="public">
-        <div className="mfposts">
-          {posts.map((post) => (
-            <div key={post.post_id} className="post">
-            <Posto arg={post}></Posto>
-            </div>
-          ))}
-
-        </div>
-      </div>
-      <div className="semi">
-        <div className="mfsemi">
-          {semi_private &&
-            semi_private.map((semi, index) => (
-              <div key={index} className="post">
-                <Posto arg={semi}></Posto>
-              </div>
-            ))}
-        </div>
-      </div>
-      <div className="private">
-        <div className="mfprivate">
-          {private_posts &&
-            private_posts.map((private_post, index) => (
-              <div key={index} className="post">
-             <Posto arg={private_post}></Posto>
-              </div>
-            ))}
-        </div>
+      <div className="posts">
+        {display.public && <PublicPosts posts={public_posts}></PublicPosts>}
+        {display.semi && <SemiPosts posts={semi_private_posts}></SemiPosts>}
+        {display.private && <PrivatePosts posts={private_posts}></PrivatePosts>}
       </div>
     </>
   );
-};
+}
+
+// PublicPosts component
+function PublicPosts({ posts }) {
+  return (
+    <div className="public">
+      <div className="mfposts">
+        {posts.map((post) => (
+          <div key={post.post_id} className="post">
+            <div className="postDate">Public | {post.creation_date}</div>
+            <div className="postUser">{post.author}</div>
+            <div className="postTitle">{post.title}</div>
+            <div className="postContent">{post.content}</div>
+            <ToggleComments post_id={post.post_id}></ToggleComments>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// SemiPosts component
+function SemiPosts({ posts }) {
+  return (
+    <div className="semi">
+      <div className="mfsemi">
+        {posts &&
+          posts.map((semi, index) => (
+            <div key={index} className="post">
+              <div className="postDate">
+                Semi-Private | {semi.creation_date}
+              </div>
+              <div className="postUser">{semi.author}</div>
+              <div className="postTitle">{semi.title}</div>
+              <div className="postContent">{semi.content}</div>
+              <ToggleComments post_id={semi.post_id}></ToggleComments>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+}
+
+// PrivatePosts component
+function PrivatePosts({ posts }) {
+  return (
+    <div className="private">
+      <div className="mfprivate">
+        {posts &&
+          posts.map((private_post, index) => (
+            <div key={index} className="post">
+              <div className="postDate">
+                Private | {private_post.creation_date}
+              </div>
+              <div className="postUser">{private_post.author}</div>
+              <div className="postTitle">{private_post.title}</div>
+              <div className="postContent">{private_post.content}</div>
+              <ToggleComments post_id={private_post.post_id}></ToggleComments>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+}
 
 export default HomePage;
