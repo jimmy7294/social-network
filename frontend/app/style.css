@@ -141,14 +141,16 @@ body {
 
 .aboutMe {
   width: 90%;
-  max-width: 800px;
-  height: 150px;
+  min-height: 5vh;
+  height: auto;
   box-sizing: border-box;
   border: 0px solid #ccc;
   border-radius: 4px;
   background-color: #f8f8f8;
   resize: none;
   margin: 2px;
+  overflow: auto;
+  padding: 2px;
 }
 
 .text {
@@ -328,12 +330,14 @@ body {
 .tinyavatar {
   display: flex;
   align-items: center;
-  width: 150px;
+  min-width: 100px;
+  width: max-content;
   height: 50px;
   justify-content: center;
   background-color: #213049;
   border: #4faa92 solid 2px;
 }
+
 .notification {
   width: 16px;
   height: 16px;
@@ -403,4 +407,11 @@ body {
   border-radius: 2px;
   border: 0px solid #ccc;
   margin-left: 2px;
+}
+
+.groupmaker {
+  display: grid;
+  justify-items: center;
+  width: 50vh;
+  min-height: max-content;
 }

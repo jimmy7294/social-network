@@ -36,9 +36,11 @@ const handleNewGroup = (e) => {
 };
   return (
     <>
-    <form onSubmit={(e) => handleNewGroup(e)}>
-    <input type="text" value={name} placeholder="Group Name" onChange={(e) => setname(e.target.value)}></input>
-    <input type="text" value={description} placeholder="Group Description" onChange={(e) => setDescription(e.target.value)}></input>
+    <form className="groupmaker" onSubmit={(e) => handleNewGroup(e)}>
+    <input className="mt-2" type="text" placeholder="Group Name" onChange={(e) => setGroupname(e.target.value)}></input>
+    <br />
+    <textarea className="aboutMe" type="text" placeholder="Group Description" onChange={(e) => setGroupdescription(e.target.value)}></textarea>
+    <br />
     <button type="submit">Make Group</button>
     </form>
     </>
