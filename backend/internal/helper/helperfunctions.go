@@ -34,6 +34,8 @@ func UpdateTableColumnStringById(table, newData, column string, uid int) error {
 	if err != nil {
 		return err
 	}
+	defer sqlStmt.Close()
+
 	_, err = sqlStmt.Exec(newData, uid)
 	if err != nil {
 		return err
@@ -48,6 +50,8 @@ func UpdateTableColumnByteById(table string, newData []byte, column string, uid 
 	if err != nil {
 		return err
 	}
+	defer sqlStmt.Close()
+
 	_, err = sqlStmt.Exec(newData, uid)
 	if err != nil {
 		return err

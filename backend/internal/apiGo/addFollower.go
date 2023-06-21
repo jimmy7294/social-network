@@ -29,6 +29,8 @@ func addFollower(followerId int, email string) error {
 		fmt.Println("AUUUUUGHHH", err)
 		return err
 	}
+	defer sqlStmt.Close()
+
 	_, err = sqlStmt.Exec(email, followerId)
 
 	return err
@@ -45,6 +47,8 @@ func removeFollower(followerId int, email string) error {
 		fmt.Println("gosh darn it", err)
 		return err
 	}
+	defer sqlStmt.Close()
+
 	_, err = sqlStmt.Exec(followerId, email)
 	return err
 }

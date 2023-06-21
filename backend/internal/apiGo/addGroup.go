@@ -17,12 +17,14 @@ func addGroupToDB(name, description string, creatorId int) error {
 	return err
 }
 
-func addGroupMemberToDB(uuid int, memberType string) error {
+func addGroupMemberToDB(uuid int, memberType, groupName string) error {
 	sqlStmt := `INSERT INTO groupMembers (group_id,uuid,role)
-	VALUES
-	(?,?,?)`
+	SELECT groups.group_id,
+	? AS uuid
+	? AS role
+	WHERE groups.group_name = ?`
 
-	_, err := data.DB.Exec(sqlStmt, uuid, memberType)
+	_, err := data.DB.Exec(sqlStmt, uuid, memberType, groupName)
 	return err
 }
 
@@ -41,14 +43,17 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "decoding_error")
 			return
 		}
-
 		uuid, err := helper.GetIdBySession(w, r)
 		if err != nil {
 			helper.WriteResponse(w, "session_error")
 			return
 		}
-
 		err = addGroupToDB(gInfo.Name, gInfo.Description, uuid)
+		if err != nil {
+			helper.WriteResponse(w, "database_error")
+			return
+		}
+		err = addGroupMemberToDB(uuid, "creator", gInfo.Name)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
 			return

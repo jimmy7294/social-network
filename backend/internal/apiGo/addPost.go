@@ -25,6 +25,8 @@ func addPostToTable(postData post) error {
 	if err != nil {
 		return err
 	}
+	defer sqlStmt.Close()
+
 	_, err = sqlStmt.Exec(postData.Author, postData.Privacy, postData.Image, postData.Created, postData.Content, postData.Title)
 	return err
 }
@@ -34,6 +36,8 @@ func addGroupPostToTable(postData post) error {
 	if err != nil {
 		return err
 	}
+	defer sqlStmt.Close()
+
 	_, err = sqlStmt.Exec(postData.Author, postData.GroupId, postData.Image, postData.Created, postData.Content, postData.Title)
 	return err
 }

@@ -1,6 +1,7 @@
 package apiGO
 
 import (
+	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
 	"net/http"
 	"time"
@@ -23,6 +24,21 @@ type groupPage struct {
 	Events       []event       `json:"events"`
 	ChatMessages []chatMessage `json:"chat_messages"`
 	Status       string        `json:"status"`
+}
+
+func checkIfGroupMember(groupName string, uuid int) (bool, string) {
+	sqlStmt := `SELECT group_id,
+	role
+	FROM groupMembers
+	WHERE groupMembers.uuid = ? AND group_id IN (
+		SELECT groups.group_id
+		FROM groups
+		WHERE groups.group_name = ?
+	)`
+	var res string
+	err := data.DB.QueryRow(sqlStmt, uuid, groupName).Scan(&res)
+
+	return err == nil, res
 }
 
 func GetGroupPage(w http.ResponseWriter, r *http.Request) {

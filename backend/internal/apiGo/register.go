@@ -28,6 +28,7 @@ func registerUser(regData reg) error {
 	if err != nil {
 		return err
 	}
+	defer sqlStmt.Close()
 	_, err = sqlStmt.Exec(regData.Password, regData.Email, regData.Firstname, regData.Lastname, regData.Birthdate, "private")
 	return err
 }
