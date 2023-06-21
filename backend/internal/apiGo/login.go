@@ -35,6 +35,8 @@ func updateSessionToken(token string, uid int) error {
 	if err != nil {
 		return err
 	}
+	defer sqlStmt.Close()
+
 	_, err = sqlStmt.Exec(token, uid)
 	if err != nil {
 		return err
