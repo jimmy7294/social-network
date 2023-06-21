@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect,useState } from "react";
+import Headers from "../../components/Header";
 
 
 function GetEvents() {
@@ -128,6 +129,7 @@ function GetGroup(slug) {
 function GroupPage(slug){
     return(
         <>
+        <Headers />
         {GetGroup(slug)}
         <div className="groupPage">
             <h1>group page</h1>

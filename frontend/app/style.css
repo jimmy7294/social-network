@@ -264,6 +264,7 @@ body {
 .postUser {
   text-align: left;
   font-size: 15px;
+  width: fit-content;
 }
 
 .postTitle {

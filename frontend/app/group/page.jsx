@@ -1,22 +1,27 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import Headers from "../components/Header";
+import { useRouter } from "next/navigation";
+
+
 
 
 function MakeGroup(){
-  const [groupname, setGroupname] = useState("");
-  const [groupdescription, setGroupdescription] = useState("");
 
+  const [name, setname] = useState("");
+  const [description, setDescription] = useState("");
+  const router = useRouter();
 
-const handleNewGroup = () => {
+const handleNewGroup = (e) => {
   e.preventDefault();
-  fetch("http://localhost:8080/api/makeGroup", {
+ 
+  fetch("http://localhost:8080/api/addGroup", {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({groupname, groupdescription}),
+    body: JSON.stringify({name, description}),
   })
     .then((data) => data.json())
     .then((data) => {
@@ -25,13 +30,15 @@ const handleNewGroup = () => {
         return;
       }
       console.log("group made");
+      const url = `/group/${name}`;
+      router.push(url)
     });
 };
   return (
     <>
     <form onSubmit={(e) => handleNewGroup(e)}>
-    <input type="text" placeholder="Group Name" onChange={(e) => setGroupname(e.target.value)}></input>
-    <input type="text" placeholder="Group Description" onChange={(e) => setGroupdescription(e.target.value)}></input>
+    <input type="text" value={name} placeholder="Group Name" onChange={(e) => setname(e.target.value)}></input>
+    <input type="text" value={description} placeholder="Group Description" onChange={(e) => setDescription(e.target.value)}></input>
     <button type="submit">Make Group</button>
     </form>
     </>

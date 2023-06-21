@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Headers from "../components/Header";
 
 import Link from "next/link";
 
@@ -116,6 +117,7 @@ export default function Optional() {
   };
   return (
     <>
+      <Headers />
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="padder">

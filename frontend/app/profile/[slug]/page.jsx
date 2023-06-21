@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
+import Headers from "../../components/Header";
 
 
 
@@ -14,7 +15,6 @@ function followCheck(slug){
 
   const [following, setFollwing] = useState(Boolean)
   const user = decodeURIComponent(slug.params.slug)
-  console.log(user)
   useEffect(() => {
     fetch("http://localhost:8080/api/followCheck", {
       method: "POST",
@@ -66,7 +66,7 @@ function followCheck(slug){
     return (
       <>
       <a href={`${user}`}>
-      <button onClick={() => handleFollow()} href="">Follow</button>
+      <button onClick={() => handleFollow()} >Follow</button>
       </a>
       </>
     )
@@ -79,8 +79,8 @@ function followCheck(slug){
 
 function GetProfile(slug) {
   const user = decodeURIComponent(slug.params.slug)
-console.log("hello")
   const [stuff, setStuff] = useState([]);
+  console.log(user)
 
   useEffect(() => {
     fetch("http://localhost:8080/api/getProfile", {
@@ -144,6 +144,7 @@ function ProfilePage(slug){
 
 
 return (<>
+  <Headers />
   <div className="ProfilePage">
     {GetProfile(slug)}
     {followCheck(slug)}

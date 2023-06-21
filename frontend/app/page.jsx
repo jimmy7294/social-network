@@ -45,7 +45,7 @@ function Posto(post) {
     <>
    
               <div className="postDate">Post | {post.creation_date}</div>
-              <div className="postUser">{post.author}</div>
+              <div className="postUser"> <a href={`/profile/${post.author}`}>{post.author}</a></div>
               <div className="postTitle">{post.title}</div>
               <div className="postContent">{post.content}</div>
               <button
@@ -72,7 +72,7 @@ function Posto(post) {
 function MakePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [private_post, setPrivate_post] = useState("");
+  const [visibility, setVisibility] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,14 +82,16 @@ function MakePost() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, content, private_post }),
+      body: JSON.stringify({ title, content, visibility }),
     });
     const data = await res.json();
     if (data.status !== "success") {
+      console.log((visibility,content,title))
       console.log("failed to make post");
       return;
     }
     console.log("success");
+    console.log((visibility,content,title))
   };
   return (
     <>
@@ -104,7 +106,7 @@ function MakePost() {
           <select
           className="dropdown"
             placeholder="private"
-            onChange={(e) => setPrivate_post(e.target.value)}
+            onChange={(e) => setVisibility(e.target.value)}
           >
             {/*your job*/}
             <option value="">Public</option>
