@@ -71,10 +71,10 @@ const Headers = () => {
       </div>
       <GetTinyProfile/>
           <Link className="navigate" href="/group">Group</Link>
-          
-        <div className="logout" >
+          <Link className="navigate" href="msg">Chat</Link>
+      <div className="logout" >
        <a className="link-up" onClick ={() => {Logout()}} href="/login">log out</a>
-       </div>
+      </div>
         
     </header>
   );

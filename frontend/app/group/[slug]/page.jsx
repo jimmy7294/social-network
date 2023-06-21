@@ -27,8 +27,8 @@ function GetEvents() {
     return(
         <>
         <div className="allEvents">
-            <h2>all events</h2>
-            <h2>this is public post section</h2>
+            <h2>All events</h2>
+            <h2>This is public post section</h2>
             {events.map((event, index) => (
                 <div key={index}>
                     <p> {event.title}</p>
@@ -73,7 +73,7 @@ function MakeEvent(){
     return(
         <>
         <div className="makeEvent">
-            <h2>make event</h2>
+            <h2>Make event</h2>
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder="title" onChange={(e) => setTitle(e.target.value)} />
                 <input type="text" placeholder="description" onChange={(e) => setDescription(e.target.value)} />
