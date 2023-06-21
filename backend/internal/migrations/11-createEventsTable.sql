@@ -2,6 +2,8 @@
 CREATE TABLE IF NOT EXISTS `events`
 (
     `event_id` INTEGER,
+    `group_id` INTEGER NOT NULL,
+    `event_author` INTEGER NOT NULL,
     `event_title` TEXT NOT NULL,
     `event_content` TEXT NOT NULL,
     `creation_date` TIMESTAMP NOT NULL,

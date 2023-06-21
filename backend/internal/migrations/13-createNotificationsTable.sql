@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS `notifications`
     `creation_date` TIMESTAMP,
     `uuid` INTEGER NOT NULL,
     `sender_id` INTEGER NOT NULL,
-    `type` TEXT NOT NULL,
+    `notif_type` TEXT NOT NULL,
+    `notif_context` TEXT,
     PRIMARY KEY(`notif_id` AUTOINCREMENT)
 );
 

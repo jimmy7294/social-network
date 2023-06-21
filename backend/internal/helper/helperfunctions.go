@@ -168,7 +168,7 @@ func GetYourPosts(uuid int) error {
 	return nil
 }
 func AddNotificationToDB(content, nType string, usr, sender int) error {
-	sqlStmt := `INSERT INTO notifications (notif_content,creation_date,uuid,sender_id,type)
+	sqlStmt := `INSERT INTO notifications (notif_content,creation_date,uuid,sender_id,notif_type)
 	VALUES(?,?,?,?,?)
 	WHERE NOT EXISTS(
 		SELECT 1 FROM notifications
