@@ -49,6 +49,16 @@ func getEmailById(uuid int) (string, error) {
 	return result, err
 }
 
+func getEmailByUsername(name string) (string, error) {
+	sqlStmt := `SELECT email
+	FROM users
+	WHERE username = ?`
+	var result string
+	err := data.DB.QueryRow(sqlStmt, name).Scan(&result)
+
+	return result, err
+}
+
 func getProfileFromDataBase(email string) (profile, int, error) {
 	var usrProfile profile
 	var uuid int
@@ -128,8 +138,17 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 		} else {
 			emailExists := helper.CheckIfStringExist("users", "email", eInfo.Email)
 			if !emailExists {
-				helper.WriteResponse(w, "user_does_not_exist")
-				return
+				if !helper.CheckIfStringExist("users", "username", eInfo.Email) {
+					helper.WriteResponse(w, "user_does_not_exist")
+					return
+				}
+				eInfo.Email, err = getEmailByUsername(eInfo.Email)
+				if err != nil {
+					helper.WriteResponse(w, "error_should_not_be_possible")
+					fmt.Println("error should not be possible", err)
+					return
+				}
+
 			}
 		}
 
