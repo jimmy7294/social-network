@@ -10,6 +10,7 @@ function GetGroupPage(slug){
   const [events, setEvents] = useState([])
   const [members , setMembers] = useState([])
     const [joinRequest, setJoinRequest] = useState([])
+    const [userType, setUserType] = useState("")
 
     useEffect(() => {
         fetch("http://localhost:8080/api/getGroupPage", {
@@ -31,6 +32,7 @@ function GetGroupPage(slug){
                 setEvents(data.events)
                 setMembers(data.members)
                 setJoinRequest(data.join_request)
+                setUserType(data.member_type)
 
 
             })
@@ -107,19 +109,25 @@ function GetGroupPage(slug){
             </div>
             }
 
-          
-
-
-
-
-    
-     
-     
-      
-
-
-
-
+            {userType === "creator" &&
+            <div>
+                <h1>Join Requests</h1>
+                {joinRequest &&
+                <div>
+                    {joinRequest.map((request,index) => (
+                        <div className="groupJoinRequest" key={index}>
+                            {request&&
+                            <div className="groupJoinRequestInfo">
+                                <h2>{request.username}</h2>
+                                <h1>{request.email}</h1>
+                                </div>
+                            }
+                        </div>
+                    ))}
+                </div>
+                }
+            </div>
+            }
         </>
     )
 }
