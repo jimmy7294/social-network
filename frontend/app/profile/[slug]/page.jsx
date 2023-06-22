@@ -12,7 +12,7 @@ import Headers from "../../components/Header";
 
 
 function followCheck(slug){
-
+  
   const [following, setFollwing] = useState(Boolean)
   const user = decodeURIComponent(slug.params.slug)
   useEffect(() => {
@@ -47,6 +47,7 @@ function followCheck(slug){
   .then((data) => data.json())
   .then((data) => {
     if (data.status !== "success"){
+      console.log(data.status)
       console.log("unfollow/follow failed")
       return
     }
@@ -121,7 +122,7 @@ function GetProfile(slug) {
         <p> {stuff.privacy}</p>
         <p> {stuff.followers}</p>
         <p> {stuff.following}</p>
-        <p> {stuff.groups}</p>
+        {}
             </div>   
           </>
         );

@@ -18,7 +18,7 @@ function GetGroupPage(slug){
             credentials: "include",
             headers: {
                 "Content-Type": "application/json"
-                },
+                },  
                 body: JSON.stringify(user),
             })
             .then((data) => data.json())
@@ -33,7 +33,6 @@ function GetGroupPage(slug){
                 setMembers(data.members)
                 setJoinRequest(data.join_request)
                 setUserType(data.member_type)
-
 
             })
     }, [])
@@ -61,6 +60,14 @@ function GetGroupPage(slug){
             }
             {members.username&& 
             <div>
+                {members.username && (members.username.length == 1) &&
+              
+                <div>
+                    <h1>Members</h1>
+                    <p>{members.username}</p>
+                </div>
+}
+            
             {members.map((member,index) => (
                 <div className="groupMember" key={index}>
                     

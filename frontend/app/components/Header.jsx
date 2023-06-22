@@ -33,7 +33,7 @@ function GetTinyProfile() {
 }, []);
     return (
       <>
-      {notification && <div className="notification"> </div>
+      {!notification && <div className="notification"><p>NOTIFICATION</p> </div>
       }
         <div className="tinyavatar">
           <img

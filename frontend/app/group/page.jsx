@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 function MakeGroup(){
 
-  const [name, setname] = useState("");
+  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const router = useRouter();
 
@@ -37,9 +37,9 @@ const handleNewGroup = (e) => {
   return (
     <>
     <form className="groupmaker" onSubmit={(e) => handleNewGroup(e)}>
-    <input className="titleCreation" type="text" placeholder="Group Name" onChange={(e) => setGroupname(e.target.value)}></input>
+    <input className="titleCreation" type="text" placeholder="Group Name" onChange={(e) => setName(e.target.value)}></input>
     <br />
-    <textarea className="aboutMe" type="text" placeholder="Group Description" onChange={(e) => setGroupdescription(e.target.value)}></textarea>
+    <textarea className="aboutMe" type="text" placeholder="Group Description" onChange={(e) => setDescription(e.target.value)}></textarea>
     <br />
     <button type="submit" className="postCreationButton">Make Group</button>
     </form>
