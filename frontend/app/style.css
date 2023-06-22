@@ -424,6 +424,8 @@ body {
   min-width: 30vh;
   min-height: 15vh;
   margin-bottom: 2vh;
+  display: grid;
+  justify-items: center;
 }
 
 .poster {

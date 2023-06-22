@@ -128,10 +128,15 @@ function GetGroupPage(slug){
                 <div className="groupEvent" key={index}>
                     
                     <div className="groupEventInfo">
+                    <div className="postti">
                     <h2>{event.title}</h2>
                     <p>{event.description}</p>
+                       
+                        <div className="contents">
                     <p>{event.date}</p>
                     <p>{event.location}</p>
+                        </div>
+                    </div>
                     </div>
                 </div>
             ))}

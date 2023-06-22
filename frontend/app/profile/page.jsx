@@ -35,8 +35,8 @@ function GetProfile() {
           <>
     <div className="layouter">
         <div className="Profile">
-          <div>
-          <img src={profile.avatar}/>
+          <div className="title">
+          <img className="logo" src={profile.avatar}/>
           </div>
 
             <h2>Profile</h2>
@@ -48,7 +48,11 @@ function GetProfile() {
           <p> {profile.username}</p>
           <p> {profile.bio}</p>
           <p> {profile.privacy}</p>
+          <a href="/optional" className="gibspace">
+          <button>Change Profile</button>
+          </a>
               </div>
+   
               <div>
             <div className="folow">
               <h2>Followers</h2>
@@ -106,9 +110,6 @@ function ProfilePage(){
     <>
     <Headers/>
     <GetProfile/>
-    <a href="/optional">
-    <button>Change Profile</button>
-    </a>
     </>
   )
 }
