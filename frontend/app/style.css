@@ -416,3 +416,22 @@ body {
   width: 50vh;
   min-height: max-content;
 }
+
+.postti {
+  border: #4faa92 solid 2px;
+  width: max-content;
+  height: max-content;
+  min-width: 30vh;
+  min-height: 15vh;
+  margin-bottom: 2vh;
+}
+
+.poster {
+  display: flex;
+  justify-items: center;
+}
+
+.contents {
+  margin: 1vh;
+  font-size: large;
+}

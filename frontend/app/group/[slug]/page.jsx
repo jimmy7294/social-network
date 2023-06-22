@@ -79,11 +79,15 @@ function GetGroupPage(slug){
             {groupPosts.map((post,index) => (
                 <div className="groupPost" key={index}>
                     
-                    <div className="groupPostInfo">
-                    <img src={post.image} alt="post image" />
+                    <div className="postti">
+                        <div className="poster">
+                    <img className="pfp" src={post.image} alt="post image" />
                     <h2>{post.author}</h2>
+                        </div>
+                        <div className="contents">
                     <p>{post.content}</p>
                     <p>{post.creation_date}</p>
+                        </div>
                     </div>
 
                 </div>
