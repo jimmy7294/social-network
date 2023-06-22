@@ -4,6 +4,7 @@ import (
 	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -20,8 +21,9 @@ func addGroupToDB(name, description string, creatorId int) error {
 func addGroupMemberToDB(uuid int, memberType, groupName string) error {
 	sqlStmt := `INSERT INTO groupMembers (group_id,uuid,role)
 	SELECT groups.group_id,
-	? AS uuid
+	? AS uuid,
 	? AS role
+	FROM groups
 	WHERE groups.group_name = ?`
 
 	_, err := data.DB.Exec(sqlStmt, uuid, memberType, groupName)
@@ -51,11 +53,13 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
 		err = addGroupToDB(gInfo.Name, gInfo.Description, uuid)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
+			fmt.Println("adding group err", err)
 			return
 		}
 		err = addGroupMemberToDB(uuid, "creator", gInfo.Name)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
+			fmt.Println("add creator err", err)
 			return
 		}
 
