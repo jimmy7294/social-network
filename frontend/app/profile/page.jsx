@@ -53,7 +53,7 @@ function getProfile() {
               {followers && <div>
               {followers.map((follower,index) => (
                 <div  key={index} className="follower">
-                  <p>{follower}</p>
+                  <a href={`profile/${follower}`}><p>{follower}</p> </a>
               </div>
               ))}
               </div>

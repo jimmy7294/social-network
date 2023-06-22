@@ -43,7 +43,7 @@ type groupPage struct {
 func gatherGroupMembers(groupName string) ([]groupMember, error) {
 	var allGroupMembers []groupMember
 
-	sqlStmt, err := data.DB.Prepare(`SELECT COALESCE(users.username,users.email)
+	sqlStmt, err := data.DB.Prepare(`SELECT COALESCE(users.username,users.email),
 	role
 	FROM groupMembers
 	JOIN users
@@ -106,7 +106,7 @@ func gatherEventChoices(allEvents []event) ([]event, error) {
 func gatherGroupEvents(groupName string) ([]event, error) {
 	var allEvents []event
 
-	sqlStmt, err := data.DB.Prepare(`SELECT event_id
+	sqlStmt, err := data.DB.Prepare(`SELECT event_id,
 	COALESCE(users.username, users.email),
 	event_title,
 	event_content,
@@ -179,14 +179,17 @@ func gatherGroupPageData(groupName, memberType string) (groupPage, error) {
 	var err error
 	groupPageData.GroupPosts, err = gatherGroupPosts(groupName)
 	if err != nil {
+		fmt.Println("Error in gatherGroupPosts: ", err)
 		return groupPageData, err
 	}
 	groupPageData.Members, err = gatherGroupMembers(groupName)
 	if err != nil {
+		fmt.Println("Error in gatherGroupMembers: ", err)
 		return groupPageData, err
 	}
 	groupPageData.Events, err = gatherGroupEvents(groupName)
 	if err != nil {
+		fmt.Println("Error in gatherGroupEvents: ", err)
 		return groupPageData, err
 	}
 	groupPageData.Events, err = gatherEventChoices(groupPageData.Events)
@@ -247,7 +250,8 @@ func checkIfGroupMember(groupName string, uuid int) (bool, string) {
 		WHERE groups.group_name = ?
 	)`
 	var res string
-	err := data.DB.QueryRow(sqlStmt, uuid, groupName).Scan(&res)
+	var dummy int
+	err := data.DB.QueryRow(sqlStmt, uuid, groupName).Scan(&dummy, &res)
 
 	return err == nil, res
 }
@@ -260,27 +264,31 @@ func GetGroupPage(w http.ResponseWriter, r *http.Request) {
 		err := json.NewDecoder(r.Body).Decode(&groupName)
 		if err != nil {
 			helper.WriteResponse(w, "decoding_error")
-			fmt.Println(err)
+			fmt.Println("decoding", err)
 			return
 		}
 		groupExist := helper.CheckIfStringExist("groups", "group_name", groupName)
 		if !groupExist {
 			helper.WriteResponse(w, "group_does_not_exist")
+			fmt.Println("group not exist", err)
 			return
 		}
 		uuid, err := helper.GetIdBySession(w, r)
 		if err != nil {
 			helper.WriteResponse(w, "session_error")
+			fmt.Println(err)
 			return
 		}
 		isMember, memberType := checkIfGroupMember(groupName, uuid)
 		if !isMember {
 			helper.WriteResponse(w, "not_a_member")
+			fmt.Println(groupName, uuid)
 			return
 		}
 		groupPageData, err := gatherGroupPageData(groupName, memberType)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
+			fmt.Println("gathergroupPageData", err)
 			return
 		}
 		groupPageData.Status = "success"
@@ -289,6 +297,7 @@ func GetGroupPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("marshalling error", err)
 			helper.WriteResponse(w, "marshalling_error")
+			fmt.Println(err)
 			return
 		}
 		fmt.Println("success")

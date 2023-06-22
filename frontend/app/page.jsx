@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Headers from "./components/Header";
-import { Noto_Sans_Masaram_Gondi } from "next/font/google";
+
 
 function HomePage() {
   return (
