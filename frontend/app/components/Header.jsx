@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import  { use, useEffect, useState } from "react";
+import  {  useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 
@@ -33,7 +33,7 @@ function GetTinyProfile() {
 }, []);
     return (
       <>
-      {!notification && <div className="notification"><p>NOTIFICATION</p> </div>
+      {notification && <div className="notification"><p>NOTIFICATION</p> </div>
       }
         <div className="tinyavatar">
           <img

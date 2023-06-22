@@ -3,9 +3,33 @@
 import  { useState, useEffect } from "react";
 import Headers from "../../components/Header";
 
+function RequestToJoin(slug){
+    const groupname = decodeURIComponent(slug.params.slug)
+    fetch("http://localhost:8080/api/requestToJoin", {
+        method: "POST",
+        credentials: "include", 
+        headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify(groupname),
+
+        })
+        .then((data) => data.json())
+        .then((data) => {
+            if (data.status !== "success"){
+                console.log(data.status)
+                console.log("request to join failed")
+                return
+            }
+            console.log("request to join success")
+        })
+    }
+
+
+
 
 function GetGroupPage(slug){
-    const user = decodeURIComponent(slug.params.slug)
+    const groupname = decodeURIComponent(slug.params.slug)
   const [groupPosts, setGroupPosts] = useState([])
   const [events, setEvents] = useState([])
   const [members , setMembers] = useState([])
@@ -19,27 +43,36 @@ function GetGroupPage(slug){
             headers: {
                 "Content-Type": "application/json"
                 },  
-                body: JSON.stringify(user),
+                body: JSON.stringify(groupname),
             })
             .then((data) => data.json())
             .then((data) => {
-                if (data.status !== "success") {
-                    console.log("get group page failed", data.status)
-                    return
-                }
-                console.log(data)
+             if (data.status === "success"){
                 setGroupPosts(data.group_posts)
                 setEvents(data.events)
                 setMembers(data.members)
                 setJoinRequest(data.join_request)
                 setUserType(data.member_type)
-
+             } else {
+                setUserType("not_a_member")
+             }
             })
-    }, [])
+    
+    }, []);
+    console.log(userType)
+    if(userType === "not_a_member"){
+        return(
+            <>
+            <h2>{groupname}</h2>
+            <button onClick={RequestToJoin(slug)}>Request to join</button>
+        </>
+
+        )
+    }
     return(
         <>
         <div className="groupPage">
-            <h1>{user}</h1>
+            <h1>{groupname}</h1>
             </div>
             {groupPosts &&
             <div>

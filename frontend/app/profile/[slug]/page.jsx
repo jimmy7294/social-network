@@ -109,13 +109,14 @@ function GetProfile(slug) {
         <>
         <div className="Profile">
           <h2>Profile</h2>
+          <img src={stuff.avatar}/>
        
         <p> {stuff.email}</p>
         <p> {stuff.first_name}</p>
         <p> {stuff.last_name}</p>
         <p> {stuff.dob}</p>
         <div>
-        <img src={stuff.avatar}/>
+        
         </div>
         <p> {stuff.username}</p>
         <p> {stuff.bio}</p>

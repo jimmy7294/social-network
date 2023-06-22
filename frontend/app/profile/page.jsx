@@ -35,6 +35,10 @@ function GetProfile() {
           <>
     <div className="layouter">
         <div className="Profile">
+          <div>
+          <img src={profile.avatar}/>
+          </div>
+
             <h2>Profile</h2>
          
           <p> {profile.email}</p>

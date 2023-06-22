@@ -45,9 +45,11 @@ function ToggleComments({ post_id }) {
         <div className="commentos">
           {comments.map((dat, index) => (
             <div key={index} className="commenting">
-              <a href={dat.author} key={index} />
+              
               <div className="commentDate">{dat.created}</div>
+              <a href={`profile/${dat.author}`} >
               <div className="commentUser">{dat.author}</div>
+              </a>
               <div className="commentContent">{dat.content}</div>
             </div>
           ))}
@@ -226,7 +228,10 @@ function PublicPosts({ posts }) {
         {posts.map((post) => (
           <div key={post.post_id} className="post">
             <div className="postDate">Public | {post.creation_date}</div>
+          <a href={`profile/${post.author}`}>
             <div className="postUser">{post.author}</div>
+            </a>
+
             <div className="postTitle">{post.title}</div>
             <div className="postContent">{post.content}</div>
             <ToggleComments post_id={post.post_id}></ToggleComments>
@@ -248,7 +253,9 @@ function SemiPosts({ posts }) {
               <div className="postDate">
                 Semi-Private | {semi.creation_date}
               </div>
+              <a href = {`profile/${semi.author}`}>
               <div className="postUser">{semi.author}</div>
+              </a>
               <div className="postTitle">{semi.title}</div>
               <div className="postContent">{semi.content}</div>
               <ToggleComments post_id={semi.post_id}></ToggleComments>
@@ -270,7 +277,9 @@ function PrivatePosts({ posts }) {
               <div className="postDate">
                 Private | {private_post.creation_date}
               </div>
+              <a href={`profile/${private_post.author}`}>
               <div className="postUser">{private_post.author}</div>
+              </a>
               <div className="postTitle">{private_post.title}</div>
               <div className="postContent">{private_post.content}</div>
               <ToggleComments post_id={private_post.post_id}></ToggleComments>
