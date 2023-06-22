@@ -18,7 +18,7 @@ type allposts struct {
 type posts struct {
 	PostId       int       `json:"post_id"`
 	Author       string    `json:"author"`
-	Image        []byte    `json:"image"`
+	Image        string    `json:"image"`
 	CreationDate time.Time `json:"creation_date"`
 	Content      string    `json:"content"`
 	Title        string    `json:"title"`

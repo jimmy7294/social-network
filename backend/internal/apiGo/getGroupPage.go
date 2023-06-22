@@ -103,16 +103,20 @@ func gatherEventChoices(allEvents []event) ([]event, error) {
 	return allEvents, err
 }
 
-func gatherGroupEvents(groupName string) ([]event, error) {
+func gatherGroupEvents(groupName string, uuid int) ([]event, error) {
 	var allEvents []event
 
-	sqlStmt, err := data.DB.Prepare(`SELECT event_id,
+	sqlStmt, err := data.DB.Prepare(`SELECT events.event_id,
 	COALESCE(users.username, users.email),
 	event_title,
 	event_content,
 	creation_date,
 	event_date,
-	options
+	options,
+	COALESCE((SELECT 
+		eventOptionChoices.uuid
+		FROM eventOptionChoices
+		WHERE events.event_id = eventOptionChoices.event_id AND eventOptionChoices.uuid = ?), -1)
 	FROM events
 	JOIN users
 	ON events.event_author = users.uuid
@@ -122,12 +126,15 @@ func gatherGroupEvents(groupName string) ([]event, error) {
 		WHERE groups.group_name = ?
 	)`)
 	if err != nil {
+		fmt.Println(err)
 		return allEvents, err
 	}
 	defer sqlStmt.Close()
-
-	rows, err := sqlStmt.Query(groupName)
+	//	JOIN eventOptionChoices
+	//	ON events.event_id = eventOptionChoices.event_id AND eventOptionChoices.uuid = ?
+	rows, err := sqlStmt.Query(uuid, groupName)
 	if err != nil {
+		fmt.Println(err)
 		return allEvents, err
 	}
 	defer rows.Close()
@@ -135,14 +142,19 @@ func gatherGroupEvents(groupName string) ([]event, error) {
 	for rows.Next() {
 		var gEvent event
 		var optionsInString string
-
-		err = rows.Scan(gEvent.Id, gEvent.Author, gEvent.Title, gEvent.Content, gEvent.Created, gEvent.Date, optionsInString)
+		var hasChoosen = -1
+		err = rows.Scan(&gEvent.Id, &gEvent.Author, &gEvent.Title, &gEvent.Content, &gEvent.Created, &gEvent.Date, &optionsInString, &hasChoosen)
 		if err != nil {
+			fmt.Println(err)
 			return allEvents, err
 		}
 		gEvent.Options = strings.Split(optionsInString, data.SEPERATOR)
+		if hasChoosen != -1 {
+			gEvent.AlreadyChosen = true
+		}
 
 		allEvents = append(allEvents, gEvent)
+		fmt.Println(gEvent)
 	}
 	return allEvents, err
 }
@@ -174,7 +186,7 @@ func gatherGroupJoinRequests(groupName string) ([]notification, error) {
 	return allJoinRequests, err
 }
 
-func gatherGroupPageData(groupName, memberType string) (groupPage, error) {
+func gatherGroupPageData(groupName, memberType string, uuid int) (groupPage, error) {
 	var groupPageData groupPage
 	var err error
 	groupPageData.GroupPosts, err = gatherGroupPosts(groupName)
@@ -187,7 +199,7 @@ func gatherGroupPageData(groupName, memberType string) (groupPage, error) {
 		fmt.Println("Error in gatherGroupMembers: ", err)
 		return groupPageData, err
 	}
-	groupPageData.Events, err = gatherGroupEvents(groupName)
+	groupPageData.Events, err = gatherGroupEvents(groupName, uuid)
 	if err != nil {
 		fmt.Println("Error in gatherGroupEvents: ", err)
 		return groupPageData, err
@@ -203,7 +215,8 @@ func gatherGroupPageData(groupName, memberType string) (groupPage, error) {
 
 func gatherGroupPosts(groupName string) ([]posts, error) {
 	var allGroupPosts []posts
-	sqlStmt, err := data.DB.Prepare(`SELECT COALESCE(users.username, users.email),
+	sqlStmt, err := data.DB.Prepare(`SELECT gpost_id,
+	COALESCE(users.username, users.email),
 	IFNULL(gpost_image, 'http://localhost:8080/images/default.jpeg'),
 	creation_date,
 	gpost_content,
@@ -230,7 +243,7 @@ func gatherGroupPosts(groupName string) ([]posts, error) {
 	for rows.Next() {
 		var groupPost posts
 
-		err = rows.Scan(&groupPost.Author, &groupPost.Image, &groupPost.CreationDate, &groupPost.Content, &groupPost.Title)
+		err = rows.Scan(&groupPost.PostId, &groupPost.Author, &groupPost.Image, &groupPost.CreationDate, &groupPost.Content, &groupPost.Title)
 		if err != nil {
 			return allGroupPosts, err
 		}
@@ -285,7 +298,7 @@ func GetGroupPage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(groupName, uuid)
 			return
 		}
-		groupPageData, err := gatherGroupPageData(groupName, memberType)
+		groupPageData, err := gatherGroupPageData(groupName, memberType, uuid)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
 			fmt.Println("gathergroupPageData", err)
@@ -300,7 +313,7 @@ func GetGroupPage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println("success")
+
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(pDataJson)
 
