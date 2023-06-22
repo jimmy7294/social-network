@@ -50,6 +50,10 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "session_error")
 			return
 		}
+		if helper.CheckIfStringExist("groups", "group_name", gInfo.Name) {
+			helper.WriteResponse(w, "name_already_taken")
+			return
+		}
 		err = addGroupToDB(gInfo.Name, gInfo.Description, uuid)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")

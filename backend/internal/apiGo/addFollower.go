@@ -95,7 +95,7 @@ func AddOrRemoveFollow(w http.ResponseWriter, r *http.Request) {
 					helper.WriteResponse(w, "wrong")
 					return
 				}
-				helper.AddNotificationToDB("You have a new Follow request!", "follow_request", theirId, yourID)
+				helper.AddNotificationToDB("You have a new Follow request!", "follow_request", "", theirId, yourID)
 			} else {
 				err = addFollower(yourID, email)
 			}
