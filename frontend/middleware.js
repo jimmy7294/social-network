@@ -7,7 +7,6 @@ import cookie from "js-cookie";
 
 export async function middleware(req, NextRequest){
     const cookiee = req.cookies.get('session_token')
-    let cok = cookie.get("session_token")
     console.log("should be session",cookiee)
     //if there is no cookie pressent at all, redirct to login page
 if(cookiee === undefined){
@@ -38,5 +37,5 @@ const response = await fetch("http://localhost:8080/api/cookie", {
 
 
 export const config = {
-    matcher: ['/', '/post', '/profile/:path*, /optional', '/msg/:path*', '/group/:path*',]
+    matcher: ['/', '/post', '/profile/:path*','/optional', '/msg/:path*', '/group/:path*',]
 }
