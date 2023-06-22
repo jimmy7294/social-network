@@ -285,8 +285,9 @@ body {
 .group {
   margin-bottom: 1vh;
   background-color: #4c6ca4;
-  height: 30px;
-  text-align: center;
+  min-height: 10vh;
+  width: 40vh;
+  height: max-content;
 }
 
 .commenting {
