@@ -53,6 +53,7 @@ function GetGroupPage(slug){
                 setMembers(data.members)
                 setJoinRequest(data.join_request)
                 setUserType(data.member_type)
+                console.log(data)
              } else {
                 setUserType("not_a_member")
              }

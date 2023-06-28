@@ -162,7 +162,15 @@ func gatherGroupEvents(groupName string, uuid int) ([]event, error) {
 func gatherGroupJoinRequests(groupName string) ([]notification, error) {
 	var allJoinRequests []notification
 
-	sqlStmt, err := data.DB.Prepare(``)
+	sqlStmt, err := data.DB.Prepare(`SELECT notif_content,
+	creation_date,
+	COALESCE(users.username, users.email),
+	notif_type,
+	notif_context
+	FROM notifications
+	JOIN users
+	ON notifications.sender_id = users.uuid
+	WHERE notifications.notif_type = 'group_join_request' AND notifications.notif_context = ?`)
 	if err != nil {
 		return allJoinRequests, err
 	}
@@ -177,7 +185,7 @@ func gatherGroupJoinRequests(groupName string) ([]notification, error) {
 	for rows.Next() {
 		var joinRequest notification
 
-		err = rows.Scan()
+		err = rows.Scan(&joinRequest.Content, &joinRequest.Created, &joinRequest.Sender, &joinRequest.Type, &joinRequest.Context)
 		if err != nil {
 			return allJoinRequests, err
 		}
@@ -208,7 +216,10 @@ func gatherGroupPageData(groupName, memberType string, uuid int) (groupPage, err
 	if memberType != "creator" {
 		return groupPageData, err
 	}
-	//groupPageData.JoinRequests, err = gatherGroupJoinRequests(groupName)
+	groupPageData.JoinRequests, err = gatherGroupJoinRequests(groupName)
+	if err != nil {
+		fmt.Println("join request err", err)
+	}
 
 	return groupPageData, err
 }

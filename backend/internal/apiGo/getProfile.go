@@ -170,12 +170,20 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 			w.Write(privProfJson)
 			return
 		}
-		usrProfile.Followers, err = helper.GetFollowing(uuid)
+		usrProfile.Following, err = helper.GetFollowing(uuid)
+		if err != nil {
+			fmt.Println("following error", err)
+			helper.WriteResponse(w, "following_error")
+			return
+		}
+
+		usrProfile.Followers, err = helper.GetFollowers(uuid)
 		if err != nil {
 			fmt.Println("followers error", err)
 			helper.WriteResponse(w, "followers_error")
 			return
 		}
+
 		usrProfile.Groups, err = helper.GetYourGroups(uuid)
 		if err != nil {
 			fmt.Println("groups error", err)

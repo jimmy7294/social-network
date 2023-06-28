@@ -122,6 +122,8 @@ WHERE follower_id = ?;`
 		return bleh, err
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
 		var d1 string
 		var d2 string
@@ -135,6 +137,34 @@ WHERE follower_id = ?;`
 	}
 
 	return bleh, err
+}
+
+func GetFollowers(uuid int) ([]string, error) {
+	sqlStmt := `SELECT COALESCE(users.username, users.email)
+	FROM followers
+	JOIN users
+	ON users.uuid = followers.follower_id
+	WHERE followers.uuid = ?;`
+	var result []string
+
+	rows, err := data.DB.Query(sqlStmt, uuid)
+	if err != nil {
+		return result, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var usr string
+
+		err = rows.Scan(&usr)
+		if err != nil {
+			return result, err
+		}
+		result = append(result, usr)
+	}
+
+	return result, err
 }
 
 func GetYourGroups(uuid int) ([]string, error) {
