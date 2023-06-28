@@ -228,9 +228,7 @@ function PublicPosts({ posts }) {
         {posts.map((post) => (
           <div key={post.post_id} className="post">
             <div className="postDate">Public | {post.creation_date}</div>
-          <a href={`profile/${post.author}`}>
-            <div className="postUser">{post.author}</div>
-            </a>
+            <div className="postUser"><a href={`profile/${post.author}`}>{post.author}</a></div>
 
             <div className="postTitle">{post.title}</div>
             <div className="postContent">{post.content}</div>

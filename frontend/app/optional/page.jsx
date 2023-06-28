@@ -129,9 +129,9 @@ export default function Optional() {
             </a>
           </div>
           <div>
+            {/* have fun guys, find a way to fix this shit, you shouldn't be able to click on the text to proc the button and find a way to stylize it like the other button of the page <3 */}
             <label id="image">Choose an image:</label>
-            <input type="file" name="image" id="image" onChange={e => encodeImageFile(e.target)}></input>
-            <input className="imgSubmit" type="submit" value="Upload"></input>
+            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)}></input>
           </div>
           <br />
           <label id="aboutMe">About Me</label>
@@ -156,7 +156,7 @@ export default function Optional() {
               placeholder="nickname"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
-              className="input-field"
+              className="titleCreation"
             ></input>
           </div>
           <div>
@@ -181,7 +181,7 @@ export default function Optional() {
           </div>
 
           <div className="finish">
-            <button type="submit" className="">
+            <button type="submit" className="postCreationButton">
               Finish
             </button>
           </div>

@@ -40,17 +40,18 @@ function GetProfile() {
           </div>
 
             <h2>Profile</h2>
-         
-          <p> {profile.email}</p>
-          <p> {profile.first_name}</p>
-          <p> {profile.last_name}</p>
-          <p> {profile.dob}</p>
-          <p> {profile.username}</p>
-          <p> {profile.bio}</p>
-          <p> {profile.privacy}</p>
+            <div className="profileDate">
+          <p>Email: {profile.email}</p>
+          <p> First Name: {profile.first_name}</p>
+          <p> Last Name: {profile.last_name}</p>
+          <p> BirthDay: {profile.dob}</p>
+          <p> Nickname: {profile.username}</p>
+          <p>Bio:{profile.bio}</p>
+          <p>Privacy: {profile.privacy}</p>
           <a href="/optional" className="gibspace">
-          <button>Change Profile</button>
+          <button className="postCreationButton">Change Profile</button>
           </a>
+          </div>
               </div>
    
               <div>

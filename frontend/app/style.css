@@ -44,6 +44,11 @@
   margin-left: 2.5px;
 }
 
+a {
+  color: white;
+  text-decoration: none;
+}
+
 .pfp {
   height: 45px;
   width: 45px;
@@ -367,7 +372,7 @@ body {
   display: grid;
   margin: 1vh;
   margin-top: 0;
-  padding: 2px;
+  text-align: center;
 }
 
 .layouter {
@@ -407,7 +412,7 @@ body {
 
 .postCreationButton {
   border-radius: 2px;
-  border: 0px solid #ccc;
+  border: 0px;
   margin-left: 2px;
 }
 
@@ -437,4 +442,14 @@ body {
 .contents {
   margin: 1vh;
   font-size: large;
+}
+
+.theSoundOfTheGirafe {
+  border: 0px;
+}
+
+input[type="file"] {
+  border-radius: 2px;
+  border-style: none;
+  margin-left: 2px;
 }
