@@ -392,6 +392,14 @@ body {
   padding: 2px;
 }
 
+.follower {
+  height: 1vh;
+  width: fit-content;
+  margin: 0;
+  margin-top: 0.5vh;
+  margin-bottom: 0.5vh;
+}
+
 .layouter {
   display: grid;
   justify-items: center;
