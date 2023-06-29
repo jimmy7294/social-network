@@ -96,13 +96,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		//helper.WriteResponse(w, "success")
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"status":"success", "token":"` + token + `"}`))
-		//helper.GetFollowing(1)
-		fmt.Println(getAllNotificationsFromDB(1))
-		//res, err := gatherPrivatePosts(1)
-		//fmt.Println("gather result priv", res, err)
-		//res2, err := gatherSemiPrivatePosts(1)
-		//fmt.Println("gather result semipriv", res2, err)
-		//res3, err := gatherPosts()
-		//fmt.Println("gather result pub", res3, err)
+
 	}
 }

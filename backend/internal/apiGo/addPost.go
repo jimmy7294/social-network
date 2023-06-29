@@ -20,6 +20,29 @@ type post struct {
 	Author  int
 }
 
+func addAllowedUsersToDB(users []string, postTitle string) error {
+	sqlString := `INSERT INTO allowedUsers(post_id,uuid)
+	SELECT posts.post_id AS post_id,
+	users.uuid
+	FROM posts
+	JOIN users
+	ON users.username = ? OR users.email = ?
+	WHERE post_title = ?
+	ORDER BY posts.post_id DESC
+	LIMIT 1`
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	for _, user := range users {
+		sqlStmt.Exec(user, user, postTitle)
+	}
+	return err
+}
+
 func addPostToTable(postData post) error {
 	sqlStmt, err := data.DB.Prepare(`INSERT INTO posts(post_author,post_privacy,post_image,creation_date,post_content,post_title) values(?,?,?,?,?,?)`)
 	if err != nil {
@@ -68,7 +91,11 @@ func PostApi(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			if pData.Privacy == "semi_private" {
-
+				err = addAllowedUsersToDB(pData.Allowed, pData.Title)
+				if err != nil {
+					helper.WriteResponse(w, "could_not_add_users")
+					return
+				}
 			}
 		} else if pData.Type == "group_post" {
 			err = addGroupPostToTable(pData)
@@ -77,6 +104,7 @@ func PostApi(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
+		helper.WriteResponse(w, "success")
 
 	}
 }
