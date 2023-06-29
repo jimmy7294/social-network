@@ -218,3 +218,21 @@ func GetuuidByString(tabType, value string) (int, error) {
 
 	return result, err
 }
+
+func GetuuidFromEmailOrUsername(user string) (int, error) {
+	sqlString := `SELECT uuid
+	FROM users
+	WHERE email = ?
+	OR username = ?`
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return 0, err
+	}
+
+	defer sqlStmt.Close()
+
+	var uuid int
+	err = sqlStmt.QueryRow(user, user).Scan(&uuid)
+
+	return uuid, err
+}

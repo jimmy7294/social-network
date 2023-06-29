@@ -46,6 +46,7 @@ func setupApi() {
 	http.HandleFunc("/api/getPosts", apiGO.GetPosts)
 	http.HandleFunc("/api/getProfile", apiGO.GetProfile)
 	http.HandleFunc("/api/getNotifications", apiGO.GetAllNotifications)
+	http.HandleFunc("/api/getPrivateMessages", apiGO.GetPrivateMessages)
 	http.HandleFunc("/api/followCheck", apiGO.CheckFollowing)
 	http.HandleFunc("/api/getComments", apiGO.GetComments)
 	http.HandleFunc("/api/getHeadbar", apiGO.GetHeadBar)

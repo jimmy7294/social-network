@@ -1,6 +1,7 @@
 package apiGO
 
 import (
+	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
 	"encoding/json"
 	"fmt"
@@ -13,6 +14,7 @@ type privateMessage struct {
 	Receiver string    `json:"reciever"`
 	Created  time.Time `json:"created"`
 	Image    string    `json:"image"`
+	Content  string    `json:"content"`
 }
 
 type privateMessages struct {
@@ -20,11 +22,47 @@ type privateMessages struct {
 	Status   string           `json:"status"`
 }
 
-func gatherPrivateMessagesfromDB(yourId int, otherUser string) (privateMessages, error) {
-	var MessageData privateMessages
-	//sqlStmt := `SELECT `
+func gatherPrivateMessagesfromDB(yourId int, otherUser int) ([]privateMessage, error) {
+	var AllMessagesData []privateMessage
+	sqlString := `SELECT COALESCE(u1.username, u1.email),
+	COALESCE(u2.username, u2.email),
+	pmg_content,
+	IFNULL(pmg_image, 'http://localhost:8080/images/default.jpeg'),
+	creation_date
+	FROM privateMessages
+	JOIN users AS 'u1'
+	ON u1.uuid = pmg_sender
+	JOIN users AS 'u2'
+	ON u2.uuid = pmg_reciever
+	WHERE (pmg_sender = ? AND pmg_reciever = ?)
+	OR (pmg_sender = ? AND pmg_reciever = ?) 
+	`
 
-	return MessageData, nil
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return AllMessagesData, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(yourId, otherUser, otherUser, yourId)
+	if err != nil {
+		return AllMessagesData, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var messageData privateMessage
+
+		err = rows.Scan(&messageData.Sender, &messageData.Receiver, &messageData.Content, &messageData.Image, &messageData.Created)
+		if err != nil {
+			return AllMessagesData, err
+		}
+		AllMessagesData = append(AllMessagesData, messageData)
+	}
+
+	return AllMessagesData, err
 }
 
 func GetPrivateMessages(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +84,13 @@ func GetPrivateMessages(w http.ResponseWriter, r *http.Request) {
 		helper.WriteResponse(w, "session_error")
 		return
 	}
-	privateMessagesData, err := gatherPrivateMessagesfromDB(uuid, otherUser)
+	var privateMessagesData privateMessages
+	otherUseruuid, err := helper.GetuuidFromEmailOrUsername(otherUser)
+	if err != nil {
+		helper.WriteResponse(w, "user_does_not_exist")
+		return
+	}
+	privateMessagesData.Messages, err = gatherPrivateMessagesfromDB(uuid, otherUseruuid)
 	if err != nil {
 		helper.WriteResponse(w, "database_error")
 		return
