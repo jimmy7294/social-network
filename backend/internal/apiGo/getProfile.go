@@ -13,18 +13,19 @@ type qInfo struct {
 }
 
 type profile struct {
-	Email     string   `json:"email"`
-	Firstname string   `json:"first_name"`
-	Lastname  string   `json:"last_name"`
-	DOB       string   `json:"dob"`
-	Avatar    string   `json:"avatar"`
-	UserName  string   `json:"username"`
-	Bio       string   `json:"bio"`
-	Privacy   string   `json:"privacy"`
-	Followers []string `json:"followers"`
-	Following []string `json:"following"`
-	Groups    []string `json:"groups"`
-	Status    string   `json:"status"`
+	Email        string   `json:"email"`
+	Firstname    string   `json:"first_name"`
+	Lastname     string   `json:"last_name"`
+	DOB          string   `json:"dob"`
+	Avatar       string   `json:"avatar"`
+	UserName     string   `json:"username"`
+	Bio          string   `json:"bio"`
+	Privacy      string   `json:"privacy"`
+	Followers    []string `json:"followers"`
+	Following    []string `json:"following"`
+	CreatedPosts []string `json:"created_posts"`
+	Groups       []string `json:"groups"`
+	Status       string   `json:"status"`
 }
 type profilePrivate struct {
 	Email  string `json:"email"`
@@ -35,6 +36,33 @@ type headBarProf struct {
 	Username string `json:"username"`
 	Avatar   string `json:"avatar"`
 	Status   string `json:"status"`
+}
+
+func getCreatedPosts(uuid int) ([]string, error) {
+	var allUserCreatedPosts []string
+
+	sqlStmt := `SELECT post_title
+	FROM posts
+	WHERE post_author = ?`
+
+	rows, err := data.DB.Query(sqlStmt, uuid)
+	if err != nil {
+		return allUserCreatedPosts, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var userCreatedPost string
+
+		err = rows.Scan(&userCreatedPost)
+		if err != nil {
+			return allUserCreatedPosts, err
+		}
+		allUserCreatedPosts = append(allUserCreatedPosts, userCreatedPost)
+	}
+
+	return allUserCreatedPosts, err
 }
 
 func getEmailById(uuid int) (string, error) {
@@ -188,6 +216,13 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("groups error", err)
 			helper.WriteResponse(w, "groups_error")
+			return
+		}
+
+		usrProfile.CreatedPosts, err = getCreatedPosts(uuid)
+		if err != nil {
+			fmt.Println("created posts error", err)
+			helper.WriteResponse(w, "database_error")
 			return
 		}
 		usrProfile.Status = "success"
