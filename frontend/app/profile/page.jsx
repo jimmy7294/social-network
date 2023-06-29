@@ -38,7 +38,6 @@ function GetProfile() {
           <div className="title">
           <img className="logo" src={profile.avatar}/>
           </div>
-
             <h2>Profile</h2>
             <div className="profileDate">
           <p>Email: {profile.email}</p>
@@ -54,13 +53,13 @@ function GetProfile() {
           </div>
               </div>
    
-              <div>
+          <div>
             <div className="folow">
               <h2>Followers</h2>
               {followers && <div>
               {followers.map((follower,index) => (
                 <div  key={index} className="follower">
-                  <a href={`profile/${follower}`}><p>{follower}</p> </a>
+                  <a className="link-up" href={`profile/${follower}`}><p>{follower}</p> </a>
               </div>
               ))}
               </div>
@@ -85,7 +84,7 @@ function GetProfile() {
                     <p>{group}</p>
                     </div>
                 ))}
-              </div>
+          </div>
 }
               </div>
               

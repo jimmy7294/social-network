@@ -81,6 +81,9 @@ function followCheck(slug){
 function GetProfile(slug) {
   const user = decodeURIComponent(slug.params.slug)
   const [stuff, setStuff] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [groups, setGroups] = useState([]);
   console.log(user)
 
   useEffect(() => {
@@ -98,7 +101,9 @@ function GetProfile(slug) {
           console.log("get profile failed", data); // Update the state with fetched data
         } 
         setStuff(data);
-
+        setFollowers(data.followers);
+        setFollowing(data.following);
+        setGroups(data.groups);
         
       });
   }, []);
@@ -107,24 +112,71 @@ function GetProfile(slug) {
   
       return (
         <>
-        <div className="Profile">
-          <h2>Profile</h2>
-          <img src={stuff.avatar}/>
-       
-        <p> {stuff.email}</p>
-        <p> {stuff.first_name}</p>
-        <p> {stuff.last_name}</p>
-        <p> {stuff.dob}</p>
-        <div>
-        
+      <div className="Profile">
+        <div className="organiser">
+        <img className="avatar_preview" src={stuff.avatar}/>
+          <div className="passport">
+            <p> {stuff.username}</p>
+            <div className="birth_name">
+            <p> {stuff.first_name}</p>
+            <p> {stuff.last_name}</p>
+            </div>
         </div>
-        <p> {stuff.username}</p>
-        <p> {stuff.bio}</p>
-        <p> {stuff.privacy}</p>
-        <p> {stuff.followers}</p>
-        <p> {stuff.following}</p>
-        {}
-            </div>   
+            
+          </div>
+          <div className="docu">
+            <p> {stuff.email}</p>
+            <p> {stuff.bio}</p>
+            <p> {stuff.privacy}</p>
+            <p> {stuff.dob}</p>
+          </div>
+      </div>
+
+      <div>
+            <div className="folow">
+              <h2>Followers</h2>
+              {followers && <div>
+              {followers.map((follower,index) => (
+                <div  key={index} className="follower">
+                  <a className="link-up" href={`profile/${follower}`}><p>{follower}</p> </a>
+              </div>
+              ))}
+              </div>
+              }
+
+              {following && <div>
+                <h2>Following</h2>
+                {following.map((follow,index) => (
+                  <div key={index}>
+                    <p>{follow}</p>
+                </div>
+                ))}
+                </div>
+              }
+
+              
+              {groups && <div>
+              <h2>Groups</h2>
+                {groups.map((group,index) => (
+
+                  <div  key={index}>
+                    <p>{group}</p>
+                    </div>
+                ))}
+          </div>
+}
+              </div>
+              
+              {following && <div>
+              <h2>Following</h2>
+              {following.map((follow,index) => (
+                <div key={index} className="follow">
+                  <p>{follow}</p>
+              </div>
+              ))}
+              </div>
+              }
+            </div>
           </>
         );
         }
@@ -147,7 +199,7 @@ function ProfilePage(slug){
 
 return (<>
   <Headers />
-  <div className="ProfilePage">
+  <div className="layouter">
     {GetProfile(slug)}
     {followCheck(slug)}
   </div>

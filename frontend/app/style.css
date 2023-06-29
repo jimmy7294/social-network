@@ -13,8 +13,8 @@
 .identity {
   display: flex;
   background-color: #4c6ca4;
-  width: 350px;
-  height: 80px;
+  width: 24vh;
+  height: 6.5vh;
   align-items: flex-end;
   position: relative;
 }
@@ -30,7 +30,7 @@
 }
 
 .name {
-  font-size: larger;
+  font-size: medium;
   text-decoration: underline;
   margin-bottom: 0px;
   color: inherit;
@@ -39,9 +39,7 @@
 .logo {
   height: 75px;
   width: 75px;
-  margin-right: 5px;
-  margin-bottom: 2.5px;
-  margin-left: 2.5px;
+  margin: 0.2vh;
 }
 
 a {
@@ -60,6 +58,7 @@ a {
   height: 100px;
   width: 100px;
   border: ridge #ccc 2px;
+  margin-top: 1vh;
 }
 
 .pick-me.profile {
@@ -360,9 +359,28 @@ body {
 
 .Profile {
   display: grid;
-  justify-items: center;
   border: #4faa92 solid 2px;
   width: 50vh;
+}
+
+.passport {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: -webkit-fill-available;
+  margin: 1vh;
+  margin-top: 0vh;
+}
+
+.docu {
+  display: grid;
+  justify-self: center;
+}
+
+.organiser {
+  display: flex;
+  margin: 1vh;
+  margin-top: 0;
 }
 
 .folow {
@@ -371,13 +389,18 @@ body {
   height: max-content;
   display: grid;
   margin: 1vh;
-  margin-top: 0;
-  text-align: center;
+  padding: 2px;
 }
 
 .layouter {
-  display: flex;
+  display: grid;
+  justify-items: center;
+}
 
+.birth_name {
+  display: flex;
+  justify-content: space-between;
+  width: 12vh;
 }
 
 .list-up {

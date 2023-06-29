@@ -228,7 +228,9 @@ function PublicPosts({ posts }) {
         {posts.map((post) => (
           <div key={post.post_id} className="post">
             <div className="postDate">Public | {post.creation_date}</div>
-            <div className="postUser"><a href={`profile/${post.author}`}>{post.author}</a></div>
+          <a className="link-up" href={`profile/${post.author}`}>
+            <div className="postUser">{post.author}</div>
+            </a>
 
             <div className="postTitle">{post.title}</div>
             <div className="postContent">{post.content}</div>
@@ -251,7 +253,7 @@ function SemiPosts({ posts }) {
               <div className="postDate">
                 Semi-Private | {semi.creation_date}
               </div>
-              <a href = {`profile/${semi.author}`}>
+              <a className="link-up" href = {`profile/${semi.author}`}>
               <div className="postUser">{semi.author}</div>
               </a>
               <div className="postTitle">{semi.title}</div>
@@ -275,7 +277,7 @@ function PrivatePosts({ posts }) {
               <div className="postDate">
                 Private | {private_post.creation_date}
               </div>
-              <a href={`profile/${private_post.author}`}>
+              <a className="link-up" href={`profile/${private_post.author}`}>
               <div className="postUser">{private_post.author}</div>
               </a>
               <div className="postTitle">{private_post.title}</div>
