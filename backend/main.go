@@ -45,6 +45,7 @@ func setupApi() {
 	http.HandleFunc("/api/getUsernames", apiGO.GetUsernames)
 	http.HandleFunc("/api/getPosts", apiGO.GetPosts)
 	http.HandleFunc("/api/getProfile", apiGO.GetProfile)
+	http.HandleFunc("/api/getNotifications", apiGO.GetAllNotifications)
 	http.HandleFunc("/api/followCheck", apiGO.CheckFollowing)
 	http.HandleFunc("/api/getComments", apiGO.GetComments)
 	http.HandleFunc("/api/getHeadbar", apiGO.GetHeadBar)
