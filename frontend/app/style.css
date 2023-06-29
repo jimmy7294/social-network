@@ -408,7 +408,7 @@ body {
 .birth_name {
   display: flex;
   justify-content: space-between;
-  width: 12vh;
+  width: 16vh;
 }
 
 .list-up {

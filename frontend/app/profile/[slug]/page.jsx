@@ -117,7 +117,7 @@ function GetProfile(slug) {
         <img className="avatar_preview" src={stuff.avatar}/>
           <div className="passport">
             <p> {stuff.username}</p>
-            <div className="birth_name">
+            <div className="birth_name"> Name:
             <p> {stuff.first_name}</p>
             <p> {stuff.last_name}</p>
             </div>
@@ -125,10 +125,10 @@ function GetProfile(slug) {
             
           </div>
           <div className="docu">
-            <p> {stuff.email}</p>
-            <p> {stuff.bio}</p>
+            <p> Email: {stuff.email}</p>
+            <p> Description: {stuff.bio}</p>
             <p> {stuff.privacy}</p>
-            <p> {stuff.dob}</p>
+            <p> Brithday: {stuff.dob}</p>
           </div>
       </div>
 
