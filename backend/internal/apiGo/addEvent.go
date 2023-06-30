@@ -19,6 +19,29 @@ type createEvent struct {
 	Options   []string `json:"options"`
 }
 
+func sendNotificationToAllGroupMembers(groupName string, yourId int) error {
+	sqlString := `INSERT INTO notifications(notif_content,creation_date,uuid,sender_id,notif_type,notif_context)
+	SELECT ? AS notif_content,
+	? AS creation_date,
+	groupMembers.uuid AS uuid,
+	? AS sender_id,
+	'event' AS notif_type,
+	? AS notif_context
+	FROM groupMembers
+	WHERE groupMembers.uuid NOT IN (?)`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec("A new event has been created in the group"+groupName, time.Now(), yourId, groupName)
+
+	return err
+}
+
 func addEventToDB(event createEvent) error {
 	sqlStmt := `INSERT INTO events(group_id,event_author,event_title,event_content,creation_date,event_date,options)
 	SELECT groups.group_id,
@@ -74,6 +97,12 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		helper.WriteResponse(w, "database_error")
 		return
 	}
+
+	err = sendNotificationToAllGroupMembers(eventData.GroupName, uuid)
+	if err != nil {
+		fmt.Println("sending event notification error", err)
+	}
+
 	helper.WriteResponse(w, "success")
 
 }

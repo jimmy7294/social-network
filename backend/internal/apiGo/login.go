@@ -92,6 +92,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		   		for _, sad := range cok {
 		   			fmt.Println(sad)
 		   		} */
+		fmt.Println("invite someone", addGroupInviteNotifToDB("The Bullies", "Shizuka73", 2))
+		//fmt.Println("request", addGroupJoinNotifToDB("The Bullies", 2))
 		//fmt.Println("hopefully cookies are here", r.Header)
 		//helper.WriteResponse(w, "success")
 		w.Header().Set("Content-Type", "application/json")
