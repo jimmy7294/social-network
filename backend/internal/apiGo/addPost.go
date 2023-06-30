@@ -9,15 +9,15 @@ import (
 )
 
 type post struct {
-	Type    string   `json:"type"`
-	Privacy string   `json:"privacy"`
-	Allowed []string `json:"allowed_users"`
-	GroupId int      `json:"group_id"`
-	Image   []byte   `json:"image"`
-	Created string   `json:"creation_date"`
-	Content string   `json:"content"`
-	Title   string   `json:"title"`
-	Author  int
+	Type      string   `json:"type"`
+	Privacy   string   `json:"privacy"`
+	Allowed   []string `json:"allowed_users"`
+	GroupName string   `json:"group_name"`
+	Image     []byte   `json:"image"`
+	Created   string   `json:"creation_date"`
+	Content   string   `json:"content"`
+	Title     string   `json:"title"`
+	Author    int
 }
 
 func addAllowedUsersToDB(users []string, postTitle string) error {
@@ -55,13 +55,22 @@ func addPostToTable(postData post) error {
 }
 
 func addGroupPostToTable(postData post) error {
-	sqlStmt, err := data.DB.Prepare(`INSERT INTO groupPosts(gpost_author,group_id,gpost_image,creation_date,gpost_content,gpost_title) values(?,?,?,?,?,?)`)
+	sqlString := `INSERT INTO groupPosts(gpost_author,group_id,gpost_image,creation_date,gpost_content,gpost_title)
+	SELECT ? AS gpost_author,
+	group_id,
+	? AS gpost_image,
+	? AS creation_date,
+	? AS gpost_content,
+	? AS gpost_title
+	FROM groups
+	WHERE group_name = ?`
+	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
 		return err
 	}
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(postData.Author, postData.GroupId, postData.Image, postData.Created, postData.Content, postData.Title)
+	_, err = sqlStmt.Exec(postData.Author, postData.Image, postData.Created, postData.Content, postData.Title, postData.GroupName)
 	return err
 }
 
@@ -98,6 +107,11 @@ func PostApi(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		} else if pData.Type == "group_post" {
+			isMember, _ := checkIfGroupMember(pData.GroupName, uuid)
+			if !isMember {
+				helper.WriteResponse(w, "not_a_member")
+				return
+			}
 			err = addGroupPostToTable(pData)
 			if err != nil {
 				helper.WriteResponse(w, "incorrect_input")

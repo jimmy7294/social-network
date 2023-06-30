@@ -86,12 +86,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("it do work")
 		//fmt.Println(r.Cookie("session_token"))
 		//fmt.Println(r.Cookie("next-auth.csrf-token"))
-		cok := r.Cookies()
-		//fmt.Println("cok length", len(cok))
-		//fmt.Println(r.Header)
-		for _, sad := range cok {
-			fmt.Println(sad)
-		}
+		/* 		cok := r.Cookies()
+		   		//fmt.Println("cok length", len(cok))
+		   		//fmt.Println(r.Header)
+		   		for _, sad := range cok {
+		   			fmt.Println(sad)
+		   		} */
 		//fmt.Println("hopefully cookies are here", r.Header)
 		//helper.WriteResponse(w, "success")
 		w.Header().Set("Content-Type", "application/json")
