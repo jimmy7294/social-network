@@ -54,6 +54,7 @@ func setupApi() {
 	http.HandleFunc("/api/addGroup", apiGO.AddGroup)
 	http.HandleFunc("/api/addEvent", apiGO.AddEvent)
 	http.HandleFunc("/api/getGroupPage", apiGO.GetGroupPage)
+	http.HandleFunc("/api/addPost", apiGO.PostApi)
 	img := http.FileServer(http.Dir("internal/images"))
 	http.Handle("/images/", http.StripPrefix("/images/", img))
 	//http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))

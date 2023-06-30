@@ -13,10 +13,10 @@ import (
 type createEvent struct {
 	GroupName string `json:"group_name"`
 	Author    int
-	Title     string    `json:"title"`
-	Content   string    `json:"content"`
-	EventDate time.Time `json:"event_date"`
-	Options   []string  `json:"options"`
+	Title     string   `json:"title"`
+	Content   string   `json:"content"`
+	EventDate string   `json:"event_date"`
+	Options   []string `json:"options"`
 }
 
 func addEventToDB(event createEvent) error {
@@ -32,7 +32,11 @@ func addEventToDB(event createEvent) error {
 	WHERE group_name = ?`
 
 	optionsJoined := strings.Join(event.Options, data.SEPERATOR)
-	_, err := data.DB.Exec(sqlStmt, event.Author, event.Title, event.Content, time.Now(), event.EventDate, optionsJoined, event.GroupName)
+	eDate, err := time.Parse("2006-01-02", event.EventDate)
+	if err != nil {
+		return err
+	}
+	_, err = data.DB.Exec(sqlStmt, event.Author, event.Title, event.Content, time.Now(), eDate, optionsJoined, event.GroupName)
 
 	return err
 }
@@ -47,7 +51,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	var eventData createEvent
 	err := json.NewDecoder(r.Body).Decode(&eventData)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("decoding error", err)
 	}
 	uuid, err := helper.GetIdBySession(w, r)
 	if err != nil {
@@ -57,6 +61,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	isMember, _ := checkIfGroupMember(eventData.GroupName, uuid)
 	if !isMember {
+		fmt.Println("not a member error", eventData.GroupName, uuid)
 		helper.WriteResponse(w, "not_a_member")
 		return
 	}

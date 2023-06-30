@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type post struct {
@@ -14,7 +15,6 @@ type post struct {
 	Allowed   []string `json:"allowed_users"`
 	GroupName string   `json:"group_name"`
 	Image     []byte   `json:"image"`
-	Created   string   `json:"creation_date"`
 	Content   string   `json:"content"`
 	Title     string   `json:"title"`
 	Author    int
@@ -50,7 +50,7 @@ func addPostToTable(postData post) error {
 	}
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(postData.Author, postData.Privacy, postData.Image, postData.Created, postData.Content, postData.Title)
+	_, err = sqlStmt.Exec(postData.Author, postData.Privacy, postData.Image, time.Now(), postData.Content, postData.Title)
 	return err
 }
 
@@ -70,7 +70,7 @@ func addGroupPostToTable(postData post) error {
 	}
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(postData.Author, postData.Image, postData.Created, postData.Content, postData.Title, postData.GroupName)
+	_, err = sqlStmt.Exec(postData.Author, postData.Image, time.Now(), postData.Content, postData.Title, postData.GroupName)
 	return err
 }
 

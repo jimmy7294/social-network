@@ -52,6 +52,36 @@ function Logout() {
   Cookies.set('session_token', 'value', { expires: 0, path: '/' })
 }
 
+function GetNotification() {
+  const [notification, setNotification] = useState(false);
+  const [notificationdata, setNotificationdata] = useState([]);
+  useEffect(() => {
+  fetch("http://localhost:8080/api/getNotifications", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      if (data.status !== "success") {
+        console.log("failed to get notification");
+        return;
+      }
+        setNotification(true);
+      console.log(data, notification);
+      setNotificationdata(data.notificationdata);
+    });
+}, []);
+
+    return (
+      <>
+      {notification && <div className="notification"><p>NOTIFICATION</p> </div>
+      }
+      </>
+    );
+}
 
 
 
@@ -69,6 +99,7 @@ const Headers = () => {
         />
           <Link className="name" href="/">Dummy Antisocial Network</Link>
       </div>
+      <GetNotification/>
       <GetTinyProfile/>
           <Link className="navigate" href="/group">Group</Link>
           <Link className="navigate" href="/msg">Chat</Link>

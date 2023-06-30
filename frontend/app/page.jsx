@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import Headers from "./components/Header";
 
 
@@ -31,7 +31,7 @@ function ToggleComments({ post_id }) {
         if (data.status !== "success") {
           console.log("failed to get comments", data);
         }
-        console.log(data);
+
         setComments(data.comments);
         setShowMore(!showMore);
       });
@@ -63,17 +63,22 @@ function ToggleComments({ post_id }) {
 function MakePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [private_post, setPrivate_post] = useState("");
+  const [privacy, setPrivacy] = useState("public");
+  const [allowed, setAllowed] = useState([]);
+  const [image, setImage] = useState("");
+  const[users,setUsers] = useState([])
+  const type = "post"
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:8080/api/makePost", {
+    console.log(allowed)
+    const res = await fetch("http://localhost:8080/api/addPost", {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, content, private_post }),
+      body: JSON.stringify({ title, content, privacy, allowed ,type }),
     });
     const data = await res.json();
     if (data.status !== "success") {
@@ -82,6 +87,27 @@ function MakePost() {
     }
     console.log("success");
   };
+
+  const handlePrivacyChange = async (e) => {
+    setPrivacy(e.target.value);
+    if (e.target.value === "semi-private") {
+      const res = await fetch("http://localhost:8080/api/getUsernames", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.status !== "success") {
+        console.log("failed to get users");
+        return;
+      }
+      setUsers(data.users);
+    }
+  };
+ 
+  
   return (
     <>
       <div className="makePost">
@@ -95,19 +121,33 @@ function MakePost() {
           <select
             className="dropdown"
             placeholder="private"
-            onChange={(e) => setPrivate_post(e.target.value)}
+            onChange= {handlePrivacyChange}
           >
             {/*your job*/}
-            <option value="">Public</option>
-            <option value="">Semi-Private</option>
-            <option value="">Private</option>a
+            <option value="public">Public</option>
+            <option value="semi-private">Semi-Private</option>
+            <option value="private">Private</option>a
           </select>
+          {privacy === "semi-private" && (
+            <select
+              className="dropdown"
+              placeholder="allowed"
+              onChange={(e) => setAllowed(e.target.value)}
+            >
+              {users.map((user,index) => (
+                <option key={index} value={user.username}>{user.username}</option>
+              ))}
+            </select>
+          )}
+
+
           <textarea
             type="text"
             placeholder="content"
             className="postContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
+
           <button type="submit" className="postCreationButton">
             submit
           </button>
@@ -119,8 +159,8 @@ function MakePost() {
 
 function GetPosts() {
   const [public_posts, setPublic_posts] = useState([]);
-  const [semi_private_posts, setSemi_private_posts] = useState([]);
-  const [private_posts, setPrivate_posts] = useState([]);
+  const [semi_privacys, setSemi_privacys] = useState([]);
+  const [privacys, setPrivacys] = useState([]);
   const [display, setDisplay] = useState({
     public: true,
     semi: true,
@@ -143,17 +183,12 @@ function GetPosts() {
     })
       .then((data) => data.json())
       .then((data) => {
-        if (data.status == "success") {
-          setPublic_posts(data.posts);
-          setSemi_private_posts(data.semi_private_posts);
-          setPrivate_posts(data.private_posts);
-          console.log(data);
-        } else {
-          console.log(
-            "Error fetching data from http://localhost:8080/api/getPosts",
-            data
-          );
-        }
+        if (data.status !== "success") {
+          console.log("failed to get posts");
+        } 
+        setPublic_posts(data.posts);
+        setSemi_privacys(data.semi_privacys);
+        setPrivacys(data.privacys);
       });
   }, []);
 
@@ -213,8 +248,8 @@ function GetPosts() {
       </div>
       <div className="posts">
         {display.public && <PublicPosts posts={public_posts}></PublicPosts>}
-        {display.semi && <SemiPosts posts={semi_private_posts}></SemiPosts>}
-        {display.private && <PrivatePosts posts={private_posts}></PrivatePosts>}
+        {display.semi && <SemiPosts posts={semi_privacys}></SemiPosts>}
+        {display.private && <PrivatePosts posts={privacys}></PrivatePosts>}
       </div>
     </>
   );
@@ -266,23 +301,27 @@ function SemiPosts({ posts }) {
   );
 }
 
+
+
+
+
 // PrivatePosts component
 function PrivatePosts({ posts }) {
   return (
     <div className="private">
       <div className="mfprivate">
         {posts &&
-          posts.map((private_post, index) => (
+          posts.map((privacy, index) => (
             <div key={index} className="post">
               <div className="postDate">
-                Private | {private_post.creation_date}
+                Private | {privacy.creation_date}
               </div>
-              <a className="link-up" href={`profile/${private_post.author}`}>
-              <div className="postUser">{private_post.author}</div>
+              <a className="link-up" href={`profile/${privacy.author}`}>
+              <div className="postUser">{privacy.author}</div>
               </a>
-              <div className="postTitle">{private_post.title}</div>
-              <div className="postContent">{private_post.content}</div>
-              <ToggleComments post_id={private_post.post_id}></ToggleComments>
+              <div className="postTitle">{privacy.title}</div>
+              <div className="postContent">{privacy.content}</div>
+              <ToggleComments post_id={privacy.post_id}></ToggleComments>
             </div>
           ))}
       </div>

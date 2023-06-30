@@ -2,6 +2,87 @@
 
 import  { useState, useEffect } from "react";
 import Headers from "../../components/Header";
+import { useRouter } from "next/navigation";
+
+
+function MakeEvent( slug ) {
+    const router = useRouter();
+    const group_name = decodeURIComponent(slug.params.slug)
+    const [title, setEventTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [event_date, setEvent_Date] = useState("");
+    const [options, setOptions] = useState([]);
+    const [optionone, setOptionOne] = useState("");
+    const [optiontwo, setOptionTwo] = useState("");
+   
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        options.push(optionone);
+        options.push(optiontwo);
+        console.log(options)
+        console.log(group_name)
+         fetch("http://localhost:8080/api/addEvent",{
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ group_name, title, content, event_date, options }),
+        })
+        .then((data) => data.json())
+        .then((data) => {
+            if (data.status !== "success") {
+                console.log("failed to add event", data);
+            }
+            console.log(data);
+            setOptions([]);
+
+
+        //make reload work            
+           router.Reload(window.location.pathname)
+            
+
+        });
+    };
+    return (
+        <>
+        <div className="makeEvent">
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    placeholder="event title"
+                    onChange={(e) => setEventTitle(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="event description"
+                    onChange={(e) => setContent(e.target.value)}
+                />
+                <input
+                    type="date"
+                    placeholder="event date"
+                    onChange={(e) => setEvent_Date(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="event options"
+                    onChange={(e) => setOptionOne(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="event options"
+                    onChange={(e) => setOptionTwo(e.target.value)}
+                />
+                <button type="submit">submit</button>
+            </form>
+        </div>
+        </>
+    );
+}
+
+
+
+
 
 function RequestToJoin(slug){
     const groupname = decodeURIComponent(slug.params.slug)
@@ -60,7 +141,6 @@ function GetGroupPage(slug){
             })
     
     }, []);
-    console.log(userType)
     if(userType === "not_a_member"){
         return(
             <>
@@ -187,6 +267,7 @@ function GroupPage(slug){
     return(
         <>
         <Headers />
+        {MakeEvent(slug)}
         {GetGroupPage(slug)}
         </>
     )
