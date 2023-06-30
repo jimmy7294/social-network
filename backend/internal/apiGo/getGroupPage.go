@@ -154,7 +154,7 @@ func gatherGroupEvents(groupName string, uuid int) ([]event, error) {
 		}
 
 		allEvents = append(allEvents, gEvent)
-		fmt.Println(gEvent)
+		//fmt.Println(gEvent)
 	}
 	return allEvents, err
 }

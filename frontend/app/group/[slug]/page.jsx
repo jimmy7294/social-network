@@ -5,6 +5,53 @@ import Headers from "../../components/Header";
 import { useRouter } from "next/navigation";
 
 
+function MakeGroupPost(slug) {
+    const group_name = decodeURIComponent(slug.params.slug)
+    const type = "group_post"
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+
+    const SubmitHandle = async (e) => {
+    fetch("http://localhost:8080/api/addPost", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ group_name, title, content, type }),
+    })
+        .then((data) => data.json())
+        .then((data) => {
+            if (data.status !== "success") {
+                console.log("failed to add post", data);
+                return
+            }
+            console.log("added post", data);
+        });
+    };
+    return (
+        <>
+        <div className="makePost">
+            <form onSubmit={SubmitHandle}>
+                <input
+                    type="text"
+                    placeholder="title"
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="content"
+                    onChange={(e) => setContent(e.target.value)}
+                />
+                <button type="submit">submit</button>
+            </form>
+        </div>
+        </>
+    );
+}
+
+
+
 function MakeEvent( slug ) {
     const router = useRouter();
     const group_name = decodeURIComponent(slug.params.slug)
@@ -16,7 +63,6 @@ function MakeEvent( slug ) {
     const [optiontwo, setOptionTwo] = useState("");
    
     const handleSubmit = async (e) => {
-        e.preventDefault();
         options.push(optionone);
         options.push(optiontwo);
         console.log(options)
@@ -35,13 +81,7 @@ function MakeEvent( slug ) {
                 console.log("failed to add event", data);
             }
             console.log(data);
-            setOptions([]);
-
-
-        //make reload work            
-           router.Reload(window.location.pathname)
-            
-
+            setOptions([]); 
         });
     };
     return (
@@ -267,6 +307,7 @@ function GroupPage(slug){
     return(
         <>
         <Headers />
+        {MakeGroupPost(slug)}
         {MakeEvent(slug)}
         {GetGroupPage(slug)}
         </>
