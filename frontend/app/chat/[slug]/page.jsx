@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
+import Headers from "../../components/Header";
 
 function currentChat(slug){
     const user = decodeURIComponent(slug.params.slug)
     return(
         <>
+        <Headers />
         <h2>Chatting With {user}</h2>
         {GetMessages(slug)}
         </>

@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect, use } from "react";
-import Link from "next/link";
+import Headers from "../components/Header";
+
 
 
 
@@ -33,7 +34,7 @@ import Link from "next/link";
                 <div className="chatpage__users">
                     {users.map((user,index) => (
                         <div key={index} className="chatpage__user">
-                        <h1><Link href={`/chat/${user.username}`}>{user.username}</Link></h1>
+                        <h1><a href={`/chat/${user.username}`}>{user.username}</a></h1>
                         </div>
                     ))}
                 </div>
@@ -49,6 +50,7 @@ import Link from "next/link";
 function chatpage(){
     return(
         <>
+        <Headers />
         <AllChats />
         </>
     )
