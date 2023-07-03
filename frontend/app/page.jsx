@@ -227,11 +227,13 @@ function GetPosts() {
         if (data.status !== "success") {
           console.log("failed to get posts");
         } 
+        console.log(data)
         setPublic_posts(data.posts);
-        setSemi_privacys(data.semi_privacys);
-        setPrivacys(data.privacys);
+        setSemi_privacys(data.semi_private);
+        setPrivacys(data.private);
       });
   }, []);
+
 
   return (
     <>
