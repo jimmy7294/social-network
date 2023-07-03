@@ -81,7 +81,7 @@ func deleteFollowRequestsFromDB(sender string, reciever int) error {
 	return err
 }
 
-func AcceptGroupInvite(w http.ResponseWriter, r *http.Request) {
+func HandleGroupInvite(w http.ResponseWriter, r *http.Request) {
 
 	helper.EnableCors(&w)
 
@@ -141,7 +141,7 @@ func AcceptGroupInvite(w http.ResponseWriter, r *http.Request) {
 	helper.WriteResponse(w, "success")
 }
 
-func AcceptFollowRequest(w http.ResponseWriter, r *http.Request) {
+func HandleFollowRequest(w http.ResponseWriter, r *http.Request) {
 
 	helper.EnableCors(&w)
 
@@ -150,7 +150,7 @@ func AcceptFollowRequest(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func AcceptGroupJoinRequest(w http.ResponseWriter, r *http.Request) {
+func HandleGroupJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	helper.EnableCors(&w)
 
