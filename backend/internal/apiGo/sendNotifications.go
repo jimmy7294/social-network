@@ -10,6 +10,7 @@ import (
 )
 
 type groupNotification struct {
+	Sender    string `json:"sender"`
 	Receiver  string `json:"receiver"`
 	GroupName string `json:"group_name"`
 }

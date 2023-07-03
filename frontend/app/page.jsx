@@ -14,6 +14,47 @@ function HomePage() {
   );
 }
 
+
+function MakeComment(post_id){
+  const [content, setContent] = useState("");
+  const handleSubmit = async (e) => {
+    fetch("http://localhost:8080/api/addComment", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ post_id, content }),
+      })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.status !== "success") {
+          console.log("failed to add comment", data);
+          return;
+        }
+        console.log("added comment", data);
+      }
+    );
+  };
+  return (
+    <>
+      <div className="makeComment">
+        <form onSubmit={handleSubmit}>
+          <textarea
+            type="text"
+            placeholder="content"
+            className="commentContentCreation"
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <button type="submit" className="commentCreationButton">
+            submit
+          </button>
+        </form>
+      </div>
+    </>
+  );
+}
+
 function ToggleComments({ post_id }) {
   const [showMore, setShowMore] = useState(false);
   const [comments, setComments] = useState([]);
@@ -186,11 +227,13 @@ function GetPosts() {
         if (data.status !== "success") {
           console.log("failed to get posts");
         } 
+        console.log(data)
         setPublic_posts(data.posts);
-        setSemi_privacys(data.semi_privacys);
-        setPrivacys(data.privacys);
+        setSemi_privacys(data.semi_private);
+        setPrivacys(data.private);
       });
   }, []);
+
 
   return (
     <>
@@ -257,7 +300,9 @@ function GetPosts() {
 
 // PublicPosts component
 function PublicPosts({ posts }) {
+  
   return (
+    <>
     <div className="public">
       <div className="mfposts">
         {posts.map((post) => (
@@ -269,11 +314,14 @@ function PublicPosts({ posts }) {
 
             <div className="postTitle">{post.title}</div>
             <div className="postContent">{post.content}</div>
+            <MakeComment post_id={post.post_id}></MakeComment>
             <ToggleComments post_id={post.post_id}></ToggleComments>
           </div>
         ))}
+         
       </div>
     </div>
+    </>
   );
 }
 

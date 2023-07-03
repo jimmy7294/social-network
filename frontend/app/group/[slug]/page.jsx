@@ -5,6 +5,52 @@ import Headers from "../../components/Header";
 import { useRouter } from "next/navigation";
 
 
+function ChatBox(slug){
+    const [message, setMessage] = useState([]);
+    const groupname = decodeURIComponent(slug.params.slug)
+    fetch("http://localhost:8080/api/getChat", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(groupname),
+        })
+        .then((data) => data.json())
+        .then((data) => {
+            if (data.status !== "success"){
+                console.log("failed to get chat")
+                return
+            }
+            console.log(data)
+            console.log("got chat")
+            setMessage(data.messages)
+        })
+
+    return(
+    <>
+   
+        {message.map((message, index) => (
+            <div key={index}>
+                <p>{message.username}</p>
+                <p>{message.message}</p>
+                <p>{message.time}</p>
+            </div>
+        
+        ))}
+
+   )}
+
+    <div className="chatBox">
+        <h1>ChatBox</h1>
+        <input type="text" placeholder="message"/>
+        <button>send</button>
+    </div>
+    </>
+    )
+}
+
+
 function MakeGroupPost(slug) {
     const group_name = decodeURIComponent(slug.params.slug)
     const type = "group_post"
@@ -310,6 +356,7 @@ function GroupPage(slug){
         {MakeGroupPost(slug)}
         {MakeEvent(slug)}
         {GetGroupPage(slug)}
+        {ChatBox(slug)}
         </>
     )
 
