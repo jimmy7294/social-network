@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect, use } from "react";
+import Link from "next/link";
 
 
 
@@ -32,7 +33,7 @@ import React, { useState, useEffect, use } from "react";
                 <div className="chatpage__users">
                     {users.map((user,index) => (
                         <div key={index} className="chatpage__user">
-                        <h1>{user.username}</h1>
+                        <h1><Link href={`/chat/${user.username}`}>{user.username}</Link></h1>
                         </div>
                     ))}
                 </div>
