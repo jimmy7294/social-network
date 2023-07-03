@@ -33,6 +33,7 @@ function GetProfile() {
     }, []);
         return (
           <>
+          <div>
     <div className="layouter">
         <div className="Profile">
           <div className="title">
@@ -45,7 +46,7 @@ function GetProfile() {
           <p> Last Name: {profile.last_name}</p>
           <p> BirthDay: {profile.dob}</p>
           <p> Nickname: {profile.username}</p>
-          <p>Bio:{profile.bio}</p>
+          <p>Bio: {profile.bio}</p>
           <p>Privacy: {profile.privacy}</p>
           <a href="/optional" className="gibspace">
           <button className="postCreationButton">Change Profile</button>
@@ -56,17 +57,17 @@ function GetProfile() {
           <div>
             <div className="folow">
               <h2>Followers</h2>
-              {followers && <div className="">
+              {followers && <div className="follower">
               {followers.map((follower,index) => (
-                  <a className="link-up" key={index} href={`profile/${follower}`}><p>{follower}</p> </a>
+                  <p><a key={index} href={`profile/${follower}`}>{follower}</a></p>
               ))}
               </div>
               }
 
-              {following && <div>
+              {following && <div className="follower">
                 <h2>Following</h2>
                 {following.map((follow,index) => (
-                 <a className="link-up" key={index} href={`profile/${follow}`}><p>{follow}</p> </a>
+                <p><a key={index} href={`profile/${follow}`}>{follow}</a></p>
                  ))}
                 </div>
               }
@@ -77,13 +78,14 @@ function GetProfile() {
                 {groups.map((group,index) => (
 
                   <div  key={index}>
-                    <p>{group}</p>
+                    <p> <a href="/group">{group}</a></p>
                     </div>
                 ))}
           </div>
 }
               </div>
             </div>
+    </div>
     </div>
             </>
           );

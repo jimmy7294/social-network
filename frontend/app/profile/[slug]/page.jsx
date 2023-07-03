@@ -137,7 +137,7 @@ function GetProfile(slug) {
               <h2>Followers</h2>
               {followers && <div>
               {followers.map((follower,index) => (
-                  <a className="link-up" key={index} href={`profile/${follower}`}><p>{follower}</p> </a>
+                  <a key={index} href={`/profile/${follower}`}><p>{follower}</p></a>
               ))}
               </div>
               }
@@ -146,7 +146,7 @@ function GetProfile(slug) {
                 <h2>Following</h2>
                 {following.map((follow,index) => (
                   <div key={index}>
-                   <a className="link-up" key={index} href={`profile/${follow}`}><p>{follow}</p> </a>
+                   <a className="link-up" key={index} href={`/profile/${follow}`}><p>{follow}</p> </a>
                 </div>
                 ))}
                 </div>

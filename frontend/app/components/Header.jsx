@@ -35,15 +35,16 @@ function GetTinyProfile() {
       <>
       {notification && <div className="notification"><p>NOTIFICATION</p> </div>
       }
-        <div className="tinyavatar">
+        <a className="fit" href="/profile">
+          <div className="tinyavatar">
           <img
             className="pfp"
             src= {avatar}
-            alt="Your Company"
+            alt="Your Avatar"
           /> 
-        <Link className="link-up" href="/profile">{username}</Link>
+        <div className="link-up">{username}</div>
         </div>
-         
+         </a>
       </>
     );  
 }
@@ -77,7 +78,7 @@ function GetNotification() {
 
     return (
       <>
-      {notification && <div className="notification"><p>NOTIFICATION</p> </div>
+      {notification && <div className="notification"><p className="notifText">NOTIFICATION</p></div>
       }
       </>
     );
@@ -90,23 +91,30 @@ function GetNotification() {
 const Headers = () => {
   return (
     <header className="headbar">
-      
       <div className="identity">
+        <a href="http://localhost:3000">
       <img
           className="logo"
           src="http://localhost:8080/images/Rickrolling.png"
           alt="Your Company"
         />
-          <Link className="name" href="/">Dummy Antisocial Network</Link>
+        </a>
       </div>
-      <GetNotification/>
+      <div>
       <GetTinyProfile/>
-          <Link className="navigate" href="/group">Group</Link>
-          <Link className="navigate" href="/msg">Chat</Link>
-      <div className="logout" >
-       <a className="link-up" onClick ={() => {Logout()}} href="/login">log out</a>
+          <a href="/group" className="fit">
+            <div className="groupeButton">Group</div>
+            </a>
+          <a href="/msg" className="fit">
+            <div className="chatButton">Chat</div>
+            </a>
+            </div>
+      <GetNotification/>
+      <a href="/login" className="fit">
+      <div className="logout">
+       <div className="theSoundOfTaDaronne" onClick ={() => {Logout()}}>log out</div>
       </div>
-        
+      </a>
     </header>
   );
 };
