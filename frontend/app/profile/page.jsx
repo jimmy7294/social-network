@@ -1,7 +1,57 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import Headers from "../components/Header";
 import Link from "next/link";
+
+
+function GetNotification() {
+  const [notification, setNotification] = useState([]);
+  useEffect(() => {
+  fetch("http://localhost:8080/api/getNotifications", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify("voff"),
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      if (data.status !== "success") {
+        console.log("failed to get notifications");
+        return;
+      }
+      console.log(data);
+      setNotification(data.notifications);
+    });
+}, []);
+
+console.log(notification,"sakldlak")
+    return (
+ <>
+  {notification &&(
+    <div className="notification">
+      <p>NOTIFICATION</p>
+      {notification.map((notification,index) => (
+        <div key={index} className="notification__user">
+          <p>{notification.content}, {notification.context}</p>
+          <p>{notification.sender}</p>
+          {notification.type === "group_join_request" && (
+            <div>
+              <button>Accept</button>
+              <button>Decline</button>
+            </div>
+          )}
+    </div>
+      ))}
+    </div>
+  )}
+ </>
+    )
+
+      }
+
+
 
 function GetProfile() {
     const [profile, setprofile] = useState([]);
@@ -97,7 +147,9 @@ function ProfilePage(){
   return(
     <>
     <Headers/>
+    <GetNotification/>
     <GetProfile/>
+   
     </>
   )
 }
