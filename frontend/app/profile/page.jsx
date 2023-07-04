@@ -4,15 +4,15 @@ import Headers from "../components/Header";
 import Link from "next/link";
 
 
-function HandleGroupRequest(grp, resp){
-  console.log(grp)
+function HandleGroupRequest(group_name, response, sender, reciever){
+  console.log(sender)
   fetch("http://localhost:8080/api/handleGroupJoinRequest", {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({group: grp, resp}),
+    body: JSON.stringify({group_name, response, reciever,sender}),
   })
     .then((data) => data.json())
     .then((data) => {
@@ -62,13 +62,13 @@ console.log(notification,"sakldlak")
           <p>{notification.sender}</p>
           {notification.type === "group_join_request" && (
             <div>
-              <button value onClick ={() => HandleGroupRequest(notification.context, "accept")}>Accept</button>
+              <button value onClick ={() => HandleGroupRequest(notification.context, "accept", notification.sender, notification.reciever)}>Accept</button>
               <button>Decline</button>
             </div>
           )}
     </div>
       ))}
-    </div>
+    </div>  
   )}
  </>
     )
