@@ -129,8 +129,7 @@ export default function Optional() {
             </a>
           </div>
           <div>
-            {/* have fun guys, find a way to fix this shit, you shouldn't be able to click on the text to proc the button and find a way to stylize it like the other button of the page <3 */}
-            <label id="image">Choose an image:</label>
+            <label id="image" >Choose an image:</label>
             <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)}></input>
           </div>
           <br />

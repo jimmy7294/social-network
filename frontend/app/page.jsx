@@ -209,9 +209,9 @@ function GetPosts() {
   });
 
   const [buttonColor, setButtonColor] = useState({
-    public: "#4faa92",
-    semi: "#4faa92",
-    private: "#4faa92",
+    public: "#144b56",
+    semi: "#144b56",
+    private: "#144b56",
   });
 
   useEffect(() => {
@@ -248,7 +248,7 @@ function GetPosts() {
             }));
             setButtonColor((prevColor) => ({
               ...prevColor,
-              public: display.public ? "#144b56" : "#4faa92",
+              public: display.public ? "#4faa92" : "#144b56",
             }));
           }}
         >
@@ -265,7 +265,7 @@ function GetPosts() {
             }));
             setButtonColor((prevColor) => ({
               ...prevColor,
-              semi: display.semi ? "#144b56" : "#4faa92",
+              semi: display.semi ? "#4faa92" : "#144b56",
             }));
           }}
         >
@@ -282,7 +282,7 @@ function GetPosts() {
             }));
             setButtonColor((prevColor) => ({
               ...prevColor,
-              private: display.private ? "#144b56" : "#4faa92",
+              private: display.private ? "#4faa92" : "#144b56",
             }));
           }}
         >

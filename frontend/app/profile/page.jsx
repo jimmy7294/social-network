@@ -1,7 +1,57 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import Headers from "../components/Header";
 import Link from "next/link";
+
+
+function GetNotification() {
+  const [notification, setNotification] = useState([]);
+  useEffect(() => {
+  fetch("http://localhost:8080/api/getNotifications", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify("voff"),
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      if (data.status !== "success") {
+        console.log("failed to get notifications");
+        return;
+      }
+      console.log(data);
+      setNotification(data.notifications);
+    });
+}, []);
+
+console.log(notification,"sakldlak")
+    return (
+ <>
+  {notification &&(
+    <div className="notification">
+      <p>NOTIFICATION</p>
+      {notification.map((notification,index) => (
+        <div key={index} className="notification__user">
+          <p>{notification.content}, {notification.context}</p>
+          <p>{notification.sender}</p>
+          {notification.type === "group_join_request" && (
+            <div>
+              <button>Accept</button>
+              <button>Decline</button>
+            </div>
+          )}
+    </div>
+      ))}
+    </div>
+  )}
+ </>
+    )
+
+      }
+
+
 
 function GetProfile() {
     const [profile, setprofile] = useState([]);
@@ -33,6 +83,7 @@ function GetProfile() {
     }, []);
         return (
           <>
+          <div>
     <div className="layouter">
         <div className="Profile">
           <div className="title">
@@ -45,7 +96,7 @@ function GetProfile() {
           <p> Last Name: {profile.last_name}</p>
           <p> BirthDay: {profile.dob}</p>
           <p> Nickname: {profile.username}</p>
-          <p>Bio:{profile.bio}</p>
+          <p>Bio: {profile.bio}</p>
           <p>Privacy: {profile.privacy}</p>
           <a href="/optional" className="gibspace">
           <button className="postCreationButton">Change Profile</button>
@@ -56,17 +107,17 @@ function GetProfile() {
           <div>
             <div className="folow">
               <h2>Followers</h2>
-              {followers && <div className="">
+              {followers && <div className="follower">
               {followers.map((follower,index) => (
-                  <a className="link-up" key={index} href={`profile/${follower}`}><p>{follower}</p> </a>
+                  <p><a key={index} href={`profile/${follower}`}>{follower}</a></p>
               ))}
               </div>
               }
 
-              {following && <div>
+              {following && <div className="follower">
                 <h2>Following</h2>
                 {following.map((follow,index) => (
-                 <a className="link-up" key={index} href={`profile/${follow}`}><p>{follow}</p> </a>
+                <p><a key={index} href={`profile/${follow}`}>{follow}</a></p>
                  ))}
                 </div>
               }
@@ -77,13 +128,14 @@ function GetProfile() {
                 {groups.map((group,index) => (
 
                   <div  key={index}>
-                    <p>{group}</p>
+                    <p> <a href="/group">{group}</a></p>
                     </div>
                 ))}
           </div>
 }
               </div>
             </div>
+    </div>
     </div>
             </>
           );
@@ -95,7 +147,9 @@ function ProfilePage(){
   return(
     <>
     <Headers/>
+    <GetNotification/>
     <GetProfile/>
+   
     </>
   )
 }
