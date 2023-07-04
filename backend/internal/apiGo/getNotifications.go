@@ -55,7 +55,7 @@ func getAllNotificationsFromDB(uuid int) ([]notification, error) {
 	for rows.Next() {
 		var userNotification notification
 
-		err = rows.Scan(&userNotification.Id, &userNotification.Content, &userNotification.Created, &userNotification.Sender, &userNotification.Type, &userNotification.Context)
+		err = rows.Scan(&userNotification.Id, &userNotification.Content, &userNotification.Created, &userNotification.Reciever, &userNotification.Sender, &userNotification.Type, &userNotification.Context)
 		if err != nil {
 			return allNotifications, err
 		}
