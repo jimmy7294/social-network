@@ -57,6 +57,7 @@ function Logout() {
 
 function GetNotification() {
   const [notification, setNotification] = useState(false);
+  const [number, setNumber] = useState([0]);
   useEffect(() => {
   fetch("http://localhost:8080/api/getNotifications", {
     method: "POST",
@@ -74,6 +75,7 @@ function GetNotification() {
       console.log(data, "here")
       if(data.notifications !== null){
         setNotification(true);
+        setNumber(data.notifications.length);
       console.log(data, notification);
       }
     });
@@ -81,7 +83,7 @@ function GetNotification() {
 
     return (
       <>
-      {notification == true && <div className="notification"><p className="notifText">NOTIFICATION</p></div>
+      {notification == true && <div className="notification"><p>{number}</p> <p className="notifText">NOTIFICATION</p></div>
       }
       </>
     );

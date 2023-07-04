@@ -42,6 +42,7 @@ function Avatars({arg}) {
   useEffect(() => {
     fetchAvatars()
       .then((images) => {
+        console.log(images, "images")
         if (images) {
           setStockImages(images);
         }
@@ -76,7 +77,7 @@ export default function Optional() {
   const [nickname, setNickname] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [privacy, setPrivate] = useState("");
-  const [avatar, setAvatar] = useState("");
+  const [avatar, setAvatar] = useState("http://localhost:8080/images/default.jpeg");
 
 
   const router = useRouter();

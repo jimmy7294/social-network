@@ -39,6 +39,11 @@ function ChatBox(slug){
         
         ))}
 
+<<<<<<< Updated upstream
+=======
+   
+
+>>>>>>> Stashed changes
     <div className="chatBox">
         <h1>ChatBox</h1>
         <input type="text" placeholder="message"/>
