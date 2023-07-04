@@ -58,12 +58,12 @@ func addFollowerToDB(uuid int, follower string) error {
 
 func deleteGroupNotificationsFromDB(sender, reciever string) error {
 	sqlString := `DELETE FROM notifications
-	WHERE (sender_id = IN (
+	WHERE (sender_id IN (
 		SELECT u.uuid
 		FROM users AS u
 		WHERE u.username = ? OR u.email = ?
 	) AND notif_type = 'group_join_request')
-	OR (uuid = IN (
+	OR (uuid IN (
 		SELECT u2.uuid
 		FROM users AS u2
 		WHERE u2.username = ? OR u2.email = ?
@@ -269,6 +269,7 @@ func HandleGroupJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = deleteGroupNotificationsFromDB(notifInfo.Sender, notifInfo.Receiver)
 	if err != nil {
+		fmt.Println("delete notif error", err)
 		helper.WriteResponse(w, "database_error")
 		return
 	}
