@@ -165,7 +165,7 @@ function GetProfile() {
     <div className="layouter">
         <div className="Profile">
           <div className="title">
-          <img className="logo" src={profile.avatar}/>
+          <img className="logoProfile" src={profile.avatar}/>
           </div>
             <h2>Profile</h2>
             <div className="profileDate">
@@ -184,9 +184,10 @@ function GetProfile() {
    
           <div>
 
-        <div className="post">
+        <div>
+          
+          {profile.created_posts && <div className="postListe">
           <h2>Posts</h2>
-          {profile.created_posts && <div className="post">
             {profile.created_posts.map((post,index) => (
               <div key={index}>
                 <p>{post}</p>
