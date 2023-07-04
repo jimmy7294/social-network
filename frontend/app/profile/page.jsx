@@ -80,6 +80,12 @@ function GetNotification() {
 console.log(notification,"sakldlak")
     return (
  <>
+ {!notification && (
+    <div className="notification_user">
+      <p>NOTIFICATION</p>
+      <p>No notifications</p>
+      </div>
+      )}
   {notification &&(
     <div className="notification_user">
       <p>NOTIFICATION</p>

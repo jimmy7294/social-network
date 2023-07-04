@@ -227,12 +227,15 @@ function GetPosts() {
         if (data.status !== "success") {
           console.log("failed to get posts");
         } 
-        console.log(data)
+        console.log(data, "data here")
         setPublic_posts(data.posts);
-        setSemi_privacys(data.semi_private);
-        setPrivacys(data.private);
+        setSemi_privacys(data.semi_private_posts);
+        setPrivacys(data.private_posts);
       });
   }, []);
+  console.log(public_posts, "public posts")
+  console.log(semi_privacys, "semi privates")
+  console.log(privacys, "privates")
 
 
   return (
@@ -341,6 +344,7 @@ function SemiPosts({ posts }) {
               </a>
               <div className="postTitle">{semi.title}</div>
               <div className="postContent">{semi.content}</div>
+              <MakeComment post_id={posts.post_id}></MakeComment>
               <ToggleComments post_id={semi.post_id}></ToggleComments>
             </div>
           ))}
@@ -369,6 +373,7 @@ function PrivatePosts({ posts }) {
               </a>
               <div className="postTitle">{privacy.title}</div>
               <div className="postContent">{privacy.content}</div>
+              <MakeComment post_id={posts.post_id}></MakeComment>
               <ToggleComments post_id={privacy.post_id}></ToggleComments>
             </div>
           ))}

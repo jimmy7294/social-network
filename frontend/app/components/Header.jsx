@@ -108,7 +108,7 @@ const Headers = () => {
           <a href="/group" className="fit">
             <div className="groupeButton">Group</div>
             </a>
-          <a href="/msg" className="fit">
+          <a href="/chat" className="fit">
             <div className="chatButton">Chat</div>
             </a>
             </div>
