@@ -10,12 +10,13 @@ import (
 )
 
 type notification struct {
-	Id      int       `json:"id"`
-	Content string    `json:"content"`
-	Sender  string    `json:"sender"`
-	Type    string    `json:"type"`
-	Context string    `json:"context"`
-	Created time.Time `json:"created"`
+	Id       int       `json:"id"`
+	Content  string    `json:"content"`
+	Sender   string    `json:"sender"`
+	Reciever string    `json:"reciever"`
+	Type     string    `json:"type"`
+	Context  string    `json:"context"`
+	Created  time.Time `json:"created"`
 }
 
 type allNotifications struct {
@@ -28,12 +29,15 @@ func getAllNotificationsFromDB(uuid int) ([]notification, error) {
 	sqlString := `SELECT notif_id,
 	notif_content,
 	creation_date,
-	COALESCE(users.username, users.email),
+	COALESCE(u2.username, u2.email),
+	COALESCE(u1.username, u1.email),
 	notif_type,
 	notif_context
 	FROM notifications
-	JOIN users
-	ON users.uuid = notifications.sender_id
+	JOIN users AS u1
+	ON u1.uuid = notifications.sender_id
+	JOIN users AS u2
+	ON u2.uuid = ?
 	WHERE notifications.uuid = ?`
 	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
@@ -41,7 +45,7 @@ func getAllNotificationsFromDB(uuid int) ([]notification, error) {
 	}
 	defer sqlStmt.Close()
 
-	rows, err := sqlStmt.Query(uuid)
+	rows, err := sqlStmt.Query(uuid, uuid)
 	if err != nil {
 		return allNotifications, err
 	}
