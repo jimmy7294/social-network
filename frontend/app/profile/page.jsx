@@ -54,10 +54,10 @@ console.log(notification,"sakldlak")
     return (
  <>
   {notification &&(
-    <div className="notification">
+    <div className="notification_user">
       <p>NOTIFICATION</p>
       {notification.map((notification,index) => (
-        <div key={index} className="notification__user">
+        <div key={index}>
           <p>{notification.content}, {notification.context}</p>
           <p>{notification.sender}</p>
           {notification.type === "group_join_request" && (
@@ -108,6 +108,7 @@ function GetProfile() {
         return (
           <>
           <div>
+          <GetNotification/>
     <div className="layouter">
         <div className="Profile">
           <div className="title">
@@ -171,9 +172,8 @@ function ProfilePage(){
   return(
     <>
     <Headers/>
-    <GetNotification/>
+    
     <GetProfile/>
-   
     </>
   )
 }
