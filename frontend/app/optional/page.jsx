@@ -26,25 +26,22 @@ const avatar = await result.json()
 if (!avatar.stock_images) {
   return null; // or any other action you want to take when stock_images is not defined
 }
-console.log(avatar)
-return avatar.stock_images;
+return avatar
 }
-function updateProfileImage(link, setAvatar) {
-  console.log(link)
-  setAvatar(link)
-  return link
-}
+
 
 function Avatars({arg}) {
   const [stockImages, setStockImages] = useState([]);
+  const [userImages, setUserImages] = useState([]);
   console.log()
 
   useEffect(() => {
     fetchAvatars()
       .then((images) => {
-        console.log(images, "images")
+        console.log(images)
         if (images) {
-          setStockImages(images);
+          setStockImages(images.stock_images)
+          setUserImages(images.user_images);
         }
       })
       .catch((error) => {
@@ -59,6 +56,14 @@ function Avatars({arg}) {
           <img src={image} onClick={(e) => arg(image)} key={index} alt={`Avatar ${index}`} className="pfp" />
         ))}
       </div>
+      {userImages && (
+        <div className="padder">
+          {userImages.map((image, index) => (
+            <img src={image} onClick={(e) => arg(image)} key={index} alt={`Avatar ${index}`} className="pfp" />
+          ))}
+        </div>
+      )}
+
     </>
   );
         }
@@ -114,7 +119,7 @@ export default function Optional() {
           </div>
           <div>
             <label id="image" >Choose an image:</label>
-            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)}></input>
+            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
           </div>
           <br />
           <label id="aboutMe">About Me</label>
