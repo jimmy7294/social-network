@@ -262,6 +262,8 @@ func HandleGroupJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 		err = addMemberToGroup(notifInfo.Sender, notifInfo.GroupName)
 		if err != nil {
+			fmt.Println("add member err", err)
+			fmt.Println("add member err", err)
 			helper.WriteResponse(w, "database_error")
 			return
 		}

@@ -42,7 +42,7 @@ function GetTinyProfile() {
             src= {avatar}
             alt="Your Avatar"
           /> 
-        <div className="link-up">{username}</div>
+        <div id="moo" className="link-up">{username}</div>
         </div>
          </a>
       </>
