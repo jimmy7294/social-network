@@ -39,8 +39,6 @@ function ChatBox(slug){
         
         ))}
 
-   )}
-
     <div className="chatBox">
         <h1>ChatBox</h1>
         <input type="text" placeholder="message"/>
