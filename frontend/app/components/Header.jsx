@@ -7,6 +7,10 @@ import Cookies from "js-cookie";
 
 
 
+
+
+
+
 function GetTinyProfile() {
   const [username, setUsername] = useState([]);
   const [avatar, setAvatar] = useState([]);
@@ -33,8 +37,6 @@ function GetTinyProfile() {
 }, []);
     return (
       <>
-      {notification && <div className="notification"><p>NOTIFICATION</p> </div>
-      }
         <a className="fit" href="/profile">
           <div className="tinyavatar">
           <img
@@ -55,7 +57,6 @@ function Logout() {
 
 function GetNotification() {
   const [notification, setNotification] = useState(false);
-  const [notificationdata, setNotificationdata] = useState([]);
   useEffect(() => {
   fetch("http://localhost:8080/api/getNotifications", {
     method: "POST",
@@ -70,15 +71,17 @@ function GetNotification() {
         console.log("failed to get notification");
         return;
       }
+      console.log(data, "here")
+      if(data.notifications !== null){
         setNotification(true);
       console.log(data, notification);
-      setNotificationdata(data.notificationdata);
+      }
     });
 }, []);
 
     return (
       <>
-      {notification && <div className="notification"><p className="notifText">NOTIFICATION</p></div>
+      {notification == true && <div className="notification"><p className="notifText">NOTIFICATION</p></div>
       }
       </>
     );
