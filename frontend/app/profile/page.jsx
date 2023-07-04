@@ -4,6 +4,11 @@ import Headers from "../components/Header";
 import Link from "next/link";
 
 
+
+
+
+
+
 function HandleFollowRequest(response, sender, reciever){}
   
 
@@ -127,6 +132,7 @@ function GetProfile() {
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
     const [groups, setGroups] = useState([]);
+    const [created_posts, setCreatedPosts] = useState([]);
   
     useEffect(() => {
       fetch("http://localhost:8080/api/getProfile", {
@@ -142,14 +148,16 @@ function GetProfile() {
           if (data.status !== "success") {
             console.log(data);
           } 
-            console.log(data);
+            console.log(data, "profile");
             setprofile(data);
             setFollowers(data.followers);
             setFollowing(data.following);
             setGroups(data.groups);
+            setCreatedPosts(data.created_posts);
           
         });
     }, []);
+    console.log(created_posts, "created_posts")
         return (
           <>
           <div>
@@ -175,6 +183,20 @@ function GetProfile() {
               </div>
    
           <div>
+
+        <div className="post">
+          <h2>Posts</h2>
+          {profile.created_posts && <div className="post">
+            {profile.created_posts.map((post,index) => (
+              <div key={index}>
+                <p>{post}</p>
+              </div>
+            ))}
+          </div>
+          }
+          </div>
+
+
             <div className="folow">
               <h2>Followers</h2>
               {followers && <div className="follower">
