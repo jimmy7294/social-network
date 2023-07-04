@@ -37,6 +37,25 @@ func addMemberToGroup(member, groupName string) error {
 	return err
 }
 
+func addFollowerToDB(uuid int, follower string) error {
+	sqlString := `INSERT INTO followrs(uuid,follower_id)
+	? AS uuid
+	u.uuid AS follower_id
+	FROM users AS u
+	WHERE u.username = ? OR u.email = ?`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(uuid, follower)
+
+	return err
+}
+
 func deleteGroupNotificationsFromDB(sender, reciever string) error {
 	sqlString := `DELETE FROM notifications
 	WHERE (sender_id = IN (
@@ -148,6 +167,48 @@ func HandleFollowRequest(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		return
 	}
+
+	var notifInfo notificationResponse
+	err := json.NewDecoder(r.Body).Decode(&notifInfo)
+	if err != nil {
+		helper.WriteResponse(w, "decoding_error")
+		fmt.Println("decoding", err)
+		return
+	}
+
+	uuid, err := helper.GetIdBySession(w, r)
+	if err != nil {
+		helper.WriteResponse(w, "session_error")
+		fmt.Println(err)
+		return
+	}
+
+	recieveruuid, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
+	if err != nil || recieveruuid != uuid {
+		helper.WriteResponse(w, "stop_lying_pls")
+		return
+	}
+
+	if notifInfo.Response != "accept" && notifInfo.Response != "decline" {
+		helper.WriteResponse(w, "incorrect_response")
+		return
+	}
+
+	if notifInfo.Response == "accept" {
+		err = addFollowerToDB(uuid, notifInfo.Sender)
+		if err != nil {
+			helper.WriteResponse(w, "database_error")
+			return
+		}
+	}
+	err = deleteFollowRequestsFromDB(notifInfo.Sender, uuid)
+	if err != nil {
+		helper.WriteResponse(w, "error_deleting_notification")
+		return
+	}
+
+	helper.WriteResponse(w, "success")
+
 }
 
 func HandleGroupJoinRequest(w http.ResponseWriter, r *http.Request) {
