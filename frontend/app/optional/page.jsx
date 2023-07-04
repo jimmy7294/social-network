@@ -26,6 +26,7 @@ const avatar = await result.json()
 if (!avatar.stock_images) {
   return null; // or any other action you want to take when stock_images is not defined
 }
+console.log(avatar)
 return avatar.stock_images;
 }
 function updateProfileImage(link, setAvatar) {

@@ -1,6 +1,7 @@
 package apiGO
 
 import (
+	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
 	"encoding/base64"
 	"encoding/json"
@@ -19,6 +20,21 @@ import (
 	"github.com/gofrs/uuid"
 )
 
+func addImageToDB(uuid int, imagePath string) error {
+	sqlString := `INSERT INTO userImages(uuid,image_path)
+	VALUES
+	(?,?)`
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(uuid, imagePath)
+	return err
+}
+
 func AddImage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("got to addimage")
 	helper.EnableCors(&w)
@@ -28,6 +44,13 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("decoding error", err)
 		}
+
+		yourid, err := helper.GetIdBySession(w, r)
+		if err != nil {
+			helper.WriteResponse(w, "session_error")
+			return
+		}
+
 		data2 := strings.Split(data64, ",")
 		fmt.Println("len of data", len(data64), len(data2))
 
@@ -50,13 +73,16 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// TODO: fix whatever the fuck this is supposed to be
+
+		randomStringName := uuid.Must(uuid.NewV4()).String()
 		switch {
 		case strings.Contains(data2[0], "png"):
 			imageData, err := png.Decode(reader)
 			if err != nil {
 				fmt.Println(err)
 			}
-			imgFile, _ := os.Create(currDir + "/internal/images/" + uuid.Must(uuid.NewV4()).String() + "." + "png")
+			randomStringName = randomStringName + ".png"
+			imgFile, _ := os.Create(currDir + "/internal/images/" + randomStringName)
 			err = png.Encode(imgFile, imageData)
 			if err != nil {
 				fmt.Println("aaaaaauuuuuughhhh", err)
@@ -68,7 +94,8 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println(err)
 			}
-			imgFile, _ := os.Create(currDir + "/internal/images/" + uuid.Must(uuid.NewV4()).String() + "." + "jpeg")
+			randomStringName = randomStringName + ".jpeg"
+			imgFile, _ := os.Create(currDir + "/internal/images/" + randomStringName)
 			err = jpeg.Encode(imgFile, imageData, nil)
 			if err != nil {
 				fmt.Println("aaaaaauuuuuughhhh", err)
@@ -80,7 +107,8 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println(err)
 			}
-			imgFile, _ := os.Create(currDir + "/internal/images/" + uuid.Must(uuid.NewV4()).String() + "." + "gif")
+			randomStringName = randomStringName + ".gif"
+			imgFile, _ := os.Create(currDir + "/internal/images/" + randomStringName)
 			err = gif.EncodeAll(imgFile, gifData)
 			if err != nil {
 				fmt.Println("aaaaaauuuuuughhhh", err)
@@ -89,6 +117,13 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 			break
 		default:
 			fmt.Println("incorrect type")
+			return
+		}
+
+		err = addImageToDB(yourid, "http://localhost:8080/images/"+randomStringName)
+		if err != nil {
+			fmt.Println("error adding image to database", err)
+			helper.WriteResponse(w, "database_error")
 			return
 		}
 
