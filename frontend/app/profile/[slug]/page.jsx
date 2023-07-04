@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Headers from "../../components/Header";
+import { useRouter } from "next/navigation";
 
 
 
@@ -84,9 +85,11 @@ function GetProfile(slug) {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [groups, setGroups] = useState([]);
+  const router = useRouter()
   console.log(user)
 
   useEffect(() => {
+    
     fetch("http://localhost:8080/api/getProfile", {
       method: "POST",
       credentials: "include",
@@ -97,16 +100,23 @@ function GetProfile(slug) {
     })
       .then((data) => data.json())
       .then((data) => {
+        console.log(data, "data")
         if (data.status !== "success") {
           console.log("get profile failed", data); // Update the state with fetched data
         } 
+        if (data.you === true){
+          console.log("you are you")
+          router.push("/profile")
+
+          return
+        }
         setStuff(data);
         setFollowers(data.followers);
         setFollowing(data.following);
         setGroups(data.groups);
         
       });
-  }, []);
+  }, [])
   console.log(stuff)
   if(stuff.status !== "private"){
   

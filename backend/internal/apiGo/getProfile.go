@@ -155,14 +155,6 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 		//voff
-		emailuuid, err := helper.GetuuidFromEmailOrUsername(eInfo.Email)
-		if err != nil {
-			helper.WriteResponse(w, "email_does_not_exist")
-			return
-		}
-		if yourId == emailuuid {
-			yourProf = true
-		}
 		if eInfo.Email == "voff" {
 			eInfo.Email, err = getEmailById(yourId)
 			if err != nil {
@@ -188,7 +180,14 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 
 			}
 		}
-
+		emailuuid, err := helper.GetuuidFromEmailOrUsername(eInfo.Email)
+		if err != nil {
+			helper.WriteResponse(w, "email_does_not_exist")
+			return
+		}
+		if yourId == emailuuid {
+			yourProf = true
+		}
 		usrProfile, uuid, err := getProfileFromDataBase(eInfo.Email)
 		if err != nil {
 			fmt.Println("database err", err)
