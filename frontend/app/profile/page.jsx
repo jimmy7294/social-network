@@ -4,6 +4,30 @@ import Headers from "../components/Header";
 import Link from "next/link";
 
 
+function HandleGroupRequest(grp, resp){
+  console.log(grp)
+  fetch("http://localhost:8080/api/handleGroupJoinRequest", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({group: grp, resp}),
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      if (data.status !== "success") {
+        console.log("failed to handle group request");
+        console.log(data.status)
+        return;
+      }
+      console.log(data);
+    });
+  
+
+}
+
+
 function GetNotification() {
   const [notification, setNotification] = useState([]);
   useEffect(() => {
@@ -38,7 +62,7 @@ console.log(notification,"sakldlak")
           <p>{notification.sender}</p>
           {notification.type === "group_join_request" && (
             <div>
-              <button>Accept</button>
+              <button value onClick ={() => HandleGroupRequest(notification.context, "accept")}>Accept</button>
               <button>Decline</button>
             </div>
           )}
@@ -109,7 +133,7 @@ function GetProfile() {
               <h2>Followers</h2>
               {followers && <div className="follower">
               {followers.map((follower,index) => (
-                  <p><a key={index} href={`profile/${follower}`}>{follower}</a></p>
+                  <p key={index} ><a href={`profile/${follower}`}>{follower}</a></p>
               ))}
               </div>
               }
@@ -117,7 +141,7 @@ function GetProfile() {
               {following && <div className="follower">
                 <h2>Following</h2>
                 {following.map((follow,index) => (
-                <p><a key={index} href={`profile/${follow}`}>{follow}</a></p>
+                <p key={index}><a  href={`profile/${follow}`}>{follow}</a></p>
                  ))}
                 </div>
               }
