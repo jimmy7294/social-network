@@ -37,6 +37,33 @@ func addMemberToGroup(member, groupName string) error {
 	return err
 }
 
+func checkIfAlreadyGroupMember(username, groupName string) bool {
+	sqlString := `SELECT
+	group_id
+	FROM groupMembers
+	WHERE uuid IN (
+		SELECT u.uuid
+		FROM users AS u
+		WHERE u.email = ? OR u.username = ?
+	)
+	AND group_id IN (
+		SELECT g.group_id
+		FROM groups AS g
+		WHERE g.group_name = ?
+	)`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return false
+	}
+	var dummy int
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(username, username, groupName).Scan(&dummy)
+	return err == nil
+}
+
 func addFollowerToDB(uuid int, follower string) error {
 	sqlString := `INSERT INTO followrs(uuid,follower_id)
 	? AS uuid
@@ -136,6 +163,15 @@ func HandleGroupInvite(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("user not matching with notification", err)
 		return
 	}
+
+	isAlreadyMember := checkIfAlreadyGroupMember(notifInfo.Receiver, notifInfo.GroupName)
+	if isAlreadyMember {
+		fmt.Println("already in the group")
+		deleteGroupNotificationsFromDB(notifInfo.Sender, notifInfo.Receiver)
+		helper.WriteResponse(w, "success")
+		return
+	}
+
 	if notifInfo.Response == "accept" {
 		err = addMemberToGroup(notifInfo.Receiver, notifInfo.GroupName)
 		if err != nil {
@@ -244,6 +280,14 @@ func HandleGroupJoinRequest(w http.ResponseWriter, r *http.Request) {
 	isMember, memberType := checkIfGroupMember(notifInfo.GroupName, uuid)
 	if !isMember || memberType != "creator" {
 		helper.WriteResponse(w, "not_group_creator")
+		return
+	}
+
+	isAlreadyMember := checkIfAlreadyGroupMember(notifInfo.Sender, notifInfo.GroupName)
+	if isAlreadyMember {
+		fmt.Println("already in the group")
+		deleteGroupNotificationsFromDB(notifInfo.Sender, notifInfo.Receiver)
+		helper.WriteResponse(w, "success")
 		return
 	}
 

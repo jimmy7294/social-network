@@ -26,6 +26,7 @@ type profile struct {
 	CreatedPosts []string `json:"created_posts"`
 	Groups       []string `json:"groups"`
 	Status       string   `json:"status"`
+	You          bool     `json:"you"`
 }
 type profilePrivate struct {
 	Email  string `json:"email"`
@@ -154,6 +155,14 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 		//voff
+		emailuuid, err := helper.GetuuidFromEmailOrUsername(eInfo.Email)
+		if err != nil {
+			helper.WriteResponse(w, "email_does_not_exist")
+			return
+		}
+		if yourId == emailuuid {
+			yourProf = true
+		}
 		if eInfo.Email == "voff" {
 			eInfo.Email, err = getEmailById(yourId)
 			if err != nil {
@@ -225,6 +234,7 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "database_error")
 			return
 		}
+		usrProfile.You = yourProf
 		usrProfile.Status = "success"
 		usrProfileJson, err := json.Marshal(usrProfile)
 		if err != nil {
