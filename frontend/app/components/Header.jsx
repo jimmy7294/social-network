@@ -1,7 +1,8 @@
 "use client";
-import Link from "next/link";
+//import Link from "next/link";
 import  {  useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import PrintNewMessage from "../page.jsx";
 
 
 
@@ -15,13 +16,20 @@ import Cookies from "js-cookie";
 function GetTinyProfile() {
   const [username, setUsername] = useState([]);
   const [avatar, setAvatar] = useState([]);
-  const [notification, setNotification] = useState(false);
-
+const [msg, setMsg] = useState([]);
   useEffect(() => {   
      const newWS = new WebSocket("ws://localhost:8080/api/ws")
       newWS.onerror = err => console.error(err);
       //newWS.onopen = () => setWS(newWS);
-      newWS.onmessage = msg => console.log(msg);
+      newWS.onmessage = msg => setMsg(msg);
+      if(msg.type === "message"){
+        if(pathname === `"/chat/"${msg.sender}`){
+          PrintNewMessage(msg)
+        }
+      } else if(msg.type === "notification"){
+        GetNotification()
+      }
+
   fetch("http://localhost:8080/api/getHeadbar", {
     method: "POST",
     credentials: "include",

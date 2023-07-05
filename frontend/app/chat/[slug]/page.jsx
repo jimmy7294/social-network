@@ -22,6 +22,15 @@ function SendMessage(reciver){
     )
 }
 
+export function PrintNewMessage(msg){
+    return(
+        <>
+        <h1>{msg.sender}</h1>
+        <h1>{msg.content}</h1>
+        </>
+    )
+}
+
 
 
 function GetMessages(slug){
@@ -47,8 +56,8 @@ function GetMessages(slug){
             }
             )
     }, []);
-    console.log(messages, "work")
-    return(
+        console.log(messages, "work")
+        return(
         <>
         <div className="chatpage">
             {messages &&(
@@ -68,4 +77,4 @@ function GetMessages(slug){
 }
 
 
-export default currentChat;
+export default currentChat; 
