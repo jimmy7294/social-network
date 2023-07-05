@@ -132,7 +132,7 @@ a {
 .title {
   height: max-content;
   width: max-content;
-  margin: 5px;
+  margin: auto;
 }
 
 .signin-window {
@@ -539,4 +539,8 @@ body {
 
 .groupPage {
   display: grid;
+}
+
+.profileData {
+  margin: 0.25vh;
 }
