@@ -11,11 +11,17 @@ import Cookies from "js-cookie";
 
 
 
+
 function GetTinyProfile() {
   const [username, setUsername] = useState([]);
   const [avatar, setAvatar] = useState([]);
   const [notification, setNotification] = useState(false);
-  useEffect(() => {
+
+  useEffect(() => {   
+     const newWS = new WebSocket("ws://localhost:8080/api/ws")
+      newWS.onerror = err => console.error(err);
+      //newWS.onopen = () => setWS(newWS);
+      newWS.onmessage = msg => console.log(msg);
   fetch("http://localhost:8080/api/getHeadbar", {
     method: "POST",
     credentials: "include",

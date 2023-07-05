@@ -3,6 +3,7 @@ package main
 import (
 	apiGO "backend/backend/internal/apiGo"
 	"backend/backend/internal/data"
+	socket "backend/backend/internal/websocket"
 	"database/sql"
 	"fmt"
 	"log"
@@ -59,6 +60,7 @@ func setupApi() {
 	http.HandleFunc("/api/handleGroupJoinRequest", apiGO.HandleGroupJoinRequest)
 	http.HandleFunc("/api/handleGroupInvite", apiGO.HandleGroupInvite)
 	http.HandleFunc("/api/handleFollowRequest", apiGO.HandleFollowRequest)
+	http.HandleFunc("/api/ws", socket.WsEndpoint)
 	img := http.FileServer(http.Dir("internal/images"))
 	http.Handle("/images/", http.StripPrefix("/images/", img))
 	//http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
