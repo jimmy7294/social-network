@@ -68,16 +68,15 @@
 }
 
 .notification {
+  display: flex;
   float: right;
   position: absolute;
   width: 16px;
   height: 16px;
   background: red;
   border-radius: 50%;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
   color:white;
-  right: 30%;
+  left: 70%;
   margin-top: 30px;
 }
 
@@ -146,6 +145,7 @@ a {
   min-width: 400px;
   width: 25%;
   justify-self: center;
+  margin-bottom: 1vh;
 }
 
 main {
@@ -183,9 +183,9 @@ body {
   margin: 0.5vh;
 }
 .mt-2 {
-  width: 200px;
-  height: 25px;
-  margin: 2px;
+  width: 20vh;
+  height: 2vh;
+  margin: 0.25vh;
 }
 
 .input-field {
@@ -231,11 +231,9 @@ body {
 
 .container {
   display: inline-flex;
-  grid-template-columns: max-content;
-  border: black solid 2px;
-  width: -webkit-fill-available;
-  overflow-y: visible;
+  flex-wrap: wrap;
   margin-bottom: 2px;
+  width: 100%;
 }
 
 .links {
@@ -468,14 +466,14 @@ body {
 
 .postContentCreation {
   width: 90%;
-  max-width: 800px;
-  height: 150px;
+  max-width: 80vh;
+  height: 15vh;
   box-sizing: border-box;
-  border: 0px solid #ccc;
   border-radius: 2px;
   background-color: #f8f8f8;
   resize: none;
-  margin: 2px;
+  margin: 0.25vh;
+
 }
 .titleCreation {
   height: 15px;
@@ -500,21 +498,45 @@ body {
 
 .postti {
   border: #4faa92 solid 2px;
-  width: max-content;
+  width: fit-content;
   height: max-content;
-  min-width: 30vh;
+  min-width: 40vh;
   min-height: 15vh;
   margin-bottom: 2vh;
   display: grid;
   justify-items: center;
+  margin-right: 0;
 }
 
 .poster {
   display: flex;
   justify-items: center;
+  margin-top: 1vh;
 }
 
 .contents {
   margin: 1vh;
   font-size: large;
+}
+
+.gridder {
+  display: grid;
+  justify-items: center;
+  margin: 1vh;
+}
+
+.groupPost {
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}
+
+.groupEvent {
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}
+
+.groupPage {
+  display: grid;
 }

@@ -97,7 +97,7 @@ function GetNotification() {
 
     return (
       <>
-      {notification == true && <div className="notification"><p>{number}</p> <p className="notifText">NOTIFICATION</p></div>
+      {notification == true && <a  href="/profile" className="notification"><p>{number}</p> <p className="notifText">NOTIFICATION</p></a>
       }
       </>
     );
