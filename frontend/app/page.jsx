@@ -50,8 +50,8 @@ function MakeComment(post_id){
     })()
   }, [])
 
-  const handleSubmit = async (e) => {
-    preventDefault(e);
+  const handleCommentSubmit = async () => {
+  
     fetch("http://localhost:8080/api/addComment", {
       method: "POST",
       credentials: "include",
@@ -73,12 +73,12 @@ function MakeComment(post_id){
   return (
     <>
       <div className="makeComment">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleCommentSubmit}>
           {allImages && (
             <div className="padder">
            {allImages.map((image,index) => (
   <div key={index}>
-    <img src={image} alt="image" className="pfp" onClick={(e) => setImage({image})} />
+    <img src={image} alt="image" className="pfp" onClick={() => setImage({image})} />
   </div>
 ))  
 }
