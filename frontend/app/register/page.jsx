@@ -39,14 +39,12 @@ export default function Register() {
 
   return (
     <>
-      <div className="headbar">
-        <img
-          className="logo"
-          src="../images/Rickrolling.png"
-          alt="Your Company"
-        />
-        <h1> Irelevant Discussion </h1>
-      </div>
+        <header className="headbar">
+    <img className="logo"
+          src="http://localhost:8080/images/Rickrolling.png"
+          alt="Your Company"/>
+    <h1 className="padder">Irrelevent Discussion</h1>
+    </header>
       <div className="signin-window">
         <form className="organ" onSubmit={handleSubmit}>
           {/*Email*/}
