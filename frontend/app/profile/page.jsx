@@ -168,7 +168,7 @@ function GetProfile() {
           <img className="logoProfile" src={profile.avatar}/>
           </div>
             <h2>Profile</h2>
-            <div className="profileDate">
+            <div className="profileData">
           <p>Email: {profile.email}</p>
           <p> First Name: {profile.first_name}</p>
           <p> Last Name: {profile.last_name}</p>

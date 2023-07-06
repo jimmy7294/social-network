@@ -77,20 +77,25 @@ function MakeGroupPost(slug) {
     };
     return (
         <>
-        <div className="makePost">
-            <form onSubmit={SubmitHandle}>
+        <div className="gridder">
+            <form className="groupPostmaker" onSubmit={SubmitHandle}>
                 <input
+                    className="titleCreation"
                     type="text"
                     placeholder="title"
                     onChange={(e) => setTitle(e.target.value)}
                 />
-                <input
+                
+                <textarea
+                    className="postContentCreation"
                     type="text"
                     placeholder="content"
                     onChange={(e) => setContent(e.target.value)}
+                   
                 />
-                <button type="submit">submit</button>
+                 <button type="submit">submit</button>
             </form>
+            
         </div>
         </>
     );
@@ -132,30 +137,35 @@ function MakeEvent( slug ) {
     };
     return (
         <>
-        <div className="makeEvent">
+        <div className="signin-window">
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     placeholder="event title"
+                    className="mt-2"
                     onChange={(e) => setEventTitle(e.target.value)}
                 />
-                <input
+                <textarea
                     type="text"
+                    className="postContentCreation"
                     placeholder="event description"
                     onChange={(e) => setContent(e.target.value)}
                 />
                 <input
                     type="date"
+                    className="mt-2"
                     placeholder="event date"
                     onChange={(e) => setEvent_Date(e.target.value)}
                 />
                 <input
                     type="text"
+                    className="mt-2"
                     placeholder="event options"
                     onChange={(e) => setOptionOne(e.target.value)}
                 />
                 <input
                     type="text"
+                    className="mt-2"
                     placeholder="event options"
                     onChange={(e) => setOptionTwo(e.target.value)}
                 />
@@ -240,9 +250,9 @@ function GetGroupPage(slug){
         <>
         <div className="groupPage">
             <h1>{groupname}</h1>
-            </div>
+           
             {groupPosts &&
-            <div>
+            <div className="container">
             {groupPosts.map((post,index) => (
                 <div className="groupPost" key={index}>
                     
@@ -270,7 +280,8 @@ function GetGroupPage(slug){
                     <h1>Members</h1>
                     <p>{members.username}</p>
                 </div>
-}
+} 
+
             
             {members.map((member,index) => (
                 <div className="groupMember" key={index}>
@@ -288,13 +299,16 @@ function GetGroupPage(slug){
             ))}
             </div>
             }
+                <h2>Event page</h2>
+                {MakeEvent(slug)}
             {events&&
-            <div>
+              
+            <div className="container">
 
             {events.map((event,index) => (
                 <div className="groupEvent" key={index}>
                     
-                    <div className="groupEventInfo">
+                    <div className="groupPost">
                     <div className="postti">
                     <h2>{event.title}</h2>
                     <p>{event.description}</p>
@@ -310,12 +324,12 @@ function GetGroupPage(slug){
             </div>
             }
             {joinRequest &&
-            <div>
+            <div className="container">
 
             {joinRequest.map((request,index) => (
-                <div className="groupJoinRequest" key={index}>
+                <div className="groupPost" key={index}>
                     {request&&
-                    <div className="groupJoinRequestInfo">
+                    <div className="postti">
                     <h2>{request.username}</h2>
                     <h1>{request.email}</h1>
                     </div>
@@ -326,7 +340,7 @@ function GetGroupPage(slug){
             }
 
             {userType === "creator" &&
-            <div>
+            <div className="container">
                 <h1>Join Requests</h1>
                 {joinRequest &&
                 <div>
@@ -344,6 +358,7 @@ function GetGroupPage(slug){
                 }
             </div>
             }
+    </div>
         </>
     )
 }
@@ -354,8 +369,7 @@ function GroupPage(slug){
         <>
         <Headers />
         {MakeGroupPost(slug)}
-        {MakeEvent(slug)}
-        {GetGroupPage(slug)}
+        {GetGroupPage(slug)} 
         {ChatBox(slug)}
         </>
     )

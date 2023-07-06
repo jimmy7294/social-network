@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import {useRouter} from "next/navigation";
-import cookie from "js-cookie"
-
+import cookie from "js-cookie";
 
 
 export default function Login() {
@@ -36,15 +35,14 @@ export default function Login() {
     }
   };
   return (
-    <>
-      <div className="headbar">
-        <img
-          className= "logo"  
-          src= "../public/images/Rickrolling.png"
-          alt= "Your Company"
-        />
-        <h1>Irelevant Discussion</h1>
-      </div>
+    <>  
+    <header className="headbar">
+    <img className="logo"
+          src="http://localhost:8080/images/Rickrolling.png"
+          alt="Your Company"/>
+    <h1 className="padder">Irrelevent Discussion</h1>
+    </header>
+     
       <div className="signin-window">
         <h2>Sign in</h2>
         <form
