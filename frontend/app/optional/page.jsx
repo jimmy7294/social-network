@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useCookies } from "react-cookie";
+import { usePathname } from "next/navigation";
 import Headers from "../components/Header";
 import encodeImageFile from "../components/encodeImage";
 
@@ -33,7 +35,7 @@ return avatar
 function Avatars({arg}) {
   const [stockImages, setStockImages] = useState([]);
   const [userImages, setUserImages] = useState([]);
-  console.log()
+ 
 
   useEffect(() => {
     fetchAvatars()
@@ -85,7 +87,6 @@ export default function Optional() {
   const [avatar, setAvatar] = useState("http://localhost:8080/images/default.jpeg");
 
 
-  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(avatar)
@@ -119,7 +120,7 @@ export default function Optional() {
           </div>
           <div>
             <label id="image" >Choose an image:</label>
-            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
+            <input type="file" id="image" name="image" onChange={e => {encodeImageFile(e.target), router.push("/optional")}} ></input>
           </div>
           <br />
           <label id="aboutMe">About Me</label>

@@ -2,6 +2,8 @@
 
 import { useState, useEffect, use } from "react";
 import Headers from "./components/Header";
+import {useRouter,usePathname} from "next/navigation";
+import encodeImageFile from "./components/encodeImage";
 
 
 function HomePage() {
@@ -15,16 +17,48 @@ function HomePage() {
 }
 
 
+ async function GetYourImages(){
+
+  const resp = await fetch("http://localhost:8080/api/getYourImages",{
+    method: "POST",
+    credentials: "include",
+    headers:{
+      "Content-Type": "application/json"
+    }
+  })
+  const data = await resp.json()
+  if (data.status !== "success") {
+    console.log("failed to get your images", data.status)
+    return
+  }
+  console.log("got your images", data)
+  return data
+
+
+}
+
+
 function MakeComment(post_id){
+  const [allImages, setAllImages] = useState([])
+  const [image, setImage] = useState("")
   const [content, setContent] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const images = await GetYourImages()
+      setAllImages(images.user_images)
+    })()
+  }, [])
+
   const handleSubmit = async (e) => {
+    preventDefault(e);
     fetch("http://localhost:8080/api/addComment", {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
         },
-        body: JSON.stringify({ post_id, content }),
+        body: JSON.stringify({ post_id, content, image }),
       })
       .then((data) => data.json())
       .then((data) => {
@@ -40,7 +74,17 @@ function MakeComment(post_id){
     <>
       <div className="makeComment">
         <form onSubmit={handleSubmit}>
-          <textarea
+          {allImages && (
+            <div className="padder">
+           {allImages.map((image,index) => (
+  <div key={index}>
+    <img src={image} alt="image" className="pfp" onClick={(e) => setImage({image})} />
+  </div>
+))  
+}
+            </div>
+          )}
+          <input
             type="text"
             placeholder="content"
             className="commentContentCreation"
@@ -106,20 +150,32 @@ function MakePost() {
   const [content, setContent] = useState("");
   const [privacy, setPrivacy] = useState("public");
   const [allowed, setAllowed] = useState([]);
-  const [image, setImage] = useState("");
+  const [allImage, setAllImage] = useState([]);
   const[users,setUsers] = useState([])
+  const [image, setimage] = useState("");
   const type = "post"
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect( ()  =>  {
+    (async () => {
+    const images = await GetYourImages()
+    setAllImage(images.user_images)
+    })()
+  },[])
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(allowed)
+console.log(image, "dslkfhldsfl")
     const res = await fetch("http://localhost:8080/api/addPost", {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, content, privacy, allowed ,type }),
+      body: JSON.stringify({ title, content, privacy, allowed ,type,image  }),
     });
     const data = await res.json();
     if (data.status !== "success") {
@@ -127,7 +183,11 @@ function MakePost() {
       return;
     }
     console.log("success");
+    router.push('/');
   };
+
+  
+  
 
   const handlePrivacyChange = async (e) => {
     setPrivacy(e.target.value);
@@ -146,11 +206,13 @@ function MakePost() {
       }
       setUsers(data.users);
     }
+    
   };
- 
+
   
   return (
     <>
+    <h1>{pathname}</h1>
       <div className="makePost">
         <form onSubmit={handleSubmit}>
           <input
@@ -180,14 +242,27 @@ function MakePost() {
               ))}
             </select>
           )}
+          {allImage && (
+            <div>
+{allImage.map((image,index) => (
+  <div key={index}>
+    <img src={image} alt="image" className="pfp" onClick={(e) => setimage({image})} />
+  </div>
+))  
+}
 
-
+            </div>
+          )}
           <textarea
             type="text"
             placeholder="content"
             className="postContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
+         
+            <label id="image" >Choose an image:</label>
+            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
+         
 
           <button type="submit" className="postCreationButton">
             submit
@@ -233,9 +308,7 @@ function GetPosts() {
         setPrivacys(data.private_posts);
       });
   }, []);
-  console.log(public_posts, "public posts")
-  console.log(semi_privacys, "semi privates")
-  console.log(privacys, "privates")
+
 
 
   return (
@@ -316,7 +389,10 @@ function PublicPosts({ posts }) {
             </a>
 
             <div className="postTitle">{post.title}</div>
-            <div className="postContent">{post.content}</div>
+            <div className="postContent">{post.content}
+            {post.image !== null && post.image !== "http://localhost:8080/images/default.jpeg" && <img src={post.image} alt="image" className="postImage" />
+            }
+            </div>
             <MakeComment post_id={post.post_id}></MakeComment>
             <ToggleComments post_id={post.post_id}></ToggleComments>
           </div>
@@ -343,7 +419,10 @@ function SemiPosts({ posts }) {
               <div className="postUser">{semi.author}</div>
               </a>
               <div className="postTitle">{semi.title}</div>
-              <div className="postContent">{semi.content}</div>
+              <div className="postContent">{semi.content}
+              {semi.image !== null && semi.image !== "http://localhost:8080/images/default.jpeg" && <img src={semi.image} alt="image" className="postImage" />
+            }
+              </div>
               <MakeComment post_id={posts.post_id}></MakeComment>
               <ToggleComments post_id={semi.post_id}></ToggleComments>
             </div>
@@ -359,6 +438,7 @@ function SemiPosts({ posts }) {
 
 // PrivatePosts component
 function PrivatePosts({ posts }) {
+  console.log(posts, "saljdhljashdl")
   return (
     <div className="private">
       <div className="mfprivate">
@@ -372,7 +452,10 @@ function PrivatePosts({ posts }) {
               <div className="postUser">{privacy.author}</div>
               </a>
               <div className="postTitle">{privacy.title}</div>
-              <div className="postContent">{privacy.content}</div>
+              <div className="postContent">{privacy.content}
+              {privacy.image !== null && privacy.image !== "http://localhost:8080/images/default.jpeg" && <img src={privacy.image} alt="image" className="postImage" />
+            }
+              </div>
               <MakeComment post_id={posts.post_id}></MakeComment>
               <ToggleComments post_id={privacy.post_id}></ToggleComments>
             </div>
