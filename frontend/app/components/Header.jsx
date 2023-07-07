@@ -7,9 +7,15 @@ import PrintNewMessage from "../page.jsx";
 
 
 
+export const newWS = new WebSocket("ws://localhost:8080/api/ws")
 
-
-
+// if(msg.type === "message"){
+//   if(pathname === `"/chat/"${msg.sender}`){
+//     PrintNewMessage(msg)
+//   }
+// } else if(msg.type === "notification"){
+//   GetNotification()
+// }
 
 
 
@@ -17,18 +23,16 @@ function GetTinyProfile() {
   const [username, setUsername] = useState([]);
   const [avatar, setAvatar] = useState([]);
 const [msg, setMsg] = useState([]);
+/* console.log("slug stuff",slug.param)
+if (slug.param !== undefined) {
+  console.log("slug", slug.param.slug, typeof slug.param.slug)
+/*   let param = decodeURIComponent(slug.param.slug)
+  if (param !== undefined) {
+    console.log(param)
+  } 
+} */
+
   useEffect(() => {   
-     const newWS = new WebSocket("ws://localhost:8080/api/ws")
-      newWS.onerror = err => console.error(err);
-      //newWS.onopen = () => setWS(newWS);
-      newWS.onmessage = msg => setMsg(msg);
-      if(msg.type === "message"){
-        if(pathname === `"/chat/"${msg.sender}`){
-          PrintNewMessage(msg)
-        }
-      } else if(msg.type === "notification"){
-        GetNotification()
-      }
 
   fetch("http://localhost:8080/api/getHeadbar", {
     method: "POST",
@@ -73,6 +77,14 @@ function GetNotification() {
   const [notification, setNotification] = useState(false);
   const [number, setNumber] = useState([0]);
   useEffect(() => {
+/*     newWS.onerror = err => console.error(err);
+//newWS.onopen = () => setWS(newWS);
+newWS.onmessage = (msg) => {
+  let newMsg = JSON.parse(msg.data)
+  if (newMsg.type === "notification") {
+    console.log("new notification",msg)
+  }
+} */
   fetch("http://localhost:8080/api/getNotifications", {
     method: "POST",
     credentials: "include",
@@ -139,3 +151,4 @@ const Headers = () => {
 };
 
 export default Headers;
+

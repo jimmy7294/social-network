@@ -2,7 +2,6 @@ package helper
 
 import (
 	"backend/backend/internal/data"
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -91,19 +90,21 @@ func CheckIfStringExist(table, column, tableData string) bool {
 // checks if a string in a t̶a̶b̶l̶e̶ username exists
 // pretty self-explanatory shit son
 func GetUsername(uuid int) (string, error) {
-	sqlStmt := "SELECT username,email FROM users WHERE uuid = ?"
-	var email, username string
-	err := data.DB.QueryRow(sqlStmt, uuid).Scan(&email, &username)
+	sqlString := `SELECT COALESCE(username,email)
+	FROM users
+	WHERE uuid = ?`
+	var username string
+	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
 		return "", err
 	}
-	if len(username) > 0 {
-		return username, nil
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(uuid).Scan(&username)
+	if err != nil {
+		return "", err
 	}
-	if len(email) > 0 {
-		return email, nil
-	}
-	return "", errors.New("user not found")
+	return username, err
 }
 
 // complete fucking shitshow personified that i'm only keeping around because it amuses me
@@ -235,4 +236,40 @@ func GetuuidFromEmailOrUsername(user string) (int, error) {
 	err = sqlStmt.QueryRow(user, user).Scan(&uuid)
 
 	return uuid, err
+}
+
+func CheckSessionExist(session_token string) bool {
+	sqlString := `SELECT uuid
+	FROM users
+	WHERE session_token = ?`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return false
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(session_token)
+
+	return err == nil
+}
+
+func GetUsernameBySession(session string) (string, error) {
+	sqlString := `SELECT COALESCE(username,email)
+	FROM users
+	WHERE session_id = ?`
+
+	var username string
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return username, err
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(session).Scan(&username)
+
+	return username, err
 }

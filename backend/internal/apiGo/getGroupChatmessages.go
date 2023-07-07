@@ -56,51 +56,50 @@ func GetGroupChatMessages(w http.ResponseWriter, r *http.Request) {
 
 	helper.EnableCors(&w)
 
-	if r.Method != http.MethodPost {
-		return
-	}
+	if r.Method == http.MethodPost {
 
-	var groupName string
-	err := json.NewDecoder(r.Body).Decode(&groupName)
-	if err != nil {
-		helper.WriteResponse(w, "decoding_error")
-		fmt.Println("decoding", err)
-		return
-	}
-	groupExist := helper.CheckIfStringExist("groups", "group_name", groupName)
-	if !groupExist {
-		helper.WriteResponse(w, "group_does_not_exist")
-		fmt.Println("group not exist", err)
-		return
-	}
-	uuid, err := helper.GetIdBySession(w, r)
-	if err != nil {
-		helper.WriteResponse(w, "session_error")
-		fmt.Println(err)
-		return
-	}
-	isMember, _ := checkIfGroupMember(groupName, uuid)
-	if !isMember {
-		helper.WriteResponse(w, "not_a_member")
-		fmt.Println(groupName, uuid)
-		return
-	}
+		var groupName string
+		err := json.NewDecoder(r.Body).Decode(&groupName)
+		if err != nil {
+			helper.WriteResponse(w, "decoding_error")
+			fmt.Println("decoding", err)
+			return
+		}
+		groupExist := helper.CheckIfStringExist("groups", "group_name", groupName)
+		if !groupExist {
+			helper.WriteResponse(w, "group_does_not_exist")
+			fmt.Println("group not exist", err)
+			return
+		}
+		uuid, err := helper.GetIdBySession(w, r)
+		if err != nil {
+			helper.WriteResponse(w, "session_error")
+			fmt.Println(err)
+			return
+		}
+		isMember, _ := checkIfGroupMember(groupName, uuid)
+		if !isMember {
+			helper.WriteResponse(w, "not_a_member")
+			fmt.Println(groupName, uuid)
+			return
+		}
 
-	var groupMessagesData privateMessages
+		var groupMessagesData privateMessages
 
-	groupMessagesData.Messages, err = gatherGroupChatMessagesFromDB(groupName)
-	if err != nil {
-		helper.WriteResponse(w, "database_error")
-		return
-	}
+		groupMessagesData.Messages, err = gatherGroupChatMessagesFromDB(groupName)
+		if err != nil {
+			helper.WriteResponse(w, "database_error")
+			return
+		}
 
-	groupMessagesData.Status = "success"
-	groupMessagesDataJson, err := json.Marshal(groupMessagesData)
-	if err != nil {
-		fmt.Println("marshalling error", err)
-		helper.WriteResponse(w, "marshalling_error")
-		return
+		groupMessagesData.Status = "success"
+		groupMessagesDataJson, err := json.Marshal(groupMessagesData)
+		if err != nil {
+			fmt.Println("marshalling error", err)
+			helper.WriteResponse(w, "marshalling_error")
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(groupMessagesDataJson)
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(groupMessagesDataJson)
 }

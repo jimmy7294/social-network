@@ -61,9 +61,9 @@ func GetYourImages(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println(r.Cookie("session_token"))
 
 	if r.Method == http.MethodPost {
-		fmt.Println("got to get your images")
+		//fmt.Println("got to get your images")
 		var imgData images
-		fmt.Println(r.Cookie("session_token"))
+		//fmt.Println(r.Cookie("session_token"))
 		uuid, err := helper.GetIdBySession(w, r)
 		if err != nil {
 			fmt.Println("session errir", err)
@@ -84,7 +84,7 @@ func GetYourImages(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("marshalling error", err)
 			helper.WriteResponse(w, "marshalling_error")
 		}
-		fmt.Println("success")
+		//fmt.Println("success")
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(imgDataJson)
 	}

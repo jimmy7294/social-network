@@ -132,7 +132,7 @@ func GetHeadBar(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("marshalling error", err)
 			helper.WriteResponse(w, "marshalling_error")
 		}
-		fmt.Println("profile get success")
+		//fmt.Println("profile get success")
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(usrDatJson)
 	}
@@ -149,7 +149,7 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("get profile session error", err)
 			helper.WriteResponse(w, "session_error")
 		}
-		fmt.Println(r.URL.Path)
+		//fmt.Println(r.URL.Path)
 		err = json.NewDecoder(r.Body).Decode(&eInfo.Email)
 		if err != nil {
 			fmt.Println(err)
@@ -240,7 +240,7 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("marshalling error", err)
 			helper.WriteResponse(w, "marshalling_error")
 		}
-		fmt.Println("profile get success")
+		//fmt.Println("profile get success")
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(usrProfileJson)
 	}
