@@ -32,6 +32,7 @@ function HandleGroupRequest(group_name, response, sender, reciever){
         return;
       }
       console.log(data);
+      location.reload('/profile');
     });
 }
 
@@ -55,6 +56,7 @@ function HandleGroupInvite(group_name, response, sender, reciever){
           return;
         }
         console.log(data);
+        location.reload('/profile');
       });
     }
 

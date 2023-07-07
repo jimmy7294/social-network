@@ -1,8 +1,26 @@
 "use client";
 
-import  { useState, useEffect } from "react";
+import  { useState, useEffect, use } from "react";
 import Headers from "../../components/Header";
 import { useRouter } from "next/navigation";
+import GetYourImages from "../../components/GetYourImages";
+import encodeImageFile from "../../components/encodeImage";
+import { usePathname } from "next/navigation";
+
+
+
+function GroupPage(slug){
+    return(
+        <>
+        <Headers />
+        {MakeGroupPost(slug)}
+        {GetGroupPage(slug)} 
+        {ChatBox(slug)}
+        </>
+    )
+
+
+}
 
 
 function ChatBox(slug){
@@ -56,6 +74,18 @@ function MakeGroupPost(slug) {
     const type = "group_post"
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [image, setImage] = useState("");
+    const [allYourImages, setAllYourImages] = useState([]);
+    const pathname = usePathname()
+    const router = useRouter();
+
+    useEffect(() => {
+        (async () => {
+            const images = await GetYourImages()
+            setAllYourImages(images.user_images)
+         
+          })()
+        }, [])
 
     const SubmitHandle = async (e) => {
     fetch("http://localhost:8080/api/addPost", {
@@ -64,7 +94,7 @@ function MakeGroupPost(slug) {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ group_name, title, content, type }),
+        body: JSON.stringify({ group_name, title, content, type, image }),
     })
         .then((data) => data.json())
         .then((data) => {
@@ -77,8 +107,22 @@ function MakeGroupPost(slug) {
     };
     return (
         <>
-        <div className="gridder">
+      <div>
+        <form className="groupPostmaker" onSubmit={router.push(`/group/${group_name}`)}>
+    <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
+    <button type="submit">AddImage</button>
+        </form>
+        </div>
+        <div>
             <form className="groupPostmaker" onSubmit={SubmitHandle}>
+                {allYourImages && (
+                    <div className="padder">
+                        {allYourImages.map((image, index) => (
+                            <img src={image} onClick={(e) => setImage(image)} key={index} alt={`Avatar ${index}`} className="pfp" />
+                        ))}
+                    </div>
+                )}
+
                 <input
                     className="titleCreation"
                     type="text"
@@ -104,6 +148,7 @@ function MakeGroupPost(slug) {
 
 
 function MakeEvent( slug ) {
+
     const router = useRouter();
     const group_name = decodeURIComponent(slug.params.slug)
     const [title, setEventTitle] = useState("");
@@ -114,6 +159,7 @@ function MakeEvent( slug ) {
     const [optiontwo, setOptionTwo] = useState("");
    
     const handleSubmit = async (e) => {
+        preventDefault(e);
         options.push(optionone);
         options.push(optiontwo);
         console.log(options)
@@ -265,6 +311,8 @@ function GetGroupPage(slug){
                     <p>{post.content}</p>
                     <p>{post.creation_date}</p>
                         </div>
+                        <MakeComment post_id={post.post_id}></MakeComment>
+                        <ToggleComments post_id={post.post_id}></ToggleComments>
                     </div>
 
                 </div>
@@ -364,17 +412,119 @@ function GetGroupPage(slug){
 }
 
 
-function GroupPage(slug){
-    return(
-        <>
-        <Headers />
-        {MakeGroupPost(slug)}
-        {GetGroupPage(slug)} 
-        {ChatBox(slug)}
-        </>
-    )
 
 
-}
+function MakeComment(post_id){
+    const [allImages, setAllImages] = useState([])
+    const [image, setImage] = useState("")
+    const [content, setContent] = useState("");
+  
+    useEffect(() => {
+      (async () => {
+        const images = await GetYourImages()
+        setAllImages(images.user_images)
+      })()
+    }, [])
+  
+    const handleCommentSubmit = async () => {
+    
+      fetch("http://localhost:8080/api/addComment", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ post_id, content, image }),
+        })
+        .then((data) => data.json())
+        .then((data) => {
+          if (data.status !== "success") {
+            console.log("failed to add comment", data);
+            return;
+          }
+          console.log("added comment", data);
+        }
+      );
+    };
+    return (
+      <>
+        <div className="makeComment">
+          <form onSubmit={handleCommentSubmit}>
+            {allImages && (
+              <div className="padder">
+             {allImages.map((image,index) => (
+    <div key={index}>
+      <img src={image} alt="image" className="pfp" onClick={() => setImage({image})} />
+    </div>
+  ))  
+  }
+              </div>
+            )}
+            <input
+              type="text"
+              placeholder="content"
+              className="commentContentCreation"
+              onChange={(e) => setContent(e.target.value)}
+            />
+            <button type="submit" className="commentCreationButton">
+              submit
+            </button>
+          </form>
+        </div>
+      </>
+    );
+  }
+  
+  function ToggleComments({ post_id }) {
+    const [showMore, setShowMore] = useState(false);
+    const [comments, setComments] = useState([]);
+    function handleClick() {
+      fetch("http://localhost:8080/api/getComments", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(post_id),
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          if (data.status !== "success") {
+            console.log("failed to get comments", data);
+          }
+  
+          setComments(data.comments);
+          setShowMore(!showMore);
+        });
+    }
+    return (
+      <>
+        <button className="buttonComment" onClick={handleClick}>
+          comments
+        </button>
+        {showMore && comments && (
+          <div className="commentos">
+            {comments.map((dat, index) => (
+              <div key={index} className="commenting">
+                
+                <div className="commentDate">{dat.created}</div>
+                <a href={`profile/${dat.author}`} >
+                <div className="commentUser">{dat.author}</div>
+                </a>
+                <div className="commentContent">{dat.content}</div>
+                <MakeComment post_id={post_id}/>
+              </div>
+            ))}
+       
+          </div>
+        )}
+        {showMore && !comments && <div>no comments
+        <MakeComment post_id={post_id}/>
+          </div>}
+  
+        
+      </>
+    );
+  }
 
 export default GroupPage;

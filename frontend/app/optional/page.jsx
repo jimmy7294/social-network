@@ -1,55 +1,34 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
-import { usePathname } from "next/navigation";
 import Headers from "../components/Header";
 import encodeImageFile from "../components/encodeImage";
+import GetYourImages from "../components/GetYourImages";
 
 import Link from "next/link";
 
 
 
-async function fetchAvatars(){
-  const result = await fetch("http://localhost:8080/api/getYourImages",{
-  method: "POST",
-  credentials: "include",
-  headers:{
-    "Content-Type": "application/json"
-  }
-}
-)
-if(!result.ok){
-  throw new Error("Error fetching avatar login")
-}
-const avatar = await result.json()
-
-if (!avatar.stock_images) {
-  return null; // or any other action you want to take when stock_images is not defined
-}
-return avatar
-}
 
 
 function Avatars({arg}) {
   const [stockImages, setStockImages] = useState([]);
   const [userImages, setUserImages] = useState([]);
- 
+  const images = GetYourImages()
+useEffect(() => {
+  (async () => {
+    const images = await GetYourImages()
+    setUserImages(images.user_images)
+    setStockImages(images.stock_images)
+  })()
+}, [])
+   
+  console.log(images, "here i am")
 
-  useEffect(() => {
-    fetchAvatars()
-      .then((images) => {
-        console.log(images)
-        if (images) {
-          setStockImages(images.stock_images)
-          setUserImages(images.user_images);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+          // setStockImages(images.stock_images)
+          // setUserImages(images.user_images);
 
   return (
     <>
@@ -85,6 +64,7 @@ export default function Optional() {
   const [aboutMe, setAboutMe] = useState("");
   const [privacy, setPrivate] = useState("");
   const [avatar, setAvatar] = useState("http://localhost:8080/images/default.jpeg");
+  const router = useRouter();
 
 
   const handleSubmit = async (e) => {

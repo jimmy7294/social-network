@@ -2,9 +2,9 @@
 
 import { useState, useEffect, use } from "react";
 import Headers from "./components/Header";
-import {useRouter,usePathname} from "next/navigation";
+import {useRouter} from "next/navigation";
 import encodeImageFile from "./components/encodeImage";
-
+import GetYourImages from "./components/GetYourImages";
 
 function HomePage() {
   return (
@@ -16,26 +16,6 @@ function HomePage() {
   );
 }
 
-
- async function GetYourImages(){
-
-  const resp = await fetch("http://localhost:8080/api/getYourImages",{
-    method: "POST",
-    credentials: "include",
-    headers:{
-      "Content-Type": "application/json"
-    }
-  })
-  const data = await resp.json()
-  if (data.status !== "success") {
-    console.log("failed to get your images", data.status)
-    return
-  }
-  console.log("got your images", data)
-  return data
-
-
-}
 
 
 function MakeComment(post_id){
@@ -136,11 +116,17 @@ function ToggleComments({ post_id }) {
               <div className="commentUser">{dat.author}</div>
               </a>
               <div className="commentContent">{dat.content}</div>
+              <MakeComment post_id={post_id}/>
             </div>
           ))}
+     
         </div>
       )}
-      {showMore && !comments && <div>no comments</div>}
+      {showMore && !comments && <div>no comments
+      <MakeComment post_id={post_id}/>
+        </div>}
+
+      
     </>
   );
 }
@@ -155,7 +141,6 @@ function MakePost() {
   const [image, setimage] = useState("");
   const type = "post"
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect( ()  =>  {
     (async () => {
@@ -183,7 +168,7 @@ console.log(image, "dslkfhldsfl")
       return;
     }
     console.log("success");
-    router.push('/');
+    location.reload('/')
   };
 
   
@@ -212,7 +197,6 @@ console.log(image, "dslkfhldsfl")
   
   return (
     <>
-    <h1>{pathname}</h1>
       <div className="makePost">
         <form onSubmit={handleSubmit}>
           <input
@@ -246,8 +230,9 @@ console.log(image, "dslkfhldsfl")
             <div>
 {allImage.map((image,index) => (
   <div key={index}>
-    <img src={image} alt="image" className="pfp" onClick={(e) => setimage({image})} />
+    <img src={image} alt="image" className="pfp" onClick={() => setimage({image})} />
   </div>
+
 ))  
 }
 
@@ -259,12 +244,14 @@ console.log(image, "dslkfhldsfl")
             className="postContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
-         
+          <div>
+            <form onSubmit={router.push('/')}>
             <label id="image" >Choose an image:</label>
             <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
-         
-
-          <button type="submit" className="postCreationButton">
+            <button type="submit">AddImage</button>
+            </form>
+            </div>
+          <button type="submit" onClick={router.push('/')} className="postCreationButton">
             submit
           </button>
         </form>
@@ -393,7 +380,6 @@ function PublicPosts({ posts }) {
             {post.image !== null && post.image !== "http://localhost:8080/images/default.jpeg" && <img src={post.image} alt="image" className="postImage" />
             }
             </div>
-            <MakeComment post_id={post.post_id}></MakeComment>
             <ToggleComments post_id={post.post_id}></ToggleComments>
           </div>
         ))}
@@ -423,7 +409,6 @@ function SemiPosts({ posts }) {
               {semi.image !== null && semi.image !== "http://localhost:8080/images/default.jpeg" && <img src={semi.image} alt="image" className="postImage" />
             }
               </div>
-              <MakeComment post_id={posts.post_id}></MakeComment>
               <ToggleComments post_id={semi.post_id}></ToggleComments>
             </div>
           ))}
@@ -456,7 +441,6 @@ function PrivatePosts({ posts }) {
               {privacy.image !== null && privacy.image !== "http://localhost:8080/images/default.jpeg" && <img src={privacy.image} alt="image" className="postImage" />
             }
               </div>
-              <MakeComment post_id={posts.post_id}></MakeComment>
               <ToggleComments post_id={privacy.post_id}></ToggleComments>
             </div>
           ))}
