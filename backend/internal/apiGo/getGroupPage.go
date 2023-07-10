@@ -306,7 +306,7 @@ func GetGroupPage(w http.ResponseWriter, r *http.Request) {
 		isMember, memberType := checkIfGroupMember(groupName, uuid)
 		if !isMember {
 			helper.WriteResponse(w, "not_a_member")
-			fmt.Println(groupName, uuid)
+			fmt.Println("not a member group page", groupName, uuid)
 			return
 		}
 		groupPageData, err := gatherGroupPageData(groupName, memberType, uuid)

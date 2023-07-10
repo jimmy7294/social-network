@@ -61,6 +61,8 @@ func setupApi() {
 	http.HandleFunc("/api/handleGroupJoinRequest", apiGO.HandleGroupJoinRequest)
 	http.HandleFunc("/api/handleGroupInvite", apiGO.HandleGroupInvite)
 	http.HandleFunc("/api/handleFollowRequest", apiGO.HandleFollowRequest)
+	http.HandleFunc("/api/sendGroupJoinRequest", apiGO.SendGroupJoinRequestNotification)
+	http.HandleFunc("/api/sendGroupInvite", apiGO.SendGroupInviteNotification)
 	http.HandleFunc("/api/ws", socket.WsEndpoint)
 	img := http.FileServer(http.Dir("internal/images"))
 	http.Handle("/images/", http.StripPrefix("/images/", img))

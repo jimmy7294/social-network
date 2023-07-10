@@ -8,6 +8,7 @@ import cookie from "js-cookie";
 export async function middleware(req, NextRequest){
     const cookiee = req.cookies.get('session_token')
     console.log("should be session",cookiee)
+    //console.log("wtf is req", req)
     //if there is no cookie pressent at all, redirct to login page
 if(cookiee === undefined){
     return NextResponse.redirect("http://localhost:3000/login")

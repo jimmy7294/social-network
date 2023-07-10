@@ -7,7 +7,7 @@ import PrintNewMessage from "../page.jsx";
 
 
 
-export const newWS = new WebSocket("ws://localhost:8080/api/ws")
+//export const newWS = new WebSocket("ws://localhost:8080/api/ws")
 
 // if(msg.type === "message"){
 //   if(pathname === `"/chat/"${msg.sender}`){

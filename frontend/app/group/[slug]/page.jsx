@@ -7,26 +7,255 @@ import GetYourImages from "../../components/GetYourImages";
 import encodeImageFile from "../../components/encodeImage";
 import { usePathname } from "next/navigation";
 
+async function getGroupPageData(slug) {
+    const groupname = decodeURIComponent(slug.params.slug)
+    const json = await fetch("http://localhost:8080/api/getGroupPage", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+            },  
+            body: JSON.stringify(groupname),
+        })
+    const data = await json.json()
+    if (data.status === "success") {
+        return data
+    }
+    return "not_a_member"
+/*         .then((data) => {
+         if (data.status === "success"){
+            setGroupPosts(data.group_posts)
+            setEvents(data.events)
+            setMembers(data.members)
+            setJoinRequest(data.join_request)
+            setUserType(data.member_type)
+            console.log(data)
+         } else {
+            setUserType("not_a_member")
+         }
+        }) */
+}
 
+export default async function GroupPage(slug){
+    const chat = await ChatBox(slug)
+    const groupPageData = await getGroupPageData(slug)
+    console.log(chat)
 
-function GroupPage(slug){
-    return(
-        <>
-        <Headers />
-        {MakeGroupPost(slug)}
-        {GetGroupPage(slug)} 
-        {ChatBox(slug)}
-        </>
-    )
+        return(
+            <>
+            { groupPageData !== "not_a_member" ? (
+                <>
+                <Headers />
+                <MakeGroupPost slug={slug}/>
+                <RenderGroup data={groupPageData} slug={slug}/>
+                <RenderChatBox message={chat} slug={slug}/>
+                </>
+            ) : (
+                <>
+                <Headers />
+                <RenderGroup data={groupPageData} slug={slug}/>
+                </>
+            )}
+            </>
+        )
+
 
 
 }
 
-
-function ChatBox(slug){
-    const [message, setMessage] = useState([]);
+function RenderGroup(props) {
+    const data = props.data
+    const slug = props.slug
+    console.log("render group slug", slug)
+    const [groupPosts, setGroupPosts] = useState([])
+    const [events, setEvents] = useState([])
+    const [members , setMembers] = useState([])
+    const [joinRequest, setJoinRequest] = useState([])
+    const [userType, setUserType] = useState("")
+    const [isMember, setIsMember] = useState(false)
     const groupname = decodeURIComponent(slug.params.slug)
-    fetch("http://localhost:8080/api/getChat", {
+    
+
+    useEffect(() => {
+        if (data !== "not_a_member"){
+            setGroupPosts(data.group_posts)
+            setEvents(data.events)
+            setMembers(data.members)
+            setJoinRequest(data.join_request)
+            setUserType(data.member_type)
+            setIsMember(true)
+        } else {
+            setUserType("not_a_member")
+            setIsMember(false)
+        }
+      }, [])
+      return (
+        <>
+        <div>
+            {isMember ? (
+                <div className="groupPage">
+            <h1>{groupname}</h1>
+
+            {groupPosts &&
+            <div className="container">
+            {groupPosts.map((post,index) => (
+                <div className="groupPost" key={index}>
+                    
+                    <div className="postti">
+                        <div className="poster">
+                    <img className="pfp" src={post.image} alt="post image" />
+                    <h2>{post.author}</h2>
+                        </div>
+                        <div className="contents">
+                    <p>{post.content}</p>
+                    <p>{post.creation_date}</p>
+                        </div>
+                        {/* <MakeComment post_id={post.post_id}></MakeComment> */}
+                        <ToggleComments post_id={post.post_id}></ToggleComments>
+                    </div>
+
+                </div>
+                    
+            ))}
+            </div>
+            }
+            {members.username&& 
+            <div>
+                {members.username && (members.username.length == 1) &&
+            
+                <div>
+                    <h1>Members</h1>
+                    <p>{members.username}</p>
+                </div>
+            }           
+            {members.map((member,index) => (
+                <div className="groupMember" key={index}>
+                    
+                    <div className="groupMemberInfo">
+                    <h2>{member.username}</h2>
+                    <h1> {member.member_type}</h1>
+                    </div>
+
+                    <div className="groupMemberInfo">
+                    <h2>{member.email}</h2>
+                    <h1> {member.member_type}</h1>
+                    </div>
+                </div>
+            ))}
+            </div>
+            }
+                <h2>Event page</h2>
+                <MakeEvent slug={slug} />
+                {/* MakeEvent(slug) */}
+            {events&&
+            
+            <div className="container">
+
+            {events.map((event,index) => (
+                <div className="groupEvent" key={index}>
+                    
+                    <div className="groupPost">
+                    <div className="postti">
+                    <h2>{event.title}</h2>
+                    <p>{event.description}</p>
+                        
+                        <div className="contents">
+                    <p>{event.date}</p>
+                    <p>{event.event_date}</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            ))}
+            </div>
+            }
+            {joinRequest &&
+            <div className="container">
+
+            {joinRequest.map((request,index) => (
+                <div className="groupPost" key={index}>
+                    {request&&
+                    <div className="postti">
+                    <h2>{request.username}</h2>
+                    <h1>{request.email}</h1>
+                    </div>
+                    }
+                </div>
+            ))}
+            </div>
+            }
+
+            {userType === "creator" &&
+            <div className="container">
+                <h1>Join Requests</h1>
+                {joinRequest &&
+                <div>
+                    {joinRequest.map((request,index) => (
+                        <div className="groupJoinRequest" key={index}>
+                            {request&&
+                            <div className="groupJoinRequestInfo">
+                                <h2>{request.username}</h2>
+                                <h1>{request.email}</h1>
+                                </div>
+                            }
+                        </div>
+                    ))}
+                </div>
+                }
+            </div>
+            }
+            </div>
+            ) : (
+                <>
+                <h2>{groupname}</h2>
+                <button onClick={() => RequestToJoin(slug)}>Request to join</button>
+                </>
+            )}
+        </div>
+        </>
+      )
+}
+
+function RenderChatBox({message}) {
+    console.log("render chat box", message)
+    const [messages, setMessages] = useState([])
+    useEffect(() => {
+        setMessages(message)
+      }, [])
+
+        return(
+            <>
+           
+                {messages.map((messages, index) => (
+                    <div key={index}>
+                        <p>{messages.sender}</p>
+                        <p>{messages.content}</p>
+                        <p>{messages.created}</p>
+                    </div>
+                
+                ))}
+        
+           
+        
+            <div className="chatBox">
+                <h1>ChatBox</h1>
+                <input type="text" placeholder="message"/>
+                <button>send</button>
+            </div>
+            </>
+            )
+
+}
+
+ async function ChatBox(slug){
+    if (slug === undefined) {
+        return 
+    }
+    //console.log("cookies???", NextResponse.cookies)
+    //console.log("cok", NextPageContext)
+   // const [message, setMessage] = useState([]);
+    const groupname = decodeURIComponent(slug.params.slug)
+    const json = await fetch("http://localhost:8080/api/getGroupChat", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -34,7 +263,15 @@ function ChatBox(slug){
             },
             body: JSON.stringify(groupname),
         })
-        .then((data) => data.json())
+    const response = await json.json()
+    if (response.status === "success") {
+        console.log("dsak")
+        return response.messages
+    }
+    console.log("failed to get chat")
+    return
+}
+/*         .then((data) => data.json())
         .then((data) => {
             if (data.status !== "success"){
                 console.log("failed to get chat")
@@ -42,10 +279,11 @@ function ChatBox(slug){
             }
             console.log(data)
             console.log("got chat")
-            setMessage(data.messages)
-        })
+            return data.messages
+            //etMessage(data.messages)
+        }) */
 
-    return(
+/*     return(
     <>
    
         {message.map((message, index) => (
@@ -67,17 +305,18 @@ function ChatBox(slug){
     </>
     )
 }
+ */
 
-
-function MakeGroupPost(slug) {
+function MakeGroupPost(props) {
+    const slug = props.slug
     const group_name = decodeURIComponent(slug.params.slug)
     const type = "group_post"
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [image, setImage] = useState("");
     const [allYourImages, setAllYourImages] = useState([]);
-    const pathname = usePathname()
-    const router = useRouter();
+    //const pathname = usePathname()
+    //const router = useRouter();
 
     useEffect(() => {
         (async () => {
@@ -108,7 +347,7 @@ function MakeGroupPost(slug) {
     return (
         <>
       <div>
-        <form className="groupPostmaker" onSubmit={router.push(`/group/${group_name}`)}>
+        <form className="groupPostmaker" onSubmit={console.log("fix this shit")/* router.push(`/group/${group_name}` */}>
     <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
     <button type="submit">AddImage</button>
         </form>
@@ -147,7 +386,7 @@ function MakeGroupPost(slug) {
 
 
 
-function MakeEvent( slug ) {
+function MakeEvent({slug}) {
 
     const router = useRouter();
     const group_name = decodeURIComponent(slug.params.slug)
@@ -227,14 +466,14 @@ function MakeEvent( slug ) {
 
 
 function RequestToJoin(slug){
-    const groupname = decodeURIComponent(slug.params.slug)
-    fetch("http://localhost:8080/api/requestToJoin", {
+    const group_name = decodeURIComponent(slug.params.slug)
+    fetch("http://localhost:8080/api/sendGroupJoinRequest", {
         method: "POST",
         credentials: "include", 
         headers: {
             "Content-Type": "application/json"
             },
-            body: JSON.stringify(groupname),
+            body: JSON.stringify({group_name}),
 
         })
         .then((data) => data.json())
@@ -251,7 +490,8 @@ function RequestToJoin(slug){
 
 
 
-function GetGroupPage(slug){
+/* function GetGroupPage({slug}){
+    console.log("sllluuugggg",slug)
     const groupname = decodeURIComponent(slug.params.slug)
   const [groupPosts, setGroupPosts] = useState([])
   const [events, setEvents] = useState([])
@@ -348,7 +588,7 @@ function GetGroupPage(slug){
             </div>
             }
                 <h2>Event page</h2>
-                {MakeEvent(slug)}
+                <MakeEvent slug={slug} />
             {events&&
               
             <div className="container">
@@ -363,7 +603,7 @@ function GetGroupPage(slug){
                        
                         <div className="contents">
                     <p>{event.date}</p>
-                    <p>{event.location}</p>
+                    <p>{event.event_date}</p>
                         </div>
                     </div>
                     </div>
@@ -409,7 +649,7 @@ function GetGroupPage(slug){
     </div>
         </>
     )
-}
+} */
 
 
 
@@ -527,4 +767,4 @@ function MakeComment(post_id){
     );
   }
 
-export default GroupPage;
+//export default GroupPage;
