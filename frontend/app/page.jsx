@@ -7,13 +7,19 @@ import encodeImageFile from "./components/encodeImage";
 import GetYourImages from "./components/GetYourImages";
 import ImageSelector from "./components/imageSelector";
 
-async function HomePage() {
-  const img = await GetYourImages()
-  console.log("images from top", img)
+
+
+
+
+
+
+
+function HomePage() {
+
   return (
     <>
       <Headers />
-      <MakePost userImages={img}/>
+      <MakePost />
       <GetPosts />
     </>
   );
@@ -85,6 +91,7 @@ function MakeComment(post_id){
 function ToggleComments({ post_id }) {
   const [showMore, setShowMore] = useState(false);
   const [comments, setComments] = useState([]);
+  
   function handleClick() {
     fetch("http://localhost:8080/api/getComments", {
       method: "POST",
@@ -135,19 +142,18 @@ function ToggleComments({ post_id }) {
 }
 
 
-function MakePost({userImages}) {
+function MakePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [privacy, setPrivacy] = useState("public");
   const [allowed_users, setAllowed] = useState([]);
-  const [allImage, setAllImage] = useState(userImages);
+  const [allImage, setAllImage] = useState([]);
   const[users,setUsers] = useState([])
   const [image, setimage] = useState("");
   const type = "post"
   const [showImages, setShowImages] = useState(false);
   //const router = useRouter();
   const [router, setRouter] = useState(useRouter())
-
 /*   useEffect( ()  =>  {
 //    async () => {
     const images = GetYourImages()
@@ -155,6 +161,14 @@ function MakePost({userImages}) {
     console.log("images",images)
 //    }
   },[]) */
+  
+
+  useEffect(() => {
+    (async () => {
+      setAllImage(await GetYourImages())
+    })()
+  }, [])
+
 
 
 
