@@ -7,15 +7,12 @@ import encodeImageFile from "./components/encodeImage";
 import GetYourImages from "./components/GetYourImages";
 import ImageSelector from "./components/imageSelector";
 
-
-
-
-
-
-
+const datapromise = GetYourImages()
 
 function HomePage() {
-
+  //const img = await GetYourImages()
+  const img = use(datapromise)
+  console.log("images from top", img)
   return (
     <>
       <Headers />
@@ -189,7 +186,7 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
       return;
     }
     console.log("success");
-    //location.reload('/')
+    location.reload('/')
   };
 
   
@@ -222,9 +219,9 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
         {image === "" ? (
           <h1>no selected image</h1>
         ):(
-          <img src={image}></img>
+          <img src={image} style={{width:"100px"}}></img>
         )}
-        <form onSubmit={()=>{handleSubmit}}>
+        <form>
           <input
             className="titleCreation"
             type="text"
@@ -253,20 +250,13 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
             </select>
           )}
 
-{/* allImage.map((image,index) => (
-  <div key={index}>
-    <img src={image} alt="image" className="pfp" onClick={() => setimage(image)} />
-  </div>
-
-))   */
-}
           <textarea
             type="text"
             placeholder="content"
             className="postContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
-          <button type="submit" onClick={() => {router.push("/")}} className="postCreationButton">
+          <button type="submit" className="postCreationButton" onClick={handleSubmit}>
             submit
           </button>
         </form>
