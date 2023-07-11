@@ -122,11 +122,11 @@ function ToggleComments({ post_id }) {
               <div className="commentUser">{dat.author}</div>
               </a>
               <div className="commentContent">{dat.content}</div>
-              <MakeComment post_id={post_id}/>
             </div>
           ))}
-     
+     <MakeComment post_id={post_id}/>
         </div>
+        
       )}
       {showMore && !comments && <div>no comments
       <MakeComment post_id={post_id}/>
