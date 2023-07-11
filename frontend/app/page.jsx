@@ -163,6 +163,7 @@ function MakePost({userImages}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(allowed_users, "fucked")
 console.log(image, {type,privacy,allowed_users,image,content,title})
     const res = await fetch("http://localhost:8080/api/addPost", {
       method: "POST",
@@ -178,15 +179,17 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
       return;
     }
     console.log("success");
-    location.reload('/')
+    //location.reload('/')
   };
 
   
   
 
   const handlePrivacyChange = async (e) => {
-    setPrivacy(e.target.value);
-    if (e.target.value === "semi-private") {
+    console.log("fuckedifuck")
+    console.log(e)
+    setPrivacy(e);
+    if (e === "semi-private") {
       const res = await fetch("http://localhost:8080/api/getUsernames", {
         method: "POST",
         credentials: "include",
@@ -201,10 +204,18 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
       }
       setUsers(data.users);
     }
+  
     
   };
-
-  
+  const AddToAllowed = (e) => {
+    console.log(e.target.checked, "lkusdhfksdhafljkhdsajlkfhljsadfhjlkashljkdfhljksadljkflhjkas")
+    if(e.target.checked){
+    setAllowed(allowed_users => [...allowed_users, e.target.value]);
+  } else {
+    setAllowed(oldArray => oldArray.filter(allowed_users => allowed_users !== e.target.value))
+  }
+  }
+  console.log(allowed_users)
   return (
     <>
       <div className="makePost">
@@ -223,23 +234,27 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
           <select
             className="dropdown"
             placeholder="private"
-            onChange={() => handlePrivacyChange}
+            onChange={(e) => handlePrivacyChange(e.target.value)}
           >
             {/*your job*/}
             <option value="public">Public</option>
             <option value="semi-private">Semi-Private</option>
-            <option value="private">Private</option>a
+            <option value="private">Private</option>
           </select>
           {privacy === "semi-private" && (
-            <select
-              className="dropdown"
-              placeholder="allowed"
-              onChange={(e) => setAllowed(e.target.value)}
-            >
+            <ul>
+            
+          
               {users.map((user,index) => (
-                <option key={index} value={user.username}>{user.username}</option>
+                <li key={index}>
+                
+                <input type="checkbox" key={index} value={user.username} onChange={e => AddToAllowed(e)} />
+                <label>{user.username}</label>
+                </li>
+
               ))}
-            </select>
+
+            </ul>
           )}
 
 {/* allImage.map((image,index) => (
