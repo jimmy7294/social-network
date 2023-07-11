@@ -16,7 +16,7 @@ function HomePage() {
   return (
     <>
       <Headers />
-      <MakePost />
+      <MakePost userImages={img}/>
       <GetPosts />
     </>
   );
@@ -88,7 +88,6 @@ function MakeComment(post_id){
 function ToggleComments({ post_id }) {
   const [showMore, setShowMore] = useState(false);
   const [comments, setComments] = useState([]);
-  
   function handleClick() {
     fetch("http://localhost:8080/api/getComments", {
       method: "POST",
@@ -139,18 +138,19 @@ function ToggleComments({ post_id }) {
 }
 
 
-function MakePost() {
+function MakePost({userImages}) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [privacy, setPrivacy] = useState("public");
   const [allowed_users, setAllowed] = useState([]);
-  const [allImage, setAllImage] = useState([]);
+  const [allImage, setAllImage] = useState(userImages);
   const[users,setUsers] = useState([])
   const [image, setimage] = useState("");
   const type = "post"
   const [showImages, setShowImages] = useState(false);
   //const router = useRouter();
   const [router, setRouter] = useState(useRouter())
+
 /*   useEffect( ()  =>  {
 //    async () => {
     const images = GetYourImages()
@@ -158,14 +158,6 @@ function MakePost() {
     console.log("images",images)
 //    }
   },[]) */
-  
-
-  useEffect(() => {
-    (async () => {
-      setAllImage(await GetYourImages())
-    })()
-  }, [])
-
 
 
 
@@ -250,6 +242,13 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
             </select>
           )}
 
+{/* allImage.map((image,index) => (
+  <div key={index}>
+    <img src={image} alt="image" className="pfp" onClick={() => setimage(image)} />
+  </div>
+
+))   */
+}
           <textarea
             type="text"
             placeholder="content"
