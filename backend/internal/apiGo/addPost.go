@@ -14,7 +14,7 @@ type post struct {
 	Privacy   string   `json:"privacy"`
 	Allowed   []string `json:"allowed_users"`
 	GroupName string   `json:"group_name"`
-	Image     []byte   `json:"image"`
+	Image     string   `json:"image"`
 	Content   string   `json:"content"`
 	Title     string   `json:"title"`
 	Author    int

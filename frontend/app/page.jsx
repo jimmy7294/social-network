@@ -5,13 +5,16 @@ import Headers from "./components/Header";
 import {useRouter} from "next/navigation";
 import encodeImageFile from "./components/encodeImage";
 import GetYourImages from "./components/GetYourImages";
+import ImageSelector from "./components/imageSelector";
 
-function HomePage() {
+async function HomePage() {
+  const img = await GetYourImages()
+  console.log("images from top", img)
   return (
     <>
       <Headers />
-      <MakePost />
-      <GetPosts />
+      <MakePost userImages={img}/>
+      {/* <GetPosts /> */}
     </>
   );
 }
@@ -132,37 +135,39 @@ function ToggleComments({ post_id }) {
 }
 
 
-function MakePost() {
+function MakePost({userImages}) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [privacy, setPrivacy] = useState("public");
-  const [allowed, setAllowed] = useState([]);
-  const [allImage, setAllImage] = useState([]);
+  const [allowed_users, setAllowed] = useState([]);
+  const [allImage, setAllImage] = useState(userImages);
   const[users,setUsers] = useState([])
   const [image, setimage] = useState("");
   const type = "post"
+  const [showImages, setShowImages] = useState(false);
   //const router = useRouter();
   const [router, setRouter] = useState(useRouter())
 
-  useEffect( ()  =>  {
-    async () => {
-    const images = await GetYourImages()
+/*   useEffect( ()  =>  {
+//    async () => {
+    const images = GetYourImages()
     setAllImage(images.user_images)
-    }
-  },[])
+    console.log("images",images)
+//    }
+  },[]) */
 
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-console.log(image, "dslkfhldsfl")
+console.log(image, {type,privacy,allowed_users,image,content,title})
     const res = await fetch("http://localhost:8080/api/addPost", {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, content, privacy, allowed ,type,image  }),
+      body: JSON.stringify({type,privacy,allowed_users,image,content,title}),
     });
     const data = await res.json();
     if (data.status !== "success") {
@@ -170,7 +175,7 @@ console.log(image, "dslkfhldsfl")
       return;
     }
     console.log("success");
-    location.reload('/')
+    //location.reload('/')
   };
 
   
@@ -200,7 +205,12 @@ console.log(image, "dslkfhldsfl")
   return (
     <>
       <div className="makePost">
-        <form onSubmit={handleSubmit}>
+        {/* image === "" ? (
+          <h1>no selected image</h1>
+        ):(
+          <img src={image}></img>
+        ) */}
+        <form onSubmit={()=>{handleSubmit}}>
           <input
             className="titleCreation"
             type="text"
@@ -210,7 +220,7 @@ console.log(image, "dslkfhldsfl")
           <select
             className="dropdown"
             placeholder="private"
-            onChange= {handlePrivacyChange}
+            onChange={() => handlePrivacyChange}
           >
             {/*your job*/}
             <option value="public">Public</option>
@@ -230,13 +240,15 @@ console.log(image, "dslkfhldsfl")
           )}
           {allImage && (
             <div>
-{allImage.map((image,index) => (
+{/* allImage.map((image,index) => (
   <div key={index}>
-    <img src={image} alt="image" className="pfp" onClick={() => setimage({image})} />
+    <img src={image} alt="image" className="pfp" onClick={() => setimage(image)} />
   </div>
 
-))  
-}
+))   */
+}             
+              
+              
 
             </div>
           )}
@@ -256,6 +268,18 @@ console.log(image, "dslkfhldsfl")
             <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
             <button type="submit">AddImage</button>
             </form>
+            {showImages ? (
+                <>
+                <button onClick={() => setShowImages(false)}>
+                  X
+                </button>
+                <ImageSelector images={allImage} func={setimage}/>
+                </>
+              ):(
+                <button onClick={() => setShowImages(true)}>
+                  Select Image
+                </button>
+              )}
             </div>
       </div>
     </>

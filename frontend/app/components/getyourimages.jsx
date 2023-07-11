@@ -12,7 +12,7 @@ async function GetYourImages(){
       console.log("failed to get your images", data.status)
       return
     }
-    console.log("got your images", data)
+    //console.log("got your images", data)
     return data
   
   
