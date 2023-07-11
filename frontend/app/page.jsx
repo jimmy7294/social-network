@@ -14,7 +14,7 @@ async function HomePage() {
     <>
       <Headers />
       <MakePost userImages={img}/>
-      {/* <GetPosts /> */}
+      <GetPosts />
     </>
   );
 }
@@ -205,11 +205,11 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
   return (
     <>
       <div className="makePost">
-        {/* image === "" ? (
+        {image === "" ? (
           <h1>no selected image</h1>
         ):(
           <img src={image}></img>
-        ) */}
+        )}
         <form onSubmit={()=>{handleSubmit}}>
           <input
             className="titleCreation"
@@ -238,20 +238,14 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
               ))}
             </select>
           )}
-          {allImage && (
-            <div>
+
 {/* allImage.map((image,index) => (
   <div key={index}>
     <img src={image} alt="image" className="pfp" onClick={() => setimage(image)} />
   </div>
 
 ))   */
-}             
-              
-              
-
-            </div>
-          )}
+}
           <textarea
             type="text"
             placeholder="content"
