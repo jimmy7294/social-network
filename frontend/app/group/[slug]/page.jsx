@@ -7,11 +7,7 @@ import GetYourImages from "../../components/GetYourImages";
 import encodeImageFile from "../../components/encodeImage";
 import { usePathname } from "next/navigation";
 
-
 async function getGroupPageData(slug) {
-
-    console.log("slug",slug)
-    if (slug === undefined) return "not_a_member"
     const groupname = decodeURIComponent(slug.params.slug)
     const json = await fetch("http://localhost:8080/api/getGroupPage", {
         method: "POST",
@@ -39,28 +35,18 @@ async function getGroupPageData(slug) {
          }
         }) */
 }
-//const promisdata = GroupPage()
-export default function GroupPage(slug){
-    const [isMember, setIsMember] = useState(false)
-    const promisdata1 = ChatBox(slug)
-    const promisdata2 = getGroupPageData(slug)
-    const chat = use(promisdata1)
-    const groupPageData = use(promisdata2)
-    //const chat = await ChatBox(slug)
-    //const chat = use(promisdata)
-    //const groupPageData = await getGroupPageData(slug)
-    //console.log(chat)
-    useEffect(() => {
-        if (groupPageData !== "not_a_member") {
-          setIsMember(true);
-        }
-      }, []);
+
+export default async function GroupPage(slug){
+    const chat = await ChatBox(slug)
+    const groupPageData = await getGroupPageData(slug)
+    console.log(chat)
+
         return(
             <>
-            { isMember ? (
+            { groupPageData !== "not_a_member" ? (
                 <>
                 <Headers />
-                {/* <MakeGroupPost slug={slug}/> */}
+                <MakeGroupPost slug={slug}/>
                 <RenderGroup data={groupPageData} slug={slug}/>
                 <RenderChatBox message={chat} slug={slug}/>
                 </>
@@ -362,8 +348,8 @@ function MakeGroupPost(props) {
         <>
       <div>
         <form className="groupPostmaker" onSubmit={console.log("fix this shit")/* router.push(`/group/${group_name}` */}>
-            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
-            <button type="submit">AddImage</button>
+    <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
+    <button type="submit">AddImage</button>
         </form>
         </div>
         <div>
@@ -408,8 +394,8 @@ function MakeEvent({slug}) {
     const [content, setContent] = useState("");
     const [event_date, setEvent_Date] = useState("");
     const [options, setOptions] = useState([]);
-    const [optionone, setOptionOne] = useState("");
-    const [optiontwo, setOptionTwo] = useState("");
+   const opti
+   
    
     const handleSubmit = async (e) => {
         preventDefault(e);
