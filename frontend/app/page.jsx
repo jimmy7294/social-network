@@ -131,6 +131,7 @@ function ToggleComments({ post_id }) {
   );
 }
 
+
 function MakePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -140,16 +141,17 @@ function MakePost() {
   const[users,setUsers] = useState([])
   const [image, setimage] = useState("");
   const type = "post"
-  const router = useRouter();
+  //const router = useRouter();
+  const [router, setRouter] = useState(useRouter())
 
   useEffect( ()  =>  {
-    (async () => {
+    async () => {
     const images = await GetYourImages()
     setAllImage(images.user_images)
-    })()
+    }
   },[])
-  
-  
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -244,17 +246,17 @@ console.log(image, "dslkfhldsfl")
             className="postContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
-          <div>
-            <form onSubmit={router.push('/')}>
+          <button type="submit" onClick={() => {router.push("/")}} className="postCreationButton">
+            submit
+          </button>
+        </form>
+        <div>
+            <form onSubmit={() => {router.push("/")}}>
             <label id="image" >Choose an image:</label>
             <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
             <button type="submit">AddImage</button>
             </form>
             </div>
-          <button type="submit" onClick={router.push('/')} className="postCreationButton">
-            submit
-          </button>
-        </form>
       </div>
     </>
   );
@@ -423,7 +425,6 @@ function SemiPosts({ posts }) {
 
 // PrivatePosts component
 function PrivatePosts({ posts }) {
-  console.log(posts, "saljdhljashdl")
   return (
     <div className="private">
       <div className="mfprivate">
