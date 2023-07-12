@@ -28,14 +28,15 @@ import Headers from "../components/Header";
 
     return(
         <>
-        <h2>Chat</h2>
+        
         <div className="container">
             
             {users.length > 0 && (
                 <div className="chatorganise">
+                    <h2 className="title">Chat</h2>
                     {users.map((user,index) => (
-                        <div key={index} className="chatpage__user">
-                        <h1><a href={`/chat/${user.username}`}>{user.username}</a></h1>
+                        <div className="user" key={index}>
+                        <h1><a className="contents" href={`/chat/${user.username}`}>{user.username}</a></h1>
                         </div>
                     ))}
                 </div>

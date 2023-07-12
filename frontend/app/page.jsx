@@ -270,7 +270,12 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
             className="postContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
-          <button type="submit" className="postCreationButton" onClick={handleSubmit}>
+          <br />
+            <label id="image" >Choose an image:</label>
+            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
+         
+
+          <button type="submit" className="postCreationButton">
             submit
           </button>
         </form>

@@ -17,7 +17,7 @@ function SendMessage(reciver){
     return(
         <>
         <input type="text" placeholder="message" />
-        <button>Send</button>
+        <button type="submit">Send</button>
         </>
     )
 }

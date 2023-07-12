@@ -515,7 +515,6 @@ body {
 }
 
 .contents {
-  margin: 1vh;
   font-size: large;
 }
 
@@ -547,7 +546,15 @@ body {
 
 .chatorganise {
   display: grid;
-  justify-items: center;
   width: 40%;
   margin: auto;
+  border: #4faa92 2px solid;
+}
+
+.user {
+  height: fit-content;
+  margin-left: 1vh;
+  margin-top: 1vh;
+  margin-bottom: 0vh;
+  border-top: #144b56 1px solid;
 }
