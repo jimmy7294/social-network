@@ -64,12 +64,13 @@ post_title
 FROM posts
 JOIN users
 ON users.uuid = posts.post_author
-WHERE post_privacy = 'semi' AND post_id IN (
+WHERE post_privacy = 'semi-private' AND post_id IN (
 SELECT post_id
 FROM allowedUsers
 WHERE uuid = ?
-);`
-	rows, err := data.DB.Query(sqlStmt, uuid)
+)
+OR (posts.post_author = ? AND post_privacy = 'semi-private');`
+	rows, err := data.DB.Query(sqlStmt, uuid, uuid)
 	if err != nil {
 		fmt.Println("query error", err)
 		return pData, err
@@ -101,8 +102,9 @@ WHERE post_privacy = 'private' AND post_author IN (
 SELECT uuid
 FROM followers
 WHERE follower_id = ?
-);`
-	rows, err := data.DB.Query(sqlStmt, uuid)
+)
+OR (posts.post_author = ? AND post_privacy = 'private');`
+	rows, err := data.DB.Query(sqlStmt, uuid, uuid)
 	if err != nil {
 		fmt.Println("query error", err)
 		return pData, err

@@ -5,6 +5,9 @@ function ImageSelector(props) {
     return (
         <>
         <div>
+            <button onClick={() => updateSelectedImage("")}>No Image</button>
+        </div>
+        <div>
             {images.stock_images ? (
                     images.stock_images.map((image,index) => (
                         <div key={index}>

@@ -80,6 +80,7 @@ func PostApi(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		var pData post
 		err := json.NewDecoder(r.Body).Decode(&pData)
+		fmt.Println("post data", pData)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -99,7 +100,8 @@ func PostApi(w http.ResponseWriter, r *http.Request) {
 				helper.WriteResponse(w, "incorrect_input")
 				return
 			}
-			if pData.Privacy == "semi_private" {
+			if pData.Privacy == "semi-private" {
+				fmt.Println("got to semi private")
 				err = addAllowedUsersToDB(pData.Allowed, pData.Title)
 				if err != nil {
 					helper.WriteResponse(w, "could_not_add_users")

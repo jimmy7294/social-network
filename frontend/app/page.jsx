@@ -163,7 +163,7 @@ function MakePost({userImages}) {
   const [allowed_users, setAllowed] = useState([]);
   const [allImage, setAllImage] = useState(userImages);
   const[users,setUsers] = useState([])
-  const [image, setimage] = useState("");
+  const [image, setimage] = useState();
   const type = "post"
   const [showImages, setShowImages] = useState(false);
   //const router = useRouter();
@@ -422,7 +422,7 @@ function GetPosts() {
 
 // PublicPosts component
 function PublicPosts({ posts }) {
-  
+  console.log(posts)
   return (
     <>
     <div className="public">
@@ -465,7 +465,7 @@ function SemiPosts({ posts }) {
               </a>
               <div className="postTitle">{semi.title}</div>
               <div className="postContent">{semi.content}
-              {semi.image !== null && semi.image !== "http://localhost:8080/images/default.jpeg" && <img src={semi.image} alt="image" className="postImage" />
+              {semi.image !== null && semi.image !== "http://localhost:8080/images/default.jpeg" && semi.image !== "" && <img src={semi.image} alt="image" className="postImage" />
             }
               </div>
               <ToggleComments post_id={semi.post_id}></ToggleComments>
@@ -496,7 +496,7 @@ function PrivatePosts({ posts }) {
               </a>
               <div className="postTitle">{privacy.title}</div>
               <div className="postContent">{privacy.content}
-              {privacy.image !== null && privacy.image !== "http://localhost:8080/images/default.jpeg" && <img src={privacy.image} alt="image" className="postImage" />
+              {privacy.image !== null && privacy.image !== "http://localhost:8080/images/default.jpeg" && privacy.image !== "" && <img src={privacy.image} alt="image" className="postImage" />
             }
               </div>
               <ToggleComments post_id={privacy.post_id}></ToggleComments>

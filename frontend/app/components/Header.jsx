@@ -98,7 +98,7 @@ newWS.onmessage = (msg) => {
         console.log("failed to get notification");
         return;
       }
-      console.log(data, "here")
+      console.log(data, "here be notifications")
       if(data.notifications !== null){
         setNotification(true);
         setNumber(data.notifications.length);

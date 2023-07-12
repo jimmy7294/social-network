@@ -52,6 +52,18 @@ export default function GroupPage(slug){
             if (g !== "not_a_member") {
                 console.log("should be true")
                 setIsMember(true);
+                const newWS = new WebSocket("ws://localhost:8080/api/ws")
+            newWS.onmessage = (msg) => {
+                console.log("new notification",msg)
+                let newMsg = JSON.parse(msg.data)
+                if (newMsg.type === "notification") {
+                console.log("new notification parsed",newMsg)
+                }
+             }
+            return () => {
+                console.log("closing websocket")
+                newWS.close()
+            }
               }
             if (g === "group_does_not_exist") {
                 setGroupExists(false)

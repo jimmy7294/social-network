@@ -9,8 +9,8 @@ VALUES
 (1, 'private', NULL, '2023-05-06', 'Mini-Dora', 'Sixth Adventure'),
 (2, 'private', NULL, '2023-05-07', 'Pass Loop', 'Seventh Adventure'),
 (3, 'private', NULL, '2023-05-08', 'Time Furoshiki', 'Eighth Adventure'),
-(4, 'semi', NULL, '2023-05-09', 'Hopter', 'Ninth Adventure'),
-(5, 'semi', NULL, '2023-05-10', 'Translation Gummy', 'Tenth Adventure');
+(4, 'semi-private', NULL, '2023-05-09', 'Hopter', 'Ninth Adventure'),
+(5, 'semi-private', NULL, '2023-05-10', 'Translation Gummy', 'Tenth Adventure');
 
 -- +migrate Down
 DELETE FROM posts
