@@ -222,7 +222,7 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
         {image === "" ? (
           <h3>no selected image</h3>
         ):(
-          <img src={image} className="avatar-preview"></img>
+          <img src={image} className="avatar_preview"></img>
         )}
         <form>
           <input
@@ -278,7 +278,7 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
         <div className="imagePoster">
             <form onSubmit={() => {router.push("/")}}>
             <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
-            <button type="submit" className="text">AddImage</button>
+            <button type="submit" className="text">Add Image</button>
             </form>
             {showImages ? (
                 <>
