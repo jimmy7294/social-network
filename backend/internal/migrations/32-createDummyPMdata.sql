@@ -1,5 +1,5 @@
 -- +migrate Up
-INSERT INTO privateMessages(pmg_sender,pmg_reciever,pmg_content,pmg_image,creation_date)
+INSERT INTO privateMessages(pmg_sender,pmg_receiver,pmg_content,pmg_image,creation_date)
 VALUES
 (2,1,"xd","http://localhost:8080/images/elmo.gif","2142-05-01"),
 (2,1,"xdd","http://localhost:8080/images/feelsgoodman.png","2142-06-02"),

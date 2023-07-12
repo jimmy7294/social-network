@@ -83,7 +83,7 @@ func addFollowerToDB(uuid int, follower string) error {
 	return err
 }
 
-func deleteGroupNotificationsFromDB(sender, reciever string) error {
+func deleteGroupNotificationsFromDB(sender, receiver string) error {
 	sqlString := `DELETE FROM notifications
 	WHERE (sender_id IN (
 		SELECT u.uuid
@@ -103,12 +103,12 @@ func deleteGroupNotificationsFromDB(sender, reciever string) error {
 
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(sender, sender, reciever, reciever)
+	_, err = sqlStmt.Exec(sender, sender, receiver, receiver)
 
 	return err
 }
 
-func deleteFollowRequestsFromDB(sender string, reciever int) error {
+func deleteFollowRequestsFromDB(sender string, receiver int) error {
 	sqlString := `DELETE FROM notifications
 	WHERE (uuid = ? AND sender_id IN (
 		SELECT u.uuid
@@ -123,7 +123,7 @@ func deleteFollowRequestsFromDB(sender string, reciever int) error {
 
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(reciever, sender, sender)
+	_, err = sqlStmt.Exec(receiver, sender, sender)
 	return err
 }
 
@@ -157,8 +157,8 @@ func HandleGroupInvite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recieveruuid, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
-	if err != nil || uuid != recieveruuid {
+	receiveruuid, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
+	if err != nil || uuid != receiveruuid {
 		helper.WriteResponse(w, "fucked")
 		fmt.Println("user not matching with notification", err)
 		return
@@ -219,8 +219,8 @@ func HandleFollowRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recieveruuid, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
-	if err != nil || recieveruuid != uuid {
+	receiveruuid, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
+	if err != nil || receiveruuid != uuid {
 		helper.WriteResponse(w, "stop_lying_pls")
 		return
 	}

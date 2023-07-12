@@ -9,12 +9,12 @@ import Link from "next/link";
 
 
 
-function HandleFollowRequest(response, sender, reciever){}
+function HandleFollowRequest(response, sender, receiver){}
   
 
 
 
-function HandleGroupRequest(group_name, response, sender, reciever){
+function HandleGroupRequest(group_name, response, sender, receiver){
   console.log(sender)
   fetch("http://localhost:8080/api/handleGroupJoinRequest", {
     method: "POST",
@@ -22,7 +22,7 @@ function HandleGroupRequest(group_name, response, sender, reciever){
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({group_name, response, reciever,sender}),
+    body: JSON.stringify({group_name, response, receiver,sender}),
   })
     .then((data) => data.json())
     .then((data) => {
@@ -36,9 +36,9 @@ function HandleGroupRequest(group_name, response, sender, reciever){
     });
 }
 
-function HandleGroupInvite(group_name, response, sender, reciever){
+function HandleGroupInvite(group_name, response, sender, receiver){
   console.log(sender, "sender")
-  console.log(reciever, "reciever")
+  console.log(receiver, "receiver")
   console.log(group_name, "group_name")
   fetch("http://localhost:8080/api/handleGroupInvite", {
     method: "POST",
@@ -46,7 +46,7 @@ function HandleGroupInvite(group_name, response, sender, reciever){
     headers: {
       "Content-Type": "application/json",
       },
-      body: JSON.stringify({group_name, response, reciever,sender}),
+      body: JSON.stringify({group_name, response, receiver,sender}),
       })
       .then((data) => data.json())
       .then((data) => {
@@ -102,20 +102,20 @@ console.log(notification,"sakldlak")
           <p>{notification.sender}</p>
           {notification.type === "group_join_request" && (
             <div>
-              <button onClick ={() => HandleGroupRequest(notification.context, "accept", notification.sender, notification.reciever)}>Accept</button>
-              <button onClick ={() => HandleGroupRequest(notification.context, "decline", notification.sender, notification.reciever)}>Decline</button>
+              <button onClick ={() => HandleGroupRequest(notification.context, "accept", notification.sender, notification.receiver)}>Accept</button>
+              <button onClick ={() => HandleGroupRequest(notification.context, "decline", notification.sender, notification.receiver)}>Decline</button>
             </div>
           )}
           {notification.type === "group_invite" && (
             <div>
-              <button onClick ={() => HandleGroupInvite(notification.context, "accept", notification.sender, notification.reciever)}>Accept</button>
-              <button onClick ={() => HandleGroupRequest(notification.context, "decline", notification.sender, notification.reciever)}>Decline</button>
+              <button onClick ={() => HandleGroupInvite(notification.context, "accept", notification.sender, notification.receiver)}>Accept</button>
+              <button onClick ={() => HandleGroupRequest(notification.context, "decline", notification.sender, notification.receiver)}>Decline</button>
             </div>
               )}
               {notification.type === "follow_request" && (
                 <div>
-                  <button onClick ={() => HandleGroupInvite(notification.context, "accept", notification.sender, notification.reciever)}>Accept</button>
-                  <button onClick ={() => HandleGroupRequest(notification.context, "decline", notification.sender, notification.reciever)}>Decline</button>
+                  <button onClick ={() => HandleGroupInvite(notification.context, "accept", notification.sender, notification.receiver)}>Accept</button>
+                  <button onClick ={() => HandleGroupRequest(notification.context, "decline", notification.sender, notification.receiver)}>Decline</button>
                   </div>
               )}
     </div>

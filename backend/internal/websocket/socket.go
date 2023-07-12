@@ -23,23 +23,23 @@ var AllClients = make(map[int]*Client)
 var AllGroupChats = make(map[string]map[int]bool)
 
 type Client struct {
-	Username string
-	Uuid     int
-	Socket   *websocket.Conn
-	Join     chan bool
-	Leave    chan bool
-	Message  chan data.UserMessage
+	Username     string
+	Uuid         int
+	Socket       *websocket.Conn
+	Join         chan bool
+	Leave        chan bool
+	GroupMessage chan data.UserMessage
 }
 
 func NewClient(conn *websocket.Conn, username string, userId int) *Client {
 
 	return &Client{
-		Username: username,
-		Uuid:     userId,
-		Socket:   conn,
-		Join:     make(chan bool),
-		Leave:    make(chan bool),
-		Message:  make(chan data.UserMessage),
+		Username:     username,
+		Uuid:         userId,
+		Socket:       conn,
+		Join:         make(chan bool),
+		Leave:        make(chan bool),
+		GroupMessage: make(chan data.UserMessage),
 	}
 }
 
@@ -90,7 +90,7 @@ func updateUserlist() {
 	msg.Sender = "server"
 	msg.Receiver = "everyone"
 	msg.Created = time.Now()
-	msg.Type = "notification"
+	msg.Type = "group_message"
 	for _, client := range AllClients {
 		if err := client.Socket.WriteJSON(msg); err != nil {
 			fmt.Println("error at updateUserlist: ", err)
@@ -131,7 +131,16 @@ func (c *Client) Read() {
 		msg.Sender = c.Username
 		//fmt.Printf(`recieved message %v %v`, msg, c.Leave)
 		//fmt.Println()
-		c.Message <- msg
+		if msg.Type == "group_message" {
+			c.GroupMessage <- msg
+		}
+		if msg.Type == "notification" {
+
+		}
+		if msg.Type == "private_message" {
+
+		}
+		//c.GroupMessage <- msg
 	}
 	c.Socket.Close()
 }
@@ -159,12 +168,16 @@ func FindAndSend(msg data.UserMessage) {
 		return
 	}
 	if val, ok := AllClients[recipientId]; ok {
-		//fmt.Printf("reciever found %v %v", val, ok)
+		//fmt.Printf("receiver found %v %v", val, ok)
 		if err := val.Socket.WriteJSON(msg); err != nil {
 			fmt.Println("problem sending message", err)
 			val.Socket.Close()
 		}
 	}
+}
+
+func FindAndSendToGroup(msg data.UserMessage) {
+
 }
 
 func (c *Client) UpdateClient() {
@@ -180,8 +193,9 @@ func (c *Client) UpdateClient() {
 			delete(AllClients, c.Uuid)
 			//updateUserlist()
 			//fmt.Printf("current userlist again: %v", AllClients)
-		case msg := <-c.Message:
-			FindAndSend(msg)
+		case msg := <-c.GroupMessage:
+			fmt.Println("new message", msg)
+			//FindAndSend(msg)
 			c.Write(msg)
 		}
 	}
@@ -190,6 +204,7 @@ func (c *Client) UpdateClient() {
 func WsEndpoint(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println("hello :)")
 	fmt.Println("websocket reached")
+	fmt.Println(r.URL)
 
 	helper.EnableCors(&w)
 
@@ -234,7 +249,7 @@ func WsEndpoint(w http.ResponseWriter, r *http.Request) {
 
 /*
 func AddMsgToTable(msg Message) {
-	stmt, err := data.DB.Prepare("INSERT INTO msg(sender,reciever,msg,date) values(?,?,?,?);")
+	stmt, err := data.DB.Prepare("INSERT INTO msg(sender,receiver,msg,date) values(?,?,?,?);")
 	if err != nil {
 		fmt.Println("you're fucked")
 	}

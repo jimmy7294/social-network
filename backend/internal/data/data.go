@@ -13,7 +13,7 @@ var SEPERATOR = "*_*"
 
 type UserMessage struct {
 	Sender   string    `json:"sender"`
-	Receiver string    `json:"reciever"`
+	Receiver string    `json:"receiver"`
 	Created  time.Time `json:"created"`
 	Image    string    `json:"image"`
 	Content  string    `json:"content"`

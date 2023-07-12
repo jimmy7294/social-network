@@ -122,10 +122,10 @@ export default function OpenChatSocket() {
 //   function sendMessage() {
 //     let newmessage = document.getElementById("messafge");
 //     if (/\S/.test(newmessage.value)) {
-//       let reciever = document.querySelector(".chat-section").id;
+//       let receiver = document.querySelector(".chat-section").id;
 //       socket.send(
 //         JSON.stringify({
-//           recipient: reciever,
+//           recipient: receiver,
 //           content: newmessage.value,
 //           type: "user_message",
 //         })

@@ -57,6 +57,7 @@ export default function GroupPage(slug){
     const [chat, setChat] = useState()
     const [groupPageData, setGroupPageData] = useState("not_a_member")
     const [groupExists, setGroupExists] = useState(true)
+    const [websocket, setWebSocket] = useState(null)
 
     useEffect(() => {
         (async () => {
@@ -71,10 +72,13 @@ export default function GroupPage(slug){
             newWS.onmessage = (msg) => {
                 console.log("new notification",msg)
                 let newMsg = JSON.parse(msg.data)
-                if (newMsg.type === "notification") {
+                if (newMsg.type === "group_message") {
                 console.log("new notification parsed",newMsg)
+                setChat((prevValue) => [...prevValue, newMsg])
+                //console.log("new chat",chat)
                 }
              }
+             setWebSocket(newWS)
             return () => {
                 console.log("closing websocket")
                 newWS.close()
@@ -93,7 +97,7 @@ export default function GroupPage(slug){
                 <Headers />
                 <MakeGroupPost slug={slug}/>
                 <RenderGroup data={groupPageData} slug={slug}/>
-                <RenderChatBox message={chat} slug={slug}/>
+                <RenderChatBox message={chat} slug={slug} websocket={websocket}/>
                 </>
             ) : (
                 groupExists ? (
@@ -272,13 +276,29 @@ function RenderGroup(props) {
       )
 }
 
-function RenderChatBox({message}) {
-
-    console.log("render chat box", message)
+function RenderChatBox(props) {
+    const message = props.message
+    const websocket = props.websocket
+    const groupName = decodeURIComponent(props.slug.params.slug)
+    console.log("render chat box", message, groupName)
     const [messages, setMessages] = useState([])
+    function handleSubmit(event) {
+        
+        event.preventDefault()
+        const msg = event.target.chat.value
+        websocket.send(
+            JSON.stringify({
+              receiver: groupName,
+              content: msg,
+              type: "group_message",
+            })
+        )
+        event.target.chat.value = ""
+    }
     useEffect(() => {
         setMessages(message)
-      }, [])
+      }, [message])
+    //setMessages(message)
 
         return(
             <>
@@ -292,10 +312,11 @@ function RenderChatBox({message}) {
                     </div>
                 
                 ))}
-        <div className="chatBox">
-              
-                <input type="text" placeholder="message"/>
-                <button>send</button>
+            <div className="chatBox">
+                <form onSubmit={handleSubmit}>
+                    <input type="text" id="chat" name="chat" placeholder="message"/>
+                    <button type="submit">send</button>
+                </form>
             </div>
         </div>
             </>

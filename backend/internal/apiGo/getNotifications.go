@@ -13,7 +13,7 @@ type notification struct {
 	Id       int       `json:"id"`
 	Content  string    `json:"content"`
 	Sender   string    `json:"sender"`
-	Reciever string    `json:"reciever"`
+	Receiver string    `json:"receiver"`
 	Type     string    `json:"type"`
 	Context  string    `json:"context"`
 	Created  time.Time `json:"created"`
@@ -55,7 +55,7 @@ func getAllNotificationsFromDB(uuid int) ([]notification, error) {
 	for rows.Next() {
 		var userNotification notification
 
-		err = rows.Scan(&userNotification.Id, &userNotification.Content, &userNotification.Created, &userNotification.Reciever, &userNotification.Sender, &userNotification.Type, &userNotification.Context)
+		err = rows.Scan(&userNotification.Id, &userNotification.Content, &userNotification.Created, &userNotification.Receiver, &userNotification.Sender, &userNotification.Type, &userNotification.Context)
 		if err != nil {
 			return allNotifications, err
 		}

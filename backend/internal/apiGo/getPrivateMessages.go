@@ -11,7 +11,7 @@ import (
 
 type privateMessage struct {
 	Sender   string    `json:"sender"`
-	Receiver string    `json:"reciever"`
+	Receiver string    `json:"receiver"`
 	Created  time.Time `json:"created"`
 	Image    string    `json:"image"`
 	Content  string    `json:"content"`
@@ -33,9 +33,9 @@ func gatherPrivateMessagesfromDB(yourId int, otherUser int) ([]privateMessage, e
 	JOIN users AS 'u1'
 	ON u1.uuid = pmg_sender
 	JOIN users AS 'u2'
-	ON u2.uuid = pmg_reciever
-	WHERE (pmg_sender = ? AND pmg_reciever = ?)
-	OR (pmg_sender = ? AND pmg_reciever = ?) 
+	ON u2.uuid = pmg_receiver
+	WHERE (pmg_sender = ? AND pmg_receiver = ?)
+	OR (pmg_sender = ? AND pmg_receiver = ?) 
 	`
 
 	sqlStmt, err := data.DB.Prepare(sqlString)
