@@ -8,6 +8,7 @@ import encodeImageFile from "../../components/encodeImage";
 import { usePathname } from "next/navigation";
 //import getGroupPageData from "@/app/components/test";
 import  { useState, useEffect, use } from "react";
+import ImageSelector from "@/app/components/imageSelector";
 
 
 async function getGroupPageData(slug) {
@@ -23,10 +24,12 @@ async function getGroupPageData(slug) {
             body: JSON.stringify(groupname),
         })
     const data = await json.json()
-    if (data.status === "success") {
-        return data
+    if (data.status !== "success") {
+       console.log("error in get gorup", data.status)
+       return (data.status)
     }
-    return "not_a_member"
+   
+    return data
 }
 
 //const promisdata2 = getGroupPageData()
@@ -38,6 +41,7 @@ export default function GroupPage(slug){
     const [isMember, setIsMember] = useState(false)
     const [chat, setChat] = useState()
     const [groupPageData, setGroupPageData] = useState("not_a_member")
+    const [groupExists, setGroupExists] = useState(true)
 
     useEffect(() => {
         (async () => {
@@ -49,12 +53,15 @@ export default function GroupPage(slug){
                 console.log("should be true")
                 setIsMember(true);
               }
+            if (g === "group_does_not_exist") {
+                setGroupExists(false)
+              }
           })()
       }, []);
       console.log("render main file")
         return(
             <>
-            { isMember ? (
+            { isMember && groupExists ? (
                 <>
                 <Headers />
                 <MakeGroupPost slug={slug}/>
@@ -62,10 +69,18 @@ export default function GroupPage(slug){
                 <RenderChatBox message={chat} slug={slug}/>
                 </>
             ) : (
-                <>
-                <Headers />
-                <RenderGroup data={groupPageData} slug={slug}/>
-                </>
+                groupExists ? (
+                    <>
+                    <Headers />
+                    <RenderGroup data={groupPageData} slug={slug}/>
+                    </>
+                ) : (
+                    <>
+                    <Headers />
+                    <h1>Group does not exist</h1>
+                    </>
+                )
+
             )}
             </>
         )
@@ -101,6 +116,8 @@ function RenderGroup(props) {
             setIsMember(false)
         }
       }, [])
+      
+   
       return (
         <>
         <div>
@@ -326,14 +343,15 @@ function MakeGroupPost(props) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [image, setImage] = useState("");
-    const [allYourImages, setAllYourImages] = useState([]);
+    const [allImage, setAllImage] = useState([]);
+    const [showImages, setShowImages] = useState(false);
     //const pathname = usePathname()
     //const router = useRouter();
 
     useEffect(() => {
         (async () => {
             const images = await GetYourImages()
-            setAllYourImages(images.user_images)
+            setAllImage(images)
          
           })()
         }, [])
@@ -359,20 +377,19 @@ function MakeGroupPost(props) {
     return (
         <>
       <div>
-        <form className="groupPostmaker" onSubmit={console.log("fix this shit")/* router.push(`/group/${group_name}` */}>
-            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
-            <button type="submit">AddImage</button>
-        </form>
+      {image === "" ? (
+          <h3>no selected image</h3>
+        ):(
+          <img src={image} className="avatar_preview"></img>
+        )}
+      <form onSubmit={encodeImageFile}>
+            <input type="file" id="image" name="image"></input>
+            <button type="submit" className="text">AddImage</button>
+            </form>
         </div>
         <div>
             <form className="groupPostmaker" onSubmit={SubmitHandle}>
-                {allYourImages && (
-                    <div className="padder">
-                        {allYourImages.map((image, index) => (
-                            <img src={image} onClick={(e) => setImage(image)} key={index} alt={`Avatar ${index}`} className="pfp" />
-                        ))}
-                    </div>
-                )}
+             
 
                 <input
                     className="titleCreation"
@@ -390,6 +407,19 @@ function MakeGroupPost(props) {
                 />
                  <button type="submit">submit</button>
             </form>
+            {showImages ? (
+                <>
+                <button onClick={() => setShowImages(false)}>
+                  X
+                </button>
+                <ImageSelector images={allImage} func={setImage}/>
+                </>
+              ):(
+            
+                <button className="" onClick={() => setShowImages(true)}>
+                  Select Image
+                </button>
+              )}
             
         </div>
         </>
