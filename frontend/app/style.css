@@ -322,6 +322,10 @@ body {
   height: 20px;
 }
 
+.makePost {
+  display: grid;
+}
+
 .postListe {
   position: absolute;
   border: solid 2px #4faa92;;
@@ -472,7 +476,7 @@ body {
   border-radius: 2px;
   background-color: #f8f8f8;
   resize: none;
-  margin: 0.25vh;
+  margin-top: 0.25vh;
 
 }
 .titleCreation {
@@ -557,4 +561,23 @@ body {
   margin-top: 1vh;
   margin-bottom: 0vh;
   border-top: #144b56 1px solid;
+}
+
+.imagePoster{
+  display: grid;
+  justify-items: start;
+  margin-bottom: 1vh;
+}
+
+.messages {
+  border: solid #4faa92 1px;
+    width: 100%;
+    padding-left: 0.5vh;
+}
+
+.messageBox {
+  width: 50%;
+  display: grid;
+  justify-items: center;
+
 }

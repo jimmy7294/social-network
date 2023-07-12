@@ -220,9 +220,9 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
     <>
       <div className="makePost">
         {image === "" ? (
-          <h1>no selected image</h1>
+          <h3>no selected image</h3>
         ):(
-          <img src={image} style={{width:"100px"}}></img>
+          <img src={image} className="avatar-preview"></img>
         )}
         <form>
           <input
@@ -271,19 +271,14 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
             onChange={(e) => setContent(e.target.value)}
           />
           <br />
-            <label id="image" >Choose an image:</label>
-            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
-         
-
           <button type="submit" className="postCreationButton">
             submit
           </button>
         </form>
-        <div>
+        <div className="imagePoster">
             <form onSubmit={() => {router.push("/")}}>
-            <label id="image" >Choose an image:</label>
             <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
-            <button type="submit">AddImage</button>
+            <button type="submit" className="text">AddImage</button>
             </form>
             {showImages ? (
                 <>
@@ -293,7 +288,8 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
                 <ImageSelector images={allImage} func={setimage}/>
                 </>
               ):(
-                <button onClick={() => setShowImages(true)}>
+            
+                <button className="" onClick={() => setShowImages(true)}>
                   Select Image
                 </button>
               )}

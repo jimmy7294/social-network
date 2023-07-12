@@ -238,26 +238,24 @@ function RenderChatBox({message}) {
 
         return(
             <>
-           
+        <div className="messageBox">
+              <h1 className="title" >Chat</h1>
                 {messages.map((messages, index) => (
-                    <div key={index}>
+                    <div className="messages" key={index}>
                         <p>{messages.sender}</p>
                         <p>{messages.content}</p>
                         <p>{messages.created}</p>
                     </div>
                 
                 ))}
-        
-           
-        
-            <div className="chatBox">
-                <h1>ChatBox</h1>
+        <div className="chatBox">
+              
                 <input type="text" placeholder="message"/>
                 <button>send</button>
             </div>
+        </div>
             </>
             )
-
 }
 
  async function ChatBox(slug){
