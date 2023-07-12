@@ -25,16 +25,22 @@ function HomePage() {
 
 
 function MakeComment(post_id){
-  const [allImages, setAllImages] = useState([])
+
+
+const [allImages, setAllImages] = useState([]);
   const [image, setImage] = useState("")
   const [content, setContent] = useState("");
+  const [showImages, setShowImages] = useState(false);
 
-  useEffect(() => {
+
+  useEffect (() => {
     (async () => {
       const images = await GetYourImages()
-      setAllImages(images.user_images)
+      setAllImages(images)
     })()
-  }, [])
+  },[])
+
+
 
   const handleCommentSubmit = async () => {
   
@@ -59,23 +65,31 @@ function MakeComment(post_id){
   return (
     <>
       <div className="makeComment">
+      {image === "" ? (
+          <h3>no selected image</h3>
+        ):(
+          <img src={image} className="avatar_preview"></img>
+        )}
         <form onSubmit={handleCommentSubmit}>
-          {allImages && (
-            <div className="padder">
-           {allImages.map((image,index) => (
-  <div key={index}>
-    <img src={image} alt="image" className="pfp" onClick={() => setImage({image})} />
-  </div>
-))  
-}
-            </div>
-          )}
           <input
             type="text"
             placeholder="content"
             className="commentContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
+          {showImages ? (
+                <>
+                <button onClick={() => setShowImages(false)}>
+                  X
+                </button>
+                <ImageSelector images={allImages} func={setImage}/>
+                </>
+              ):(
+            
+                <button className="" onClick={() => setShowImages(true)}>
+                  Select Image
+                </button>
+              )}
           <button type="submit" className="commentCreationButton">
             submit
           </button>
@@ -150,6 +164,7 @@ function MakePost({userImages}) {
   const [showImages, setShowImages] = useState(false);
   //const router = useRouter();
   const [router, setRouter] = useState(useRouter())
+  console.log(allImage, "lsuadhoashd")
 
 /*   useEffect( ()  =>  {
 //    async () => {
@@ -179,7 +194,7 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
       return;
     }
     console.log("success");
-    //location.reload('/')
+    location.reload('/')
   };
 
   
@@ -215,7 +230,7 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
     setAllowed(oldArray => oldArray.filter(allowed_users => allowed_users !== e.target.value))
   }
   }
-  console.log(allowed_users)
+ 
   return (
     <>
       <div className="makePost">
@@ -224,7 +239,8 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
         ):(
           <img src={image} className="avatar_preview"></img>
         )}
-        <form>
+        <form 
+        onSubmit={handleSubmit}>
           <input
             className="titleCreation"
             type="text"
@@ -416,7 +432,7 @@ function PublicPosts({ posts }) {
 
             <div className="postTitle">{post.title}</div>
             <div className="postContent">{post.content}
-            {post.image !== null && post.image !== "http://localhost:8080/images/default.jpeg" && <img src={post.image} alt="image" className="postImage" />
+            {post.image !== null && post.image !== "http://localhost:8080/images/default.jpeg" && post.image !== "" && <img src={post.image} alt="image" className="postImage" />
             }
             </div>
             <ToggleComments post_id={post.post_id}></ToggleComments>
