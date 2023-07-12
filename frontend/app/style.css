@@ -424,6 +424,7 @@ body {
   display: flex;
   margin: 1vh;
   margin-top: 0;
+  justify-items: center;
 }
 
 .folow {
@@ -471,7 +472,7 @@ body {
 .postContentCreation {
   width: 90%;
   max-width: 80vh;
-  height: 15vh;
+  height: 10vh;
   box-sizing: border-box;
   border-radius: 2px;
   background-color: #f8f8f8;

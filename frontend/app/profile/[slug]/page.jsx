@@ -125,8 +125,7 @@ function GetProfile(slug) {
       <div className="Profile">
         <div className="organiser">
         <img className="avatar_preview" src={stuff.avatar}/>
-          <div className="passport">
-        </div>
+       
             
           </div>
           <div className="docu">
@@ -139,8 +138,7 @@ function GetProfile(slug) {
             <p> {stuff.privacy}</p>
             
           </div>
-      </div>
-
+       </div>
       <div>
             <div className="folow">
               <h2>Followers</h2>
