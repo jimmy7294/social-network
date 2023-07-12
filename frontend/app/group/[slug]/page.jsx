@@ -1,15 +1,16 @@
 "use client";
 
-import  { useState, useEffect, use } from "react";
+
 import Headers from "../../components/Header";
 import { useRouter } from "next/navigation";
 import GetYourImages from "../../components/GetYourImages";
 import encodeImageFile from "../../components/encodeImage";
 import { usePathname } from "next/navigation";
+//import getGroupPageData from "@/app/components/test";
+import  { useState, useEffect, use } from "react";
 
 
 async function getGroupPageData(slug) {
-
     console.log("slug",slug)
     if (slug === undefined) return "not_a_member"
     const groupname = decodeURIComponent(slug.params.slug)
@@ -26,41 +27,37 @@ async function getGroupPageData(slug) {
         return data
     }
     return "not_a_member"
-/*         .then((data) => {
-         if (data.status === "success"){
-            setGroupPosts(data.group_posts)
-            setEvents(data.events)
-            setMembers(data.members)
-            setJoinRequest(data.join_request)
-            setUserType(data.member_type)
-            console.log(data)
-         } else {
-            setUserType("not_a_member")
-         }
-        }) */
 }
+
+//const promisdata2 = getGroupPageData()
+
+
 //const promisdata = GroupPage()
 export default function GroupPage(slug){
+    
     const [isMember, setIsMember] = useState(false)
-    const promisdata1 = ChatBox(slug)
-    const promisdata2 = getGroupPageData(slug)
-    const chat = use(promisdata1)
-    const groupPageData = use(promisdata2)
-    //const chat = await ChatBox(slug)
-    //const chat = use(promisdata)
-    //const groupPageData = await getGroupPageData(slug)
-    //console.log(chat)
+    const [chat, setChat] = useState()
+    const [groupPageData, setGroupPageData] = useState("not_a_member")
+
     useEffect(() => {
-        if (groupPageData !== "not_a_member") {
-          setIsMember(true);
-        }
+        (async () => {
+            const c = await ChatBox(slug)
+            setChat(c)
+            const g = await getGroupPageData(slug)
+            setGroupPageData(g)
+            if (g !== "not_a_member") {
+                console.log("should be true")
+                setIsMember(true);
+              }
+          })()
       }, []);
+      console.log("render main file")
         return(
             <>
             { isMember ? (
                 <>
                 <Headers />
-                {/* <MakeGroupPost slug={slug}/> */}
+                <MakeGroupPost slug={slug}/>
                 <RenderGroup data={groupPageData} slug={slug}/>
                 <RenderChatBox message={chat} slug={slug}/>
                 </>
@@ -78,6 +75,7 @@ export default function GroupPage(slug){
 }
 
 function RenderGroup(props) {
+
     const data = props.data
     const slug = props.slug
     console.log("render group slug", slug)
@@ -231,6 +229,7 @@ function RenderGroup(props) {
 }
 
 function RenderChatBox({message}) {
+
     console.log("render chat box", message)
     const [messages, setMessages] = useState([])
     useEffect(() => {
@@ -322,6 +321,7 @@ function RenderChatBox({message}) {
  */
 
 function MakeGroupPost(props) {
+
     const slug = props.slug
     const group_name = decodeURIComponent(slug.params.slug)
     const type = "group_post"
