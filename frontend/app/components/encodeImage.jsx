@@ -2,11 +2,9 @@
 
 function encodeImageFile(element) {
 
+let file = element.target.image.files[0]
 
-
-  if (element === undefined) return;
-console.log(element, "encodeImageFile")
-  let file = element.files[0];
+if (file === undefined) return;
   let reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onloadend = function () {

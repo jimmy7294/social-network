@@ -276,9 +276,9 @@ console.log(image, {type,privacy,allowed_users,image,content,title})
           </button>
         </form>
         <div className="imagePoster">
-            <form onSubmit={() => {router.push("/")}}>
-            <input type="file" id="image" name="image" onChange={e => encodeImageFile(e.target)} ></input>
-            <button type="submit" className="text">Add Image</button>
+            <form onSubmit={encodeImageFile}>
+            <input type="file" id="image" name="image"></input>
+            <button type="submit" className="text">AddImage</button>
             </form>
             {showImages ? (
                 <>
