@@ -11,6 +11,21 @@ import  { useState, useEffect, use } from "react";
 import ImageSelector from "@/app/components/imageSelector";
 
 
+function AddOptionRow(){
+    return(
+        <>
+        <div>
+        <input
+                    type="date"
+                    className="mt-2"
+                    placeholder="event date"
+                    onChange={(e) => setEvent_Date(e.target.value)}
+                />
+        </div>
+        </>
+    )
+}
+
 async function getGroupPageData(slug) {
     console.log("slug",slug)
     if (slug === undefined) return "not_a_member"
@@ -447,15 +462,9 @@ function MakeEvent({slug}) {
     const [title, setEventTitle] = useState("");
     const [content, setContent] = useState("");
     const [event_date, setEvent_Date] = useState("");
-    const [options, setOptions] = useState([]);
-    const [optionone, setOptionOne] = useState("");
-    const [optiontwo, setOptionTwo] = useState("");
    
     const handleSubmit = async (e) => {
-        preventDefault(e);
-        options.push(optionone);
-        options.push(optiontwo);
-        console.log(options)
+        e.preventDefault();
         console.log(group_name)
          fetch("http://localhost:8080/api/addEvent",{
             method: "POST",
@@ -463,21 +472,26 @@ function MakeEvent({slug}) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ group_name, title, content, event_date, options }),
+            body: JSON.stringify({ group_name, title, content, event_date }),
         })
         .then((data) => data.json())
         .then((data) => {
             if (data.status !== "success") {
                 console.log("failed to add event", data);
+                return
             }
             console.log(data);
-            setOptions([]); 
+           
         });
+        location.reload();
     };
     return (
         <>
         <div className="signin-window">
-            <form onSubmit={handleSubmit}>
+            <form
+            onSubmit={handleSubmit}
+            >
+                
                 <input
                     type="text"
                     placeholder="event title"
@@ -496,19 +510,9 @@ function MakeEvent({slug}) {
                     placeholder="event date"
                     onChange={(e) => setEvent_Date(e.target.value)}
                 />
-                <input
-                    type="text"
-                    className="mt-2"
-                    placeholder="event options"
-                    onChange={(e) => setOptionOne(e.target.value)}
-                />
-                <input
-                    type="text"
-                    className="mt-2"
-                    placeholder="event options"
-                    onChange={(e) => setOptionTwo(e.target.value)}
-                />
-                <button type="submit">submit</button>
+           
+                
+                <button type="submit" >submit</button>
             </form>
         </div>
         </>
