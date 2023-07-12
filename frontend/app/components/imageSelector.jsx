@@ -15,7 +15,7 @@ function ImageSelector(props) {
             )}
 
             {images.user_images ? (
-                    images.stockimages.map((image,index) => (
+                    images.user_images.map((image,index) => (
                         <div key={index}>
                             <img src={image} alt="image" className="pfp" onClick={() => updateSelectedImage(image)} />
                         </div>))
