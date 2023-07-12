@@ -94,6 +94,10 @@ const [allImages, setAllImages] = useState([]);
             submit
           </button>
         </form>
+        <form onSubmit={encodeImageFile}>
+            <input type="file" id="image" name="image"></input>
+            <button type="submit" className="text">AddImage</button>
+            </form>
       </div>
     </>
   );

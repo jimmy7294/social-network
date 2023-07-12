@@ -697,14 +697,15 @@ function RequestToJoin(slug){
 
 
 function MakeComment(post_id){
-    const [allImages, setAllImages] = useState([])
-    const [image, setImage] = useState("")
+    const [image, setImage] = useState("");
+    const [allImage, setAllImage] = useState([]);
+    const [showImages, setShowImages] = useState(false);
     const [content, setContent] = useState("");
   
     useEffect(() => {
       (async () => {
         const images = await GetYourImages()
-        setAllImages(images.user_images)
+        setAllImage(images)
       })()
     }, [])
   
@@ -731,17 +732,13 @@ function MakeComment(post_id){
     return (
       <>
         <div className="makeComment">
+        {image === "" ? (
+          <h3>no selected image</h3>
+        ):(
+          <img src={image} className="avatar_preview"></img>
+        )}
+      
           <form onSubmit={handleCommentSubmit}>
-            {allImages && (
-              <div className="padder">
-             {allImages.map((image,index) => (
-    <div key={index}>
-      <img src={image} alt="image" className="pfp" onClick={() => setImage({image})} />
-    </div>
-  ))  
-  }
-              </div>
-            )}
             <input
               type="text"
               placeholder="content"
@@ -752,6 +749,23 @@ function MakeComment(post_id){
               submit
             </button>
           </form>
+          {showImages ? (
+                <>
+                <button onClick={() => setShowImages(false)}>
+                  X
+                </button>
+                <ImageSelector images={allImage} func={setImage}/>
+                </>
+              ):(
+            
+                <button className="" onClick={() => setShowImages(true)}>
+                  Select Image
+                </button>
+              )}
+              <form onSubmit={encodeImageFile}>
+            <input type="file" id="image" name="image"></input>
+            <button type="submit" className="text">AddImage</button>
+            </form>
         </div>
       </>
     );
