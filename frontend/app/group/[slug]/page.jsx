@@ -328,17 +328,21 @@ function RenderChatBox(props) {
             <>
         <div className="messageBox">
               <h1 className="title" >Chat</h1>
+              <div className="chat">
+              <div className="autoScroll">
                 {messages.map((messages, index) => (
                     <div className="messages" key={index}>
-                        <p>{messages.sender}</p>
-                        <p>{messages.content}</p>
-                        <p>{messages.created}</p>
+                        <p className="lineBreak">{messages.sender}</p>
+                        <p className="lineBreak">{messages.content}</p>
+                        <p className="lineBreak">{messages.created}</p>
                     </div>
                 
                 ))}
+                </div>
+                </div>
             <div className="chatBox">
                 <form onSubmit={handleSubmit}>
-                    <input type="text" id="chat" name="chat" placeholder="message"/>
+                    <textarea type="text" id="chat" name="chat" className="postContentCreation" placeholder="message"/>
                     <button type="submit">send</button>
                 </form>
             </div>

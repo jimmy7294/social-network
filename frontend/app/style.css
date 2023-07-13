@@ -80,8 +80,14 @@
   margin-top: 30px;
 }
 
+.notifT {
+  display: block;
+}
+
 .notifText {
+  position: absolute;
   float: left;
+  width: max-content;
   margin-left: 25px;
   margin-top: -1.5px;
 }
@@ -571,14 +577,39 @@ body {
 }
 
 .messages {
-  border: solid #4faa92 1px;
-    width: 100%;
-    padding-left: 0.5vh;
+  border: dotted #4faa92 1px;
+    width: 98%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+    margin-top: 1%;
+    max-width: 98%;
+    
+}
+
+.lineBreak {
+  margin-left: 0.5%;
+}
+
+.autoScroll {
+  display: flex;
+  flex-direction: column;
+  
 }
 
 .messageBox {
-  width: 50%;
+  width: 100%;
   display: grid;
   justify-items: center;
+  max-width: 100%;
+}
 
+.chat {
+  width: 50%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  scroll-behavior: smooth;
+  height: 700px;
+  border: solid #4faa92 2px;
 }

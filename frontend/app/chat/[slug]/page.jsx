@@ -16,7 +16,7 @@ function currentChat(slug){
 function SendMessage(reciver){
     return(
         <>
-        <input type="text" placeholder="message" />
+        <textarea className="postContentCreation" type="text" placeholder="message" />
         <button type="submit">Send</button>
         </>
     )
@@ -27,6 +27,7 @@ export function PrintNewMessage(msg){
         <>
         <h1>{msg.sender}</h1>
         <h1>{msg.content}</h1>
+        
         </>
     )
 }
@@ -64,7 +65,7 @@ function GetMessages(slug){
                 <div className="chatpage__messages">
                     {messages.map((message,index) => (
                         <div key={index} className="chatpage__message">
-                        <h1>{message.sender}</h1>
+                        <p>folow</p>
                         <h1>{message.content}</h1>
                         </div>
                     ))}

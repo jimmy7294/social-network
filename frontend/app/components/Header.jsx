@@ -109,7 +109,7 @@ newWS.onmessage = (msg) => {
 
     return (
       <>
-      {notification == true && <a  href="/profile" className="notification"><p>{number}</p> <p className="notifText">NOTIFICATION</p></a>
+      {notification == true && <a  href="/profile" className="notification"><p className="notifText">{number} NOTIFICATION</p></a>
       }
       </>
     );
