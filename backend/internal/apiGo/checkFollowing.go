@@ -13,17 +13,13 @@ type isFollowing struct {
 	Status    string `json:"status"`
 }
 
-func checkDBIfFollowing(uuid int, email string) bool {
+func checkDBIfFollowing(yourId, theirId int) bool {
 	sqlStmt := `SELECT followers.uuid
 	FROM followers
-	WHERE followers.follower_id = ? AND followers.uuid IN (
-		SELECT uuid
-		FROM users
-		WHERE email = ?
-	);`
+	WHERE followers.follower_id = ? AND followers.uuid = ?;`
 	var lole int
 
-	err := data.DB.QueryRow(sqlStmt, uuid, email).Scan(&lole)
+	err := data.DB.QueryRow(sqlStmt, yourId, theirId).Scan(&lole)
 
 	return err == nil
 }
@@ -43,7 +39,12 @@ func CheckFollowing(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			helper.WriteResponse(w, "decoding_error")
 		}
-		followInfo.Following = checkDBIfFollowing(uuid, email)
+		theirId, err := helper.GetuuidFromEmailOrUsername(email)
+		if err != nil {
+			helper.WriteResponse(w, "user_does_not_exist")
+			return
+		}
+		followInfo.Following = checkDBIfFollowing(uuid, theirId)
 		followInfo.Status = "success"
 
 		followInfoJson, err := json.Marshal(followInfo)

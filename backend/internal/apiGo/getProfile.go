@@ -194,7 +194,7 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "profile_error")
 			return
 		}
-		if (usrProfile.Privacy == "private" && !checkDBIfFollowing(yourId, usrProfile.Email)) && !yourProf {
+		if (usrProfile.Privacy == "private" && !checkDBIfFollowing(yourId, uuid)) && !yourProf {
 			var privProf profilePrivate
 			privProf.Email = usrProfile.Email
 			privProf.Status = "private"

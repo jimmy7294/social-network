@@ -200,12 +200,18 @@ func GetYourPosts(uuid int) error {
 }
 func AddNotificationToDB(content, nType, context string, usr, sender int) error {
 	sqlStmt := `INSERT INTO notifications (notif_content,creation_date,uuid,sender_id,notif_type,notif_context)
-	VALUES(?,?,?,?,?)
+	SELECT ? AS notif_content,
+	? AS creation_date,
+	? AS uuid,
+	? AS sender_id,
+	? AS notif_type,
+	? AS notif_context
 	WHERE NOT EXISTS(
 		SELECT 1 FROM notifications
-		WHERE uuid = ? AND sender_id = ? AND type = ?
+		WHERE uuid = ? AND sender_id = ? AND notif_type = ?
 	);`
-	_, err := data.DB.Exec(sqlStmt, content, time.Now(), usr, sender, nType, context)
+	_, err := data.DB.Exec(sqlStmt, content, time.Now(), usr, sender, nType, context, usr, sender, nType)
+
 	return err
 }
 

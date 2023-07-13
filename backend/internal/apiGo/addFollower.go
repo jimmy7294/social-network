@@ -8,48 +8,40 @@ import (
 	"net/http"
 )
 
-func isPrivate(email string) bool {
+func isPrivate(uuid int) bool {
 	sqlStmt := `SELECT privacy
 	FROM users
-	WHERE email = ?`
+	WHERE uuid = ?`
 	var res string
-	data.DB.QueryRow(sqlStmt, email).Scan(&res)
+	data.DB.QueryRow(sqlStmt, uuid).Scan(&res)
 	return res == "private"
 }
 
-func addFollower(followerId int, email string) error {
+func addFollower(followerId int, followedId int) error {
 
 	sqlStmt, err := data.DB.Prepare(`INSERT INTO followers (uuid,follower_id)
-	SELECT b.uuid,
-	a.uuid
-	FROM users a
-	INNER JOIN users b ON b.email = ?
-	WHERE a.uuid = ?`)
+	VALUES(?,?)`)
 	if err != nil {
 		fmt.Println("AUUUUUGHHH", err)
 		return err
 	}
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(email, followerId)
+	_, err = sqlStmt.Exec(followedId, followerId)
 
 	return err
 }
 
-func removeFollower(followerId int, email string) error {
+func removeFollower(followerId int, followedId int) error {
 	sqlStmt, err := data.DB.Prepare(`DELETE FROM followers
-	WHERE followers.follower_id = ? AND followers.uuid IN (
-		SELECT users.uuid
-		FROM users
-		WHERE email = ?
-	);`)
+	WHERE followers.follower_id = ? AND followers.uuid = ?;`)
 	if err != nil {
 		fmt.Println("gosh darn it", err)
 		return err
 	}
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(followerId, email)
+	_, err = sqlStmt.Exec(followerId, followedId)
 	return err
 }
 
@@ -63,41 +55,51 @@ func AddOrRemoveFollow(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("add/remove follow decoding error", err)
 			fmt.Println(err)
 		}
-		emailExists := helper.CheckIfStringExist("users", "email", email)
-
 		yourID, err := helper.GetIdBySession(w, r)
 		if err != nil {
 			helper.WriteResponse(w, "session_error")
 			return
 		}
-		yourEmail, err := getEmailById(yourID)
-		if err != nil {
-			helper.WriteResponse(w, "session_error")
-			return
+
+		theirId, err := helper.GetuuidFromEmailOrUsername(email)
+		if err != nil || theirId == yourID {
+			helper.WriteResponse(w, "incorrect_email")
 		}
-		if !emailExists || yourEmail == email {
-			fmt.Println("faulty email in add/remove follow")
+		//emailExists := helper.CheckIfStringExist("users", "email", email)
+		//userNameExists := helper.CheckIfStringExist("users", "username", email)
+
+		//yourEmail, err := getEmailById(yourID)
+		//if err != nil {
+		//	helper.WriteResponse(w, "session_error")
+		//	return
+		//}
+		/* 		if (!emailExists && !userNameExists) || yourEmail == email {
+			fmt.Println("faulty email in add/remove follow", emailExists)
 			helper.WriteResponse(w, "incorrect_email")
 			return
-		}
-		alreadyFollowing := checkDBIfFollowing(yourID, email)
+		} */
+		alreadyFollowing := checkDBIfFollowing(yourID, theirId)
 		fmt.Println("to follow / unfollow email", email)
 		fmt.Println("your id", yourID)
-		fmt.Println("your email", yourEmail)
+		//fmt.Println("your email", yourEmail)
 		if alreadyFollowing {
-			err = removeFollower(yourID, email)
+			err = removeFollower(yourID, theirId)
+			fmt.Println("already following")
 		} else {
-			if isPrivate(email) {
+			if isPrivate(theirId) {
 				fmt.Println("private lol")
-				theirId, err := helper.GetuuidByString("email", email)
+				//theirId, err := helper.GetuuidByString("email", email)
+				//if err != nil {
+				//	fmt.Println("tfasbjkasfbljkfablsjkbafjsl")
+				//	helper.WriteResponse(w, "wrong")
+				//	return
+				//}
+				err = helper.AddNotificationToDB("You have a new Follow request!", "follow_request", "", theirId, yourID)
 				if err != nil {
-					fmt.Println("tfasbjkasfbljkfablsjkbafjsl")
-					helper.WriteResponse(w, "wrong")
-					return
+					fmt.Println("addnotif err", err)
 				}
-				helper.AddNotificationToDB("You have a new Follow request!", "follow_request", "", theirId, yourID)
 			} else {
-				err = addFollower(yourID, email)
+				err = addFollower(yourID, theirId)
 			}
 		}
 		if err != nil {
