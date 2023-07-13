@@ -138,6 +138,7 @@ func (c *Client) Read() {
 		//fmt.Printf(`recieved message %v %v`, msg, c.Leave)
 		//fmt.Println()
 		if msg.Type == "group_message" {
+
 			c.GroupMessage <- msg
 		}
 		if msg.Type == "notification" {

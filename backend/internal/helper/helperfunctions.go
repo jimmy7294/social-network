@@ -289,3 +289,5 @@ func CheckIfGroupMember(groupName string, uuid int) (bool, string) {
 
 	return err == nil, res
 }
+
+func AddMessageToDB()
