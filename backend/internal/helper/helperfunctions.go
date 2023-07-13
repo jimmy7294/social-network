@@ -290,4 +290,6 @@ func CheckIfGroupMember(groupName string, uuid int) (bool, string) {
 	return err == nil, res
 }
 
-func AddMessageToDB()
+func AddMessageToDB() {
+	fmt.Println("stuff")
+}
