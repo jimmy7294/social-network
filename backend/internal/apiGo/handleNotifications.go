@@ -277,7 +277,7 @@ func HandleGroupJoinRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isMember, memberType := checkIfGroupMember(notifInfo.GroupName, uuid)
+	isMember, memberType := helper.CheckIfGroupMember(notifInfo.GroupName, uuid)
 	if !isMember || memberType != "creator" {
 		helper.WriteResponse(w, "not_group_creator")
 		return

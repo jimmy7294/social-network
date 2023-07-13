@@ -26,6 +26,22 @@ function AddOptionRow(){
     )
 }
 
+async function addMemberToGroupChat(slug) {
+    if (slug === undefined) return "not_yet"
+    const groupName = decodeURIComponent(slug.params.slug)
+
+    const json = await fetch("http://localhost:8080/api/addGroupMemberToChat", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+            },  
+            body: JSON.stringify(groupName),
+        })
+    const data = await json.json()
+    return data.status
+}
+
 async function getGroupPageData(slug) {
     console.log("slug",slug)
     if (slug === undefined) return "not_a_member"
@@ -61,6 +77,14 @@ export default function GroupPage(slug){
 
     useEffect(() => {
         (async () => {
+            const m = await addMemberToGroupChat(slug)
+            if (m !== "success") {
+                if (m === "group_does_not_exist") {
+                    setGroupExists(false)
+                    return
+                }
+
+            }
             const c = await ChatBox(slug)
             setChat(c)
             const g = await getGroupPageData(slug)

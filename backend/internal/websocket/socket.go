@@ -23,6 +23,7 @@ var AllClients = make(map[int]*Client)
 var AllGroupChats = make(map[string]map[int]bool)
 
 type Client struct {
+	Session      string
 	Username     string
 	Uuid         int
 	Socket       *websocket.Conn
@@ -31,9 +32,10 @@ type Client struct {
 	GroupMessage chan data.UserMessage
 }
 
-func NewClient(conn *websocket.Conn, username string, userId int) *Client {
+func NewClient(conn *websocket.Conn, username string, userId int, session string) *Client {
 
 	return &Client{
+		Session:      session,
 		Username:     username,
 		Uuid:         userId,
 		Socket:       conn,
@@ -49,7 +51,11 @@ func AddGroupChatUser(groupName string, userId int) error {
 			delete(AllGroupChats[group], userId)
 		}
 	}
+	if _, ok := AllGroupChats[groupName]; !ok {
+		AllGroupChats[groupName] = make(map[int]bool)
+	}
 	AllGroupChats[groupName][userId] = true
+	fmt.Println("new group member in chat", AllGroupChats[groupName])
 	return nil
 }
 
@@ -178,6 +184,17 @@ func FindAndSend(msg data.UserMessage) {
 
 func FindAndSendToGroup(msg data.UserMessage) {
 
+	if _, ok := AllGroupChats[msg.Receiver]; ok {
+		for memberId := range AllGroupChats[msg.Receiver] {
+			if _, ok := AllClients[memberId]; ok {
+				if err := AllClients[memberId].Socket.WriteJSON(msg); err != nil {
+					AllClients[memberId].Socket.Close()
+				}
+			} else {
+				delete(AllGroupChats[msg.Receiver], memberId)
+			}
+		}
+	}
 }
 
 func (c *Client) UpdateClient() {
@@ -193,10 +210,11 @@ func (c *Client) UpdateClient() {
 			delete(AllClients, c.Uuid)
 			//updateUserlist()
 			//fmt.Printf("current userlist again: %v", AllClients)
+			fmt.Println("current groupchat list after closing socket", AllGroupChats)
 		case msg := <-c.GroupMessage:
 			fmt.Println("new message", msg)
-			//FindAndSend(msg)
-			c.Write(msg)
+			FindAndSendToGroup(msg)
+			//c.Write(msg)
 		}
 	}
 }
@@ -240,7 +258,12 @@ func WsEndpoint(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err, "error with upgrader")
 		return
 	}
-	c := NewClient(ws, session.Value, userID)
+	username, err := helper.GetUsernameBySession(session.Value)
+	if err != nil {
+		fmt.Println("socket name error", err)
+		return
+	}
+	c := NewClient(ws, username, userID, session.Value)
 	go c.UpdateClient()
 	c.Join <- true
 	go c.Read()

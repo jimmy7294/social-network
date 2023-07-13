@@ -80,9 +80,11 @@ func PostApi(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		var pData post
 		err := json.NewDecoder(r.Body).Decode(&pData)
-		fmt.Println("post data", pData)
+		//fmt.Println("post data", pData)
 		if err != nil {
+			helper.WriteResponse(w, "decoding_error")
 			fmt.Println(err)
+			return
 		}
 		uuid, err := helper.GetIdBySession(w, r)
 		if err != nil {
@@ -109,7 +111,7 @@ func PostApi(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		} else if pData.Type == "group_post" {
-			isMember, _ := checkIfGroupMember(pData.GroupName, uuid)
+			isMember, _ := helper.CheckIfGroupMember(pData.GroupName, uuid)
 			if !isMember {
 				helper.WriteResponse(w, "not_a_member")
 				return

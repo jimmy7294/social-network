@@ -90,7 +90,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		isGroupMember, _ := checkIfGroupMember(commentData.GroupName, uuid)
+		isGroupMember, _ := helper.CheckIfGroupMember(commentData.GroupName, uuid)
 		if !isGroupMember {
 			helper.WriteResponse(w, "not_a_member")
 			return

@@ -82,7 +82,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isMember, _ := checkIfGroupMember(eventData.GroupName, uuid)
+	isMember, _ := helper.CheckIfGroupMember(eventData.GroupName, uuid)
 	if !isMember {
 		fmt.Println("not a member error", eventData.GroupName, uuid)
 		helper.WriteResponse(w, "not_a_member")

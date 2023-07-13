@@ -102,7 +102,7 @@ func SendGroupJoinRequestNotification(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isMember, _ := checkIfGroupMember(notifInfo.GroupName, uuid)
+	isMember, _ := helper.CheckIfGroupMember(notifInfo.GroupName, uuid)
 	if isMember {
 		helper.WriteResponse(w, "already_a_member")
 		return
@@ -146,7 +146,7 @@ func SendGroupInviteNotification(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isMember, _ := checkIfGroupMember(notifInfo.GroupName, uuid)
+	isMember, _ := helper.CheckIfGroupMember(notifInfo.GroupName, uuid)
 	if !isMember {
 		helper.WriteResponse(w, "not_a_member")
 		return

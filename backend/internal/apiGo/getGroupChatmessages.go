@@ -77,7 +77,7 @@ func GetGroupChatMessages(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		isMember, _ := checkIfGroupMember(groupName, uuid)
+		isMember, _ := helper.CheckIfGroupMember(groupName, uuid)
 		if !isMember {
 			helper.WriteResponse(w, "not_a_member")
 			fmt.Println("not a member groupchat", groupName, uuid)

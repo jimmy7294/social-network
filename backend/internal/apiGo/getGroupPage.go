@@ -264,22 +264,6 @@ func gatherGroupPosts(groupName string) ([]posts, error) {
 	return allGroupPosts, err
 }
 
-func checkIfGroupMember(groupName string, uuid int) (bool, string) {
-	sqlStmt := `SELECT group_id,
-	role
-	FROM groupMembers
-	WHERE groupMembers.uuid = ? AND group_id IN (
-		SELECT groups.group_id
-		FROM groups
-		WHERE groups.group_name = ?
-	)`
-	var res string
-	var dummy int
-	err := data.DB.QueryRow(sqlStmt, uuid, groupName).Scan(&dummy, &res)
-
-	return err == nil, res
-}
-
 func GetGroupPage(w http.ResponseWriter, r *http.Request) {
 	helper.EnableCors(&w)
 
@@ -303,7 +287,7 @@ func GetGroupPage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		isMember, memberType := checkIfGroupMember(groupName, uuid)
+		isMember, memberType := helper.CheckIfGroupMember(groupName, uuid)
 		if !isMember {
 			helper.WriteResponse(w, "not_a_member")
 			fmt.Println("not a member group page", groupName, uuid)

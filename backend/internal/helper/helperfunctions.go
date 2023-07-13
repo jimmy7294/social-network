@@ -258,7 +258,7 @@ func CheckSessionExist(session_token string) bool {
 func GetUsernameBySession(session string) (string, error) {
 	sqlString := `SELECT COALESCE(username,email)
 	FROM users
-	WHERE session_id = ?`
+	WHERE session_token = ?`
 
 	var username string
 
@@ -272,4 +272,20 @@ func GetUsernameBySession(session string) (string, error) {
 	err = sqlStmt.QueryRow(session).Scan(&username)
 
 	return username, err
+}
+
+func CheckIfGroupMember(groupName string, uuid int) (bool, string) {
+	sqlStmt := `SELECT group_id,
+	role
+	FROM groupMembers
+	WHERE groupMembers.uuid = ? AND group_id IN (
+		SELECT groups.group_id
+		FROM groups
+		WHERE groups.group_name = ?
+	)`
+	var res string
+	var dummy int
+	err := data.DB.QueryRow(sqlStmt, uuid, groupName).Scan(&dummy, &res)
+
+	return err == nil, res
 }
