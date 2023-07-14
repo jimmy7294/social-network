@@ -23,25 +23,29 @@ var AllClients = make(map[int]*Client)
 var AllGroupChats = make(map[string]map[int]bool)
 
 type Client struct {
-	Session      string
-	Username     string
-	Uuid         int
-	Socket       *websocket.Conn
-	Join         chan bool
-	Leave        chan bool
-	GroupMessage chan data.UserMessage
+	Session        string
+	Username       string
+	Uuid           int
+	Socket         *websocket.Conn
+	Join           chan bool
+	Leave          chan bool
+	GroupMessage   chan data.UserMessage
+	PrivateMessage chan data.UserMessage
+	Notification   chan data.UserMessage
 }
 
 func NewClient(conn *websocket.Conn, username string, userId int, session string) *Client {
 
 	return &Client{
-		Session:      session,
-		Username:     username,
-		Uuid:         userId,
-		Socket:       conn,
-		Join:         make(chan bool),
-		Leave:        make(chan bool),
-		GroupMessage: make(chan data.UserMessage),
+		Session:        session,
+		Username:       username,
+		Uuid:           userId,
+		Socket:         conn,
+		Join:           make(chan bool),
+		Leave:          make(chan bool),
+		GroupMessage:   make(chan data.UserMessage),
+		PrivateMessage: make(chan data.UserMessage),
+		Notification:   make(chan data.UserMessage),
 	}
 }
 
@@ -138,14 +142,22 @@ func (c *Client) Read() {
 		//fmt.Printf(`recieved message %v %v`, msg, c.Leave)
 		//fmt.Println()
 		if msg.Type == "group_message" {
-
+			err = helper.AddGroupMessageToDB(msg)
+			if err != nil {
+				return
+			}
 			c.GroupMessage <- msg
 		}
-		if msg.Type == "notification" {
-
-		}
+		/* 		if msg.Type == "notification" {
+			err = helper.AddNotificationToDB(msg.Content, msg.Type, msg.Content, msg)
+			//helper.AddNotificationToDB()
+		} */
 		if msg.Type == "private_message" {
-
+			err = helper.AddPrivateMessageToDB(msg)
+			if err != nil {
+				return
+			}
+			c.PrivateMessage <- msg
 		}
 		//c.GroupMessage <- msg
 	}
@@ -215,7 +227,11 @@ func (c *Client) UpdateClient() {
 		case msg := <-c.GroupMessage:
 			fmt.Println("new message", msg)
 			FindAndSendToGroup(msg)
-			//c.Write(msg)
+		case msg := <-c.PrivateMessage:
+			FindAndSend(msg)
+			c.Write(msg)
+		case msg := <-c.Notification:
+			FindAndSend(msg)
 		}
 	}
 }

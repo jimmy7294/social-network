@@ -3,6 +3,7 @@ package apiGO
 import (
 	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
+	socket "backend/backend/internal/websocket"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -17,7 +18,7 @@ type groupNotification struct {
 
 func addGroupJoinNotifToDB(groupName string, yourId int) error {
 	sqlString := `INSERT INTO notifications(notif_content,creation_date,uuid,sender_id,notif_type,notif_context)
-	SELECT 'A user would like to join your group' AS notif_content,
+	SELECT 'A user would like to join your group!' AS notif_content,
 	? AS creaton_date,
 	groups.group_creator AS a,
 	? AS b,
@@ -111,6 +112,17 @@ func SendGroupJoinRequestNotification(w http.ResponseWriter, r *http.Request) {
 	err = addGroupJoinNotifToDB(notifInfo.GroupName, uuid)
 	if err != nil {
 		helper.WriteResponse(w, "database_error")
+		return
+	}
+	receiverId, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
+	if err != nil {
+		helper.WriteResponse(w, "group_leader_died_i_guess")
+		return
+	}
+	err = socket.SendNotificationToAUser(uuid, receiverId, "A user would like to join your group!", notifInfo.GroupName, "group_join_request")
+	if err != nil {
+		helper.WriteResponse(w, "database_lock_i_guess?")
+		return
 	}
 
 	helper.WriteResponse(w, "success")
@@ -155,6 +167,16 @@ func SendGroupInviteNotification(w http.ResponseWriter, r *http.Request) {
 	err = addGroupInviteNotifToDB(notifInfo.GroupName, notifInfo.Receiver, uuid)
 	if err != nil {
 		helper.WriteResponse(w, "database_error")
+		return
+	}
+	receiverID, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
+	if err != nil {
+		helper.WriteResponse(w, "database_error")
+		return
+	}
+	err = socket.SendNotificationToAUser(uuid, receiverID, "You have received a new Group invitation", notifInfo.GroupName, "group_invite")
+	if err != nil {
+		helper.WriteResponse(w, "database_lock_i_guess?")
 		return
 	}
 

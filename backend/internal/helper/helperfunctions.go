@@ -296,6 +296,52 @@ func CheckIfGroupMember(groupName string, uuid int) (bool, string) {
 	return err == nil, res
 }
 
-func AddMessageToDB() {
-	fmt.Println("stuff")
+func AddGroupMessageToDB(msg data.UserMessage) error {
+	//fmt.Println("stuff")
+	sqlString := `INSERT INTO groupChat (group_id,gc_sender,gc_content,gc_image,creation_date)
+	SELECT groups.group_id AS group_id,
+	users.uuid AS gc_sender,
+	? AS gc_content,
+	? AS gc_image,
+	? AS creation_date
+	FROM groups
+	JOIN users
+	ON users.username = ? OR users.email = ?
+	WHERE group_name = ?`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(msg.Content, msg.Image, time.Now(), msg.Sender, msg.Sender, msg.Receiver)
+
+	return err
+}
+
+func AddPrivateMessageToDB(msg data.UserMessage) error {
+
+	sqlString := `INSERT INTO privateMessages (pmg_sender,pmg_receiver,pmg_content,pmg_image,creation_date)
+	SELECT a.uuid,
+	b.uuid,
+	? AS pmg_content,
+	? AS pmg_image,
+	? AS creation_date
+	FROM users AS a
+	JOIN users AS b
+	ON b.email = ? OR b.username = ?
+	WHERE a.email = ? OR a.username = ?`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(msg.Content, msg.Image, time.Now(), msg.Receiver, msg.Receiver, msg.Sender, msg.Sender)
+
+	return err
 }

@@ -3,6 +3,7 @@ package apiGO
 import (
 	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
+	socket "backend/backend/internal/websocket"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -98,6 +99,7 @@ func AddOrRemoveFollow(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 					fmt.Println("addnotif err", err)
 				}
+				socket.SendNotificationToAUser(yourID, theirId, "You have a new Follow request", "", "follow_request")
 			} else {
 				err = addFollower(yourID, theirId)
 			}

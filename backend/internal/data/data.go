@@ -18,4 +18,5 @@ type UserMessage struct {
 	Image    string    `json:"image"`
 	Content  string    `json:"content"`
 	Type     string    `json:"type"`
+	Context  string    `json:"context"`
 }
