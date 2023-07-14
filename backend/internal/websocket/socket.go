@@ -216,7 +216,7 @@ func (c *Client) UpdateClient() {
 		case <-c.Join:
 			//fmt.Println("user joined")
 			AddClient(c)
-			updateUserlist()
+			//updateUserlist()
 		case <-c.Leave:
 			//fmt.Println("user disconnected")
 			deleteUserFromAllGroups(c.Uuid)
