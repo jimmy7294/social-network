@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { useCookies } from "react-cookie";
+//import { useCookies } from "react-cookie";
 import Headers from "../components/Header";
 import encodeImageFile from "../components/encodeImage";
 import GetYourImages from "../components/GetYourImages";
