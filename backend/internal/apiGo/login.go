@@ -50,9 +50,18 @@ type loginData struct {
 }
 
 func checkLoginDetails(email, password string) (bool, int) {
-	sqlStmt := "SELECT uuid FROM users WHERE email = ? AND password = ?;"
+	sqlString := "SELECT uuid FROM users WHERE email = ? AND password = ?;"
 	var dum int
-	err := data.DB.QueryRow(sqlStmt, email, password).Scan(&dum)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return false, dum
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(email, password).Scan(&dum)
+
 	return err == nil, dum
 }
 

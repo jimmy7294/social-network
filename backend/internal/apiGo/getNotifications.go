@@ -43,6 +43,7 @@ func getAllNotificationsFromDB(uuid int) ([]notification, error) {
 	if err != nil {
 		return allNotifications, err
 	}
+
 	defer sqlStmt.Close()
 
 	rows, err := sqlStmt.Query(uuid, uuid)

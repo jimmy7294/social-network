@@ -10,13 +10,24 @@ import (
 )
 
 func getStockImages() ([]string, error) {
-	sqlStmt := `SELECT image_path FROM stockImages`
-	rows, err := data.DB.Query(sqlStmt)
+	sqlString := `SELECT image_path FROM stockImages`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return []string{}, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query()
 	var imgPaths []string
 	if err != nil {
 		fmt.Println("query error", err)
 		return imgPaths, err
 	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var imgPath string
 		err = rows.Scan(&imgPath)
@@ -30,12 +41,24 @@ func getStockImages() ([]string, error) {
 
 func getUserImages(uuid int) ([]string, error) {
 	var imgPaths []string
-	sqlStmt := `SELECT image_path FROM userImages WHERE uuid = ?`
-	rows, err := data.DB.Query(sqlStmt, uuid)
+
+	sqlString := `SELECT image_path FROM userImages WHERE uuid = ?`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return imgPaths, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(uuid)
 	if err != nil {
 		fmt.Println("query error usrImg", err)
 		return imgPaths, err
 	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var imgPath string
 		err = rows.Scan(&imgPath)

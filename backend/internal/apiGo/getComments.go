@@ -68,7 +68,7 @@ func gatherGroupCommentsFromDB(postId int, groupName string) (comments, error) {
 
 func gatherCommentsFromDB(postId int) (comments, error) {
 	var commentsData comments
-	sqlStmt := `SELECT COALESCE(users.username, users.email),
+	sqlString := `SELECT COALESCE(users.username, users.email),
 	comment_content,
 	IFNULL(comment_image, 'http://localhost:8080/images/default.jpeg'),
 	creation_date
@@ -77,10 +77,20 @@ func gatherCommentsFromDB(postId int) (comments, error) {
 	ON comment_author = users.uuid
 	WHERE post_id = ?`
 
-	rows, err := data.DB.Query(sqlStmt, postId)
+	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
 		return commentsData, err
 	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(postId)
+	if err != nil {
+		return commentsData, err
+	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var cData comment
 		err = rows.Scan(&cData.Author, &cData.Content, &cData.Image, &cData.Created)

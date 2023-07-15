@@ -43,7 +43,7 @@ func sendNotificationToAllGroupMembers(groupName string, yourId int) error {
 }
 
 func addEventToDB(event createEvent) error {
-	sqlStmt := `INSERT INTO events(group_id,event_author,event_title,event_content,creation_date,event_date,options)
+	sqlString := `INSERT INTO events(group_id,event_author,event_title,event_content,creation_date,event_date,options)
 	SELECT groups.group_id,
 	? AS event_author,
 	? AS event_title,
@@ -54,12 +54,18 @@ func addEventToDB(event createEvent) error {
 	FROM groups
 	WHERE group_name = ?`
 
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+	defer sqlStmt.Close()
+
 	optionsJoined := strings.Join(event.Options, data.SEPERATOR)
 	eDate, err := time.Parse("2006-01-02", event.EventDate)
 	if err != nil {
 		return err
 	}
-	_, err = data.DB.Exec(sqlStmt, event.Author, event.Title, event.Content, time.Now(), eDate, optionsJoined, event.GroupName)
+	_, err = sqlStmt.Exec(event.Author, event.Title, event.Content, time.Now(), eDate, optionsJoined, event.GroupName)
 
 	return err
 }

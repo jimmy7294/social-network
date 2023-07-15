@@ -66,23 +66,40 @@ func GetIdBySession(w http.ResponseWriter, r *http.Request) (int, error) {
 		fmt.Println("haaaa?", err)
 		return -1, err
 	}
-	sqlStmt := "SELECT uuid FROM users WHERE session_token = ?;"
+
 	var uid int
 
-	err = data.DB.QueryRow(sqlStmt, sessionToken.Value).Scan(&uid)
+	sqlString := "SELECT uuid FROM users WHERE session_token = ?;"
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return uid, err
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(sessionToken.Value).Scan(&uid)
 	if err != nil {
 		return -1, err
 	}
+
 	return uid, nil
 }
 
 // checks if a string in a table exists
 // pretty self-explanatory shit son
 func CheckIfStringExist(table, column, tableData string) bool {
-	sqlStmt := "SELECT " + column + " FROM " + table + " WHERE " + column + " = ?;"
+	sqlString := "SELECT " + column + " FROM " + table + " WHERE " + column + " = ?;"
 	var dummy string
 
-	err := data.DB.QueryRow(sqlStmt, tableData).Scan(&dummy)
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return false
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(tableData).Scan(&dummy)
 
 	return err == nil
 }
@@ -93,23 +110,27 @@ func GetUsername(uuid int) (string, error) {
 	sqlString := `SELECT COALESCE(username,email)
 	FROM users
 	WHERE uuid = ?`
+
 	var username string
+
 	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
 		return "", err
 	}
+
 	defer sqlStmt.Close()
 
 	err = sqlStmt.QueryRow(uuid).Scan(&username)
 	if err != nil {
 		return "", err
 	}
+
 	return username, err
 }
 
 // complete fucking shitshow personified that i'm only keeping around because it amuses me
 func GetFollowing(uuid int) ([]string, error) {
-	sqlStmt := `SELECT followers.uuid,
+	sqlString := `SELECT followers.uuid,
 COALESCE(users.username, users.email)
 FROM followers
 JOIN users
@@ -117,7 +138,15 @@ ON users.uuid = followers.uuid
 WHERE follower_id = ?;`
 	//JOIN users on followers.uuid = users.uuid
 	var bleh = make([]string, 0)
-	rows, err := data.DB.Query(sqlStmt, uuid)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return bleh, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(uuid)
 	if err != nil {
 		fmt.Println("query error", err)
 		return bleh, err
@@ -141,14 +170,21 @@ WHERE follower_id = ?;`
 }
 
 func GetFollowers(uuid int) ([]string, error) {
-	sqlStmt := `SELECT COALESCE(users.username, users.email)
+	sqlString := `SELECT COALESCE(users.username, users.email)
 	FROM followers
 	JOIN users
 	ON users.uuid = followers.follower_id
 	WHERE followers.uuid = ?;`
 	var result []string
 
-	rows, err := data.DB.Query(sqlStmt, uuid)
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return result, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(uuid)
 	if err != nil {
 		return result, err
 	}
@@ -169,17 +205,28 @@ func GetFollowers(uuid int) ([]string, error) {
 }
 
 func GetYourGroups(uuid int) ([]string, error) {
-	sqlStmt := `SELECT groupMembers.group_id,
+	sqlString := `SELECT groupMembers.group_id,
 	groups.group_name
 	FROM groupMembers
 	JOIN groups
 	ON groups.group_id = groupMembers.group_id
 	WHERE uuid = ?`
 	var res = make([]string, 0)
-	rows, err := data.DB.Query(sqlStmt, uuid)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return res, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(uuid)
 	if err != nil {
 		fmt.Println("query getYourGroups error", err)
 	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var temp string
 		var useless int
@@ -193,13 +240,15 @@ func GetYourGroups(uuid int) ([]string, error) {
 	return res, err
 }
 
-func GetYourPosts(uuid int) error {
-	sqlStmt := `SELECT `
-	_ = sqlStmt
-	return nil
-}
+/*
+	 func GetYourPosts(uuid int) error {
+		sqlStmt := `SELECT `
+		_ = sqlStmt
+		return nil
+	}
+*/
 func AddNotificationToDB(content, nType, context string, usr, sender int) error {
-	sqlStmt := `INSERT INTO notifications (notif_content,creation_date,uuid,sender_id,notif_type,notif_context)
+	sqlString := `INSERT INTO notifications (notif_content,creation_date,uuid,sender_id,notif_type,notif_context)
 	SELECT ? AS notif_content,
 	? AS creation_date,
 	? AS uuid,
@@ -210,18 +259,34 @@ func AddNotificationToDB(content, nType, context string, usr, sender int) error 
 		SELECT 1 FROM notifications
 		WHERE uuid = ? AND sender_id = ? AND notif_type = ?
 	);`
-	_, err := data.DB.Exec(sqlStmt, content, time.Now(), usr, sender, nType, context, usr, sender, nType)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(content, time.Now(), usr, sender, nType, context, usr, sender, nType)
 
 	return err
 }
 
 func GetuuidByString(tabType, value string) (int, error) {
-	sqlStmt := `SELECT uuid
+	sqlString := `SELECT uuid
 	FROM users
 	WHERE ` + tabType + ` = ?`
 
 	var result int
-	err := data.DB.QueryRow(sqlStmt, value).Scan(&result)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return result, err
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(value).Scan(&result)
 
 	return result, err
 }
@@ -231,6 +296,7 @@ func GetuuidFromEmailOrUsername(user string) (int, error) {
 	FROM users
 	WHERE email = ?
 	OR username = ?`
+
 	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
 		return 0, err
@@ -281,7 +347,7 @@ func GetUsernameBySession(session string) (string, error) {
 }
 
 func CheckIfGroupMember(groupName string, uuid int) (bool, string) {
-	sqlStmt := `SELECT group_id,
+	sqlString := `SELECT group_id,
 	role
 	FROM groupMembers
 	WHERE groupMembers.uuid = ? AND group_id IN (
@@ -289,9 +355,18 @@ func CheckIfGroupMember(groupName string, uuid int) (bool, string) {
 		FROM groups
 		WHERE groups.group_name = ?
 	)`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return false, "lol"
+	}
+
+	defer sqlStmt.Close()
+
 	var res string
 	var dummy int
-	err := data.DB.QueryRow(sqlStmt, uuid, groupName).Scan(&dummy, &res)
+
+	err = sqlStmt.QueryRow(uuid, groupName).Scan(&dummy, &res)
 
 	return err == nil, res
 }

@@ -42,11 +42,18 @@ type headBarProf struct {
 func getCreatedPosts(uuid int) ([]string, error) {
 	var allUserCreatedPosts []string
 
-	sqlStmt := `SELECT post_title
+	sqlString := `SELECT post_title
 	FROM posts
 	WHERE post_author = ?`
 
-	rows, err := data.DB.Query(sqlStmt, uuid)
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return allUserCreatedPosts, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(uuid)
 	if err != nil {
 		return allUserCreatedPosts, err
 	}
@@ -67,23 +74,39 @@ func getCreatedPosts(uuid int) ([]string, error) {
 }
 
 func getEmailById(uuid int) (string, error) {
-	sqlStmt := `SELECT email
+	sqlString := `SELECT email
 	FROM users
 	WHERE uuid = ?`
 
 	var result string
 
-	err := data.DB.QueryRow(sqlStmt, uuid).Scan(&result)
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return result, err
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(uuid).Scan(&result)
 
 	return result, err
 }
 
 func getEmailByUsername(name string) (string, error) {
-	sqlStmt := `SELECT email
+	sqlString := `SELECT email
 	FROM users
 	WHERE username = ?`
+
 	var result string
-	err := data.DB.QueryRow(sqlStmt, name).Scan(&result)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return result, err
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(name).Scan(&result)
 
 	return result, err
 }
@@ -91,7 +114,7 @@ func getEmailByUsername(name string) (string, error) {
 func getProfileFromDataBase(email string) (profile, int, error) {
 	var usrProfile profile
 	var uuid int
-	sqlStmt := `SELECT uuid,
+	sqlString := `SELECT uuid,
 	email,
 	first_name,
 	last_name,
@@ -102,7 +125,16 @@ func getProfileFromDataBase(email string) (profile, int, error) {
 	privacy
 	FROM users
 	WHERE email = ?`
-	err := data.DB.QueryRow(sqlStmt, email).Scan(&uuid, &usrProfile.Email, &usrProfile.Firstname, &usrProfile.Lastname, &usrProfile.DOB, &usrProfile.Avatar, &usrProfile.UserName, &usrProfile.Bio, &usrProfile.Privacy)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return usrProfile, uuid, err
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(email).Scan(&uuid, &usrProfile.Email, &usrProfile.Firstname, &usrProfile.Lastname, &usrProfile.DOB, &usrProfile.Avatar, &usrProfile.UserName, &usrProfile.Bio, &usrProfile.Privacy)
+
 	return usrProfile, uuid, err
 }
 
@@ -117,15 +149,26 @@ func GetHeadBar(w http.ResponseWriter, r *http.Request) {
 			helper.WriteResponse(w, "session_error")
 			return
 		}
-		sqlStmt := `SELECT IFNULL(avatar, 'http://localhost:8080/images/default.jpeg'),
+
+		sqlString := `SELECT IFNULL(avatar, 'http://localhost:8080/images/default.jpeg'),
 		COALESCE(username, email)
 		FROM users
 		WHERE uuid = ?`
-		err = data.DB.QueryRow(sqlStmt, uuid).Scan(&usrDat.Avatar, &usrDat.Username)
+
+		sqlStmt, err := data.DB.Prepare(sqlString)
+		if err != nil {
+			helper.WriteResponse(w, "database_error")
+			return
+		}
+
+		defer sqlStmt.Close()
+
+		err = sqlStmt.QueryRow(uuid).Scan(&usrDat.Avatar, &usrDat.Username)
 		if err != nil {
 			fmt.Println("get headbar db error", err)
 			helper.WriteResponse(w, "database_error")
 		}
+
 		usrDat.Status = "success"
 		usrDatJson, err := json.Marshal(usrDat)
 		if err != nil {

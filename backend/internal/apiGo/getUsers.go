@@ -20,11 +20,23 @@ type users struct {
 
 func getUsernameAndEmail() (users, error) {
 	var userDat users
-	sqlStmt := `SELECT email,username FROM users`
-	rows, err := data.DB.Query(sqlStmt)
+
+	sqlString := `SELECT email,username FROM users`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
 		return userDat, err
 	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query()
+	if err != nil {
+		return userDat, err
+	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var usr user
 		err = rows.Scan(&usr.Email, &usr.Username)

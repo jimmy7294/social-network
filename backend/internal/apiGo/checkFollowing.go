@@ -14,12 +14,19 @@ type isFollowing struct {
 }
 
 func checkDBIfFollowing(yourId, theirId int) bool {
-	sqlStmt := `SELECT followers.uuid
+	sqlString := `SELECT followers.uuid
 	FROM followers
 	WHERE followers.follower_id = ? AND followers.uuid = ?;`
 	var lole int
 
-	err := data.DB.QueryRow(sqlStmt, yourId, theirId).Scan(&lole)
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return false
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(yourId, theirId).Scan(&lole)
 
 	return err == nil
 }

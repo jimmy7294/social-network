@@ -10,23 +10,37 @@ import (
 )
 
 func addGroupToDB(name, description string, creatorId int) error {
-	sqlStmt := `INSERT INTO groups (group_creator,group_name,group_description,creation_date)
+	sqlString := `INSERT INTO groups (group_creator,group_name,group_description,creation_date)
 	VALUES
 	(?,?,?,?)`
 
-	_, err := data.DB.Exec(sqlStmt, creatorId, name, description, time.Now())
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(creatorId, name, description, time.Now())
 	return err
 }
 
 func addGroupMemberToDB(uuid int, memberType, groupName string) error {
-	sqlStmt := `INSERT INTO groupMembers (group_id,uuid,role)
+	sqlString := `INSERT INTO groupMembers (group_id,uuid,role)
 	SELECT groups.group_id,
 	? AS uuid,
 	? AS role
 	FROM groups
 	WHERE groups.group_name = ?`
 
-	_, err := data.DB.Exec(sqlStmt, uuid, memberType, groupName)
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(uuid, memberType, groupName)
 	return err
 }
 

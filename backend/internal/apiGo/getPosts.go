@@ -26,7 +26,7 @@ type posts struct {
 
 func gatherPosts() ([]posts, error) {
 	var pData []posts
-	sqlStmt := `SELECT post_id,
+	sqlString := `SELECT post_id,
 COALESCE(users.username, users.email),
 IFNULL(post_image, 'http://localhost:8080/images/default.jpeg'),
 creation_date,
@@ -36,11 +36,22 @@ FROM posts
 JOIN users
 ON users.uuid = posts.post_author
 WHERE post_privacy = 'public';`
-	rows, err := data.DB.Query(sqlStmt)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return pData, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query()
 	if err != nil {
 		fmt.Println("query error", err)
 		return pData, err
 	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var normPost posts
 		//var authId int
@@ -50,12 +61,13 @@ WHERE post_privacy = 'public';`
 		}
 		pData = append(pData, normPost)
 	}
+
 	return pData, nil
 }
 
 func gatherSemiPrivatePosts(uuid int) ([]posts, error) {
 	var pData []posts
-	sqlStmt := `SELECT post_id,
+	sqlString := `SELECT post_id,
 COALESCE(users.username, users.email),
 IFNULL(post_image, 'http://localhost:8080/images/default.jpeg'),
 creation_date,
@@ -70,11 +82,22 @@ FROM allowedUsers
 WHERE uuid = ?
 )
 OR (posts.post_author = ? AND post_privacy = 'semi-private');`
-	rows, err := data.DB.Query(sqlStmt, uuid, uuid)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return pData, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(uuid, uuid)
 	if err != nil {
 		fmt.Println("query error", err)
 		return pData, err
 	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var semiPost posts
 		//var authId int
@@ -84,12 +107,13 @@ OR (posts.post_author = ? AND post_privacy = 'semi-private');`
 		}
 		pData = append(pData, semiPost)
 	}
+
 	return pData, nil
 }
 
 func gatherPrivatePosts(uuid int) ([]posts, error) {
 	var pData []posts
-	sqlStmt := `SELECT post_id,
+	sqlString := `SELECT post_id,
 COALESCE(users.username, users.email),
 IFNULL(post_image, 'http://localhost:8080/images/default.jpeg'),
 creation_date,
@@ -104,11 +128,22 @@ FROM followers
 WHERE follower_id = ?
 )
 OR (posts.post_author = ? AND post_privacy = 'private');`
-	rows, err := data.DB.Query(sqlStmt, uuid, uuid)
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return pData, err
+	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query(uuid, uuid)
 	if err != nil {
 		fmt.Println("query error", err)
 		return pData, err
 	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var privPost posts
 		//var authId int
@@ -118,6 +153,7 @@ OR (posts.post_author = ? AND post_privacy = 'private');`
 		}
 		pData = append(pData, privPost)
 	}
+
 	return pData, nil
 }
 

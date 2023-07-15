@@ -10,11 +10,19 @@ import (
 )
 
 func isPrivate(uuid int) bool {
-	sqlStmt := `SELECT privacy
+	sqlString := `SELECT privacy
 	FROM users
 	WHERE uuid = ?`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return false
+	}
+
+	defer sqlStmt.Close()
+
 	var res string
-	data.DB.QueryRow(sqlStmt, uuid).Scan(&res)
+	sqlStmt.QueryRow(uuid).Scan(&res)
 	return res == "private"
 }
 

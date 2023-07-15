@@ -17,9 +17,19 @@ type reg struct {
 }
 
 func checkEmail(email string) (int, error) {
-	sqlStmt := `SELECT uuid FROM users WHERE email = ?;`
+	sqlString := `SELECT uuid FROM users WHERE email = ?;`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return -1, err
+	}
+
+	defer sqlStmt.Close()
+
 	id := -1
-	err := data.DB.QueryRow(sqlStmt, email).Scan(&id)
+
+	err = sqlStmt.QueryRow(email).Scan(&id)
+
 	return id, err
 }
 
@@ -29,6 +39,7 @@ func registerUser(regData reg) error {
 		return err
 	}
 	defer sqlStmt.Close()
+
 	_, err = sqlStmt.Exec(regData.Password, regData.Email, regData.Firstname, regData.Lastname, regData.Birthdate, "private")
 	return err
 }

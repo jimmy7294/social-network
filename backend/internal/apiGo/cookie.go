@@ -2,7 +2,6 @@ package apiGO
 
 import (
 	"backend/backend/internal/helper"
-	"fmt"
 	"net/http"
 )
 
@@ -16,11 +15,11 @@ func CheckCookie(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("amount of cookies", len(cok))
 		_, err := helper.GetIdBySession(w, r)
 		if err != nil {
-			fmt.Println("cookie check failed")
+			//fmt.Println("cookie check failed")
 			helper.WriteResponse(w, "incorrect_session")
 			return
 		}
-		fmt.Println("cookie check successfull", err)
+		//fmt.Println("cookie check successfull", err)
 		helper.WriteResponse(w, "success")
 	}
 }

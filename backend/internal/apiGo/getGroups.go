@@ -15,11 +15,22 @@ type groups struct {
 
 func getGroupnamesFromDB() (groups, error) {
 	var groupDat groups
-	sqlStmt := `SELECT group_name FROM groups`
-	rows, err := data.DB.Query(sqlStmt)
+	sqlString := `SELECT group_name FROM groups`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
 		return groupDat, err
 	}
+
+	defer sqlStmt.Close()
+
+	rows, err := sqlStmt.Query()
+	if err != nil {
+		return groupDat, err
+	}
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var grp string
 		err = rows.Scan(&grp)
