@@ -178,6 +178,7 @@ func GetHeadBar(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("profile get success")
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(usrDatJson)
+		fmt.Println("headbar donezo")
 	}
 }
 

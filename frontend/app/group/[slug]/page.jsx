@@ -74,6 +74,7 @@ export default function GroupPage(slug){
     const [groupPageData, setGroupPageData] = useState("not_a_member")
     const [groupExists, setGroupExists] = useState(true)
     const [websocket, setWebSocket] = useState(null)
+    const [notif, setNotif] = useState([])
 
     useEffect(() => {
         (async () => {
@@ -94,12 +95,16 @@ export default function GroupPage(slug){
                 setIsMember(true);
                 const newWS = new WebSocket("ws://localhost:8080/api/ws")
             newWS.onmessage = (msg) => {
-                console.log("new notification",msg)
+                //console.log("new notification",msg)
                 let newMsg = JSON.parse(msg.data)
                 if (newMsg.type === "group_message") {
                 console.log("new notification parsed",newMsg)
                 setChat((prevValue) => [...prevValue, newMsg])
                 //console.log("new chat",chat)
+                }
+                if (newMsg.type === "group_join_request" || newMsg.type === "group_invite") {
+                    console.log("new notification", newMsg)
+                    setNotif((prevValue) => [...prevValue, newMsg])
                 }
              }
              setWebSocket(newWS)
@@ -118,7 +123,7 @@ export default function GroupPage(slug){
             <>
             { isMember && groupExists ? (
                 <>
-                <Headers />
+                <Headers notifs={notif}/>
                 <MakeGroupPost slug={slug}/>
                 <RenderGroup data={groupPageData} slug={slug}/>
                 <RenderChatBox message={chat} slug={slug} websocket={websocket}/>
@@ -126,12 +131,12 @@ export default function GroupPage(slug){
             ) : (
                 groupExists ? (
                     <>
-                    <Headers />
+                    <Headers notifs={notif}/>
                     <RenderGroup data={groupPageData} slug={slug}/>
                     </>
                 ) : (
                     <>
-                    <Headers />
+                    <Headers notifs={notif}/>
                     <h1>Group does not exist</h1>
                     </>
                 )

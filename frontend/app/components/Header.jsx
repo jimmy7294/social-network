@@ -16,13 +16,26 @@ import PrintNewMessage from "../page.jsx";
 // } else if(msg.type === "notification"){
 //   GetNotification()
 // }
+async function GetTinyProfileInfo() {
+  const json = await fetch("http://localhost:8080/api/getHeadbar", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify("voff"),
+  })
+  const response = await json.json()
+  return response
+}
 
 
-
-function GetTinyProfile() {
-  const [username, setUsername] = useState([]);
-  const [avatar, setAvatar] = useState([]);
-const [msg, setMsg] = useState([]);
+function GetTinyProfile(props) {
+  //const [username, setUsername] = useState([]);
+  //const [avatar, setAvatar] = useState([]);
+  const username = props.username
+  const avatar = props.avatar
+  const [msg, setMsg] = useState([]);
 /* console.log("slug stuff",slug.param)
 if (slug.param !== undefined) {
   console.log("slug", slug.param.slug, typeof slug.param.slug)
@@ -31,7 +44,7 @@ if (slug.param !== undefined) {
     console.log(param)
   } 
 } */
-
+/* 
   useEffect(() => {   
 
   fetch("http://localhost:8080/api/getHeadbar", {
@@ -52,7 +65,7 @@ if (slug.param !== undefined) {
       setUsername(data.username);
       setAvatar(data.avatar);
     });
-}, []);
+}, []); */
     return (
       <>
         <a className="fit" href="/profile">
@@ -69,14 +82,33 @@ if (slug.param !== undefined) {
     );  
 }
 
+async function getNotificationInfo() {
+  const json = await fetch("http://localhost:8080/api/getNotifications", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  const response = await json.json()
+  return response
+}
+
 function Logout() {
   Cookies.set('session_token', 'value', { expires: 0, path: '/' })
 }
 
-function GetNotification() {
-  const [notification, setNotification] = useState(false);
-  const [number, setNumber] = useState([0]);
+function GetNotification(props) {
+  //const [notification, setNotification] = useState(false);
+  //const [number, setNumber] = useState([0]);
+  const notification = props.notifications
+  //const number = props.notifNumber
+  const [number, setNumber] = useState(0)
+
   useEffect(() => {
+    setNumber(props.notifNumber)
+  }, [props.notifNumber])
+ // useEffect(() => {
 /*     newWS.onerror = err => console.error(err);
 //newWS.onopen = () => setWS(newWS);
 newWS.onmessage = (msg) => {
@@ -85,32 +117,33 @@ newWS.onmessage = (msg) => {
     console.log("new notification",msg)
   }
 } */
-  fetch("http://localhost:8080/api/getNotifications", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((data) => data.json())
-    .then((data) => {
-      if (data.status !== "success") {
-        console.log("failed to get notification");
-        return;
-      }
-      console.log(data, "here be notifications")
-      if(data.notifications !== null){
-        setNotification(true);
-        setNumber(data.notifications.length);
-      console.log(data, notification);
-      }
-    });
-}, []);
+  // fetch("http://localhost:8080/api/getNotifications", {
+  //   method: "POST",
+  //   credentials: "include",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // })
+  //   .then((data) => data.json())
+  //   .then((data) => {
+  //     if (data.status !== "success") {
+//       console.log("failed to get notification");
+//        return;
+//      }
+//      console.log(data, "here be notifications")
+//      if(data.notifications !== null){
+//        setNotification(true);
+//       setNumber(data.notifications.length);
+//      console.log(data, notification);
+//      }
+//    });
+//}, []);
 
     return (
       <>
-      {notification == true && <a  href="/profile" className="notification"><p className="notifText">{number} NOTIFICATION</p></a>
-      }
+      <a  href="/profile" className="notification">
+        <p className="notifText">{number} NOTIFICATIONS</p>
+      </a>
       </>
     );
 }
@@ -119,7 +152,41 @@ newWS.onmessage = (msg) => {
 
 
 
-const Headers = () => {
+const Headers = (props) => {
+  const newNotif = props.notifs
+  //console.log("newNotif", newNotif)
+  const [extraNotifs, setExtraNotifs] = useState([])
+  const [notifications, setNotifications] = useState()
+  const [tinyProfInfo, setTinyProfInfo] = useState()
+  const [notifNumber, setNotifNumber] = useState(0);
+  const [username, setUsername] = useState([]);
+  const [avatar, setAvatar] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      console.log("this should run only once per page")
+      const userdat = await GetTinyProfileInfo()
+      if (userdat.status !== "success") {
+        console.log("sumtin went wrong", notifdat)
+      }
+      setUsername(userdat.username)
+      setAvatar(userdat.avatar)
+
+      const notifdat = await getNotificationInfo()
+      if (notifdat.status !== "success") {
+        console.log("getting notification error", notifdat)
+      }
+      setNotifications(notifdat.notifications)
+      setNotifNumber(notifdat.notifications.length)
+    })()
+  }, [])
+
+  useEffect(() => {
+    setExtraNotifs(newNotif)
+    setNotifNumber((prevValue) => prevValue + 1)
+    console.log("current new notifs", newNotif)
+  }, [newNotif])
+
   return (
     <header className="headbar">
       <div className="identity">
@@ -132,7 +199,7 @@ const Headers = () => {
         </a>
       </div>
       <div>
-      <GetTinyProfile/>
+      <GetTinyProfile username={username} avatar={avatar}/>
           <a href="/group" className="fit">
             <div className="groupeButton">Group</div>
             </a>
@@ -140,7 +207,7 @@ const Headers = () => {
             <div className="chatButton">Chat</div>
             </a>
             </div>
-      <GetNotification/>
+      <GetNotification notifNumber={notifNumber} notifications={notifications}/>
       <a href="/login" className="fit">
       <div className="logout">
        <div className="theSoundOfTaDaronne" onClick ={() => {Logout()}}>log out</div>

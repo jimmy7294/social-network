@@ -16,7 +16,24 @@ type groupNotification struct {
 	GroupName string `json:"group_name"`
 }
 
-func addGroupJoinNotifToDB(groupName string, yourId int) error {
+func getGroupCreatorId(groupName string) (int, error) {
+	sqlString := `SELECT group_creator
+	FROM groups
+	WHERE group_name = ?`
+	var res int
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return res, err
+	}
+
+	defer sqlStmt.Close()
+
+	err = sqlStmt.QueryRow(groupName).Scan(&res)
+
+	return res, err
+}
+
+func addGroupJoinNotifToDB(groupName string, yourId int) (bool, error) {
 	sqlString := `INSERT INTO notifications(notif_content,creation_date,uuid,sender_id,notif_type,notif_context)
 	SELECT 'A user would like to join your group!' AS notif_content,
 	? AS creaton_date,
@@ -36,14 +53,23 @@ func addGroupJoinNotifToDB(groupName string, yourId int) error {
 
 	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(time.Now(), yourId, groupName, groupName, groupName)
-
-	return err
+	res, err := sqlStmt.Exec(time.Now(), yourId, groupName, groupName, groupName)
+	if err != nil {
+		return false, err
+	}
+	affectedRows, err := res.RowsAffected()
+	if err != nil {
+		return false, err
+	}
+	//fmt.Println("addGroupJoinNotifToDB result")
+	//fmt.Println(res.LastInsertId())
+	//fmt.Println(res.RowsAffected())
+	return affectedRows == 1, err
 }
 
 func addGroupInviteNotifToDB(groupName, receiver string, yourId int) error {
@@ -78,54 +104,62 @@ func SendGroupJoinRequestNotification(w http.ResponseWriter, r *http.Request) {
 
 	helper.EnableCors(&w)
 
-	if r.Method != http.MethodPost {
-		return
-	}
-	var notifInfo groupNotification
-	err := json.NewDecoder(r.Body).Decode(&notifInfo)
-	if err != nil {
-		helper.WriteResponse(w, "decoding_error")
-		fmt.Println("decoding", err)
-		return
-	}
+	if r.Method == http.MethodPost {
+		fmt.Println("got to sendgroupjoinrequest")
 
-	groupExist := helper.CheckIfStringExist("groups", "group_name", notifInfo.GroupName)
-	if !groupExist {
-		helper.WriteResponse(w, "group_does_not_exist")
-		fmt.Println("group not exist", err)
-		return
-	}
+		var notifInfo groupNotification
+		err := json.NewDecoder(r.Body).Decode(&notifInfo)
+		if err != nil {
+			helper.WriteResponse(w, "decoding_error")
+			fmt.Println("decoding", err)
+			return
+		}
 
-	uuid, err := helper.GetIdBySession(w, r)
-	if err != nil {
-		helper.WriteResponse(w, "session_error")
-		fmt.Println(err)
-		return
-	}
+		groupExist := helper.CheckIfStringExist("groups", "group_name", notifInfo.GroupName)
+		if !groupExist {
+			helper.WriteResponse(w, "group_does_not_exist")
+			fmt.Println("group not exist", err)
+			return
+		}
 
-	isMember, _ := helper.CheckIfGroupMember(notifInfo.GroupName, uuid)
-	if isMember {
-		helper.WriteResponse(w, "already_a_member")
-		return
-	}
+		uuid, err := helper.GetIdBySession(w, r)
+		if err != nil {
+			helper.WriteResponse(w, "session_error")
+			fmt.Println(err)
+			return
+		}
 
-	err = addGroupJoinNotifToDB(notifInfo.GroupName, uuid)
-	if err != nil {
-		helper.WriteResponse(w, "database_error")
-		return
-	}
-	receiverId, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
-	if err != nil {
-		helper.WriteResponse(w, "group_leader_died_i_guess")
-		return
-	}
-	err = socket.SendNotificationToAUser(uuid, receiverId, "A user would like to join your group!", notifInfo.GroupName, "group_join_request")
-	if err != nil {
-		helper.WriteResponse(w, "database_lock_i_guess?")
-		return
-	}
+		isMember, _ := helper.CheckIfGroupMember(notifInfo.GroupName, uuid)
+		if isMember {
+			helper.WriteResponse(w, "already_a_member")
+			return
+		}
 
-	helper.WriteResponse(w, "success")
+		addedNotification, err := addGroupJoinNotifToDB(notifInfo.GroupName, uuid)
+		if err != nil {
+			helper.WriteResponse(w, "database_error")
+			return
+		}
+		//fmt.Println("added gjrequest to db")
+		//receiverId, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
+		if addedNotification {
+			receiverId, err := getGroupCreatorId(notifInfo.GroupName)
+			if err != nil {
+				fmt.Println("get uuid from groupname error", err, notifInfo.GroupName)
+				helper.WriteResponse(w, "group_leader_died_i_guess")
+				return
+			}
+			fmt.Println("got receiver id")
+			err = socket.SendNotificationToAUser(uuid, receiverId, "A user would like to join your group!", notifInfo.GroupName, "group_join_request")
+			if err != nil {
+				helper.WriteResponse(w, "database_lock_i_guess?")
+				return
+			}
+		}
+		fmt.Println("sent notification")
+		fmt.Println("sent gjrequest")
+		helper.WriteResponse(w, "success")
+	}
 }
 
 func SendGroupInviteNotification(w http.ResponseWriter, r *http.Request) {
