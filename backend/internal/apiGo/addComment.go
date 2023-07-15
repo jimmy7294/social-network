@@ -4,6 +4,7 @@ import (
 	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -86,17 +87,20 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 
 		groupExists := helper.CheckIfStringExist("groups", "group_name", commentData.GroupName)
 		if !groupExists {
+			fmt.Println("group does not exist (adding comment)", commentData, err)
 			helper.WriteResponse(w, "group_does_not_exist")
 			return
 		}
 
 		isGroupMember, _ := helper.CheckIfGroupMember(commentData.GroupName, uuid)
 		if !isGroupMember {
+			fmt.Println("is not a group member (adding comment)", err)
 			helper.WriteResponse(w, "not_a_member")
 			return
 		}
 
 		err = addGroupCommentToDB(uuid, commentData.PostId, commentData.Content, commentData.Image, commentData.GroupName)
+
 	}
 
 	if err != nil {

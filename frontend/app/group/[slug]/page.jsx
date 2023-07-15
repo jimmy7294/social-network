@@ -156,6 +156,7 @@ function RenderGroup(props) {
     const [userType, setUserType] = useState("")
     const [isMember, setIsMember] = useState(false)
     const groupname = decodeURIComponent(slug.params.slug)
+
     
 
     useEffect(() => {
@@ -196,7 +197,7 @@ function RenderGroup(props) {
                     <p>{post.creation_date}</p>
                         </div>
                         {/* <MakeComment post_id={post.post_id}></MakeComment> */}
-                        <ToggleComments post_id={post.post_id}></ToggleComments>
+                        <ToggleComments post_id={post.post_id} group_name={groupname}></ToggleComments>
                     </div>
 
                 </div>
@@ -761,11 +762,15 @@ function RequestToJoin(slug){
 
 
 
-function MakeComment(post_id){
+function MakeComment(props){
+    const post_id = props.post_id
+    const group_name = props.group_name
     const [image, setImage] = useState("");
     const [allImage, setAllImage] = useState([]);
     const [showImages, setShowImages] = useState(false);
     const [content, setContent] = useState("");
+    const post_type = "group_post"
+
   
     useEffect(() => {
       (async () => {
@@ -774,15 +779,15 @@ function MakeComment(post_id){
       })()
     }, [])
   
-    const handleCommentSubmit = async () => {
-    
+    const handleCommentSubmit = async (e) => {
+       /*  e.preventDefault() */
       fetch("http://localhost:8080/api/addComment", {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
           },
-          body: JSON.stringify({ post_id, content, image }),
+          body: JSON.stringify({ post_id, content, image, post_type, group_name }),
         })
         .then((data) => data.json())
         .then((data) => {
@@ -836,9 +841,12 @@ function MakeComment(post_id){
     );
   }
   
-  function ToggleComments({ post_id }) {
+  function ToggleComments(props) {
+    const post_id = props.post_id
+    const group_name = props.group_name
     const [showMore, setShowMore] = useState(false);
     const [comments, setComments] = useState([]);
+    const type = "group_comments"
     function handleClick() {
       fetch("http://localhost:8080/api/getComments", {
         method: "POST",
@@ -846,7 +854,7 @@ function MakeComment(post_id){
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(post_id),
+        body: JSON.stringify({post_id,type,group_name}),
       })
         .then((data) => data.json())
         .then((data) => {
@@ -876,11 +884,11 @@ function MakeComment(post_id){
                 
               </div>
             ))}
-       <MakeComment post_id={post_id}/>
+       <MakeComment post_id={post_id} group_name={group_name}/>
           </div>
         )}
         {showMore && !comments && <div>no comments
-        <MakeComment post_id={post_id}/>
+        <MakeComment post_id={post_id} group_name={group_name}/>
           </div>}
   
         
