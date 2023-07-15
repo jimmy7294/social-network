@@ -88,7 +88,7 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("aaaaaauuuuuughhhh", err)
 				return
 			}
-			break
+			//break
 		case strings.Contains(data2[0], "jpeg"):
 			imageData, err := jpeg.Decode(reader)
 			if err != nil {
@@ -101,7 +101,7 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("aaaaaauuuuuughhhh", err)
 				return
 			}
-			break
+			//break
 		case strings.Contains(data2[0], "gif"):
 			gifData, err := gif.DecodeAll(reader)
 			if err != nil {
@@ -114,7 +114,7 @@ func AddImage(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("aaaaaauuuuuughhhh", err)
 				return
 			}
-			break
+			//break
 		default:
 			fmt.Println("incorrect type")
 			return
