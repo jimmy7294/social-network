@@ -187,9 +187,10 @@ function RenderGroup(props) {
                     
                     <div className="postti">
                         <div className="poster">
-                    <img className="pfp" src={post.image} alt="post image" />
+                   
                     <h2>{post.author}</h2>
                         </div>
+                        <img className="avatar_preview" src={post.image} alt="post image" />
                         <div className="contents">
                     <p>{post.content}</p>
                     <p>{post.creation_date}</p>
@@ -757,7 +758,6 @@ function RequestToJoin(slug){
         </>
     )
 } */
-
 
 
 
