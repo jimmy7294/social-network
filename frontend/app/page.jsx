@@ -368,95 +368,21 @@ function GetPosts() {
 
 function Post({ post }) {
   return (
-    <>
-      <div className="public">
-        <div className="mfposts">
-          {posts.map((post) => (
-            <div key={post.post_id} className="post">
-              <div className="postDate">Public | {post.creation_date}</div>
-              <a className="link-up" href={`profile/${post.author}`}>
-                <div className="postUser">{post.author}</div>
-              </a>
-
-              <div className="postTitle">{post.title}</div>
-              <div className="postContent">
-                {post.content}
-                {post.image !== null &&
-                  post.image !== "http://localhost:8080/images/default.jpeg" &&
-                  post.image !== "" && (
-                    <img src={post.image} alt="image" className="postImage" />
-                  )}
-              </div>
-              <ToggleComments post_id={post.post_id}></ToggleComments>
-            </div>
-          ))}
-        </div>
+    <div className="post">
+      <div className="postDate">
+        {post.privacy} | {post.creation_date}
       </div>
-    </>
-  );
-}
-
-// SemiPosts component
-function SemiPosts({ posts }) {
-  return (
-    <div className="semi">
-      <div className="mfsemi">
-        {posts &&
-          posts.map((semi, index) => (
-            <div key={index} className="post">
-              <div className="postDate">
-                Semi-Private | {semi.creation_date}
-              </div>
-              <a className="link-up" href={`profile/${semi.author}`}>
-                <div className="postUser">{semi.author}</div>
-              </a>
-              <div className="postTitle">{semi.title}</div>
-              <div className="postContent">
-                {semi.content}
-                {semi.image !== null &&
-                  semi.image !== "http://localhost:8080/images/default.jpeg" &&
-                  semi.image !== "" && (
-                    <img src={semi.image} alt="image" className="postImage" />
-                  )}
-              </div>
-              <ToggleComments post_id={semi.post_id}></ToggleComments>
-            </div>
-          ))}
-      </div>
-    </div>
-  );
-}
-
-// PrivatePosts component
-function PrivatePosts({ posts }) {
-  return (
-    <div className="private">
-      <div className="mfprivate">
-        {posts &&
-          posts.map((privacy, index) => (
-            <div key={index} className="post">
-              <div className="postDate">Private | {privacy.creation_date}</div>
-              <a className="link-up" href={`profile/${privacy.author}`}>
-                <div className="postUser">{privacy.author}</div>
-              </a>
-              <div className="postTitle">{privacy.title}</div>
-              <div className="postContent">
-                {privacy.content}
-                {privacy.image !== null &&
-                  privacy.image !==
-                    "http://localhost:8080/images/default.jpeg" &&
-                  privacy.image !== "" && (
-                    <img
-                      src={privacy.image}
-                      alt="image"
-                      className="postImage"
-                    />
-                  )}
-              </div>
-              <ToggleComments post_id={privacy.post_id}></ToggleComments>
-            </div>
-          ))}
-      </div>
+      <a className="link-up" href={`profile/${post.author}`}>
+        <div className="postUser">{post.author}</div>
+      </a>
+      <div className="postTitle">{post.title}</div>
+      <div className="postContent">{post.content}</div>
+      {post.image !== null &&
+        post.image !== "http://localhost:8080/images/default.jpeg" &&
+        post.image !== "" && (
+          <img src={post.image} alt="image" className="postImage" />
+        )}
+      <ToggleComments post_id={post.post_id}></ToggleComments>
     </div>
   );
 }
