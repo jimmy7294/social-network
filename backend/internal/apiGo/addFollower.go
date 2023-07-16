@@ -9,6 +9,22 @@ import (
 	"net/http"
 )
 
+func removeYourFollowRequest(yourId, theirId int) error {
+	sqlString := `DELETE FROM notifications
+	WHERE (sender_id = ? AND uuid = ? AND notif_type = 'follow_request')`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(yourId, theirId)
+
+	return err
+}
+
 func isPrivate(uuid int) bool {
 	sqlString := `SELECT privacy
 	FROM users
@@ -72,7 +88,9 @@ func AddOrRemoveFollow(w http.ResponseWriter, r *http.Request) {
 
 		theirId, err := helper.GetuuidFromEmailOrUsername(email)
 		if err != nil || theirId == yourID {
+			fmt.Println("add follow uuid shit", err, email)
 			helper.WriteResponse(w, "incorrect_email")
+			return
 		}
 		//emailExists := helper.CheckIfStringExist("users", "email", email)
 		//userNameExists := helper.CheckIfStringExist("users", "username", email)
@@ -103,12 +121,22 @@ func AddOrRemoveFollow(w http.ResponseWriter, r *http.Request) {
 				//	helper.WriteResponse(w, "wrong")
 				//	return
 				//}
-				err = helper.AddNotificationToDB("You have a new Follow request!", "follow_request", "", theirId, yourID)
+				addedNotification, err := helper.AddNotificationToDB("You have a new Follow request!", "follow_request", "", theirId, yourID)
 				if err != nil {
+					helper.WriteResponse(w, "database_error")
 					fmt.Println("addnotif err", err)
+					return
 				}
-				socket.SendNotificationToAUser(yourID, theirId, "You have a new Follow request", "", "follow_request")
+				if addedNotification {
+					socket.SendNotificationToAUser(yourID, theirId, "You have a new Follow request", "", "follow_request")
+				}
 			} else {
+				err = removeYourFollowRequest(yourID, theirId)
+				if err != nil {
+					helper.WriteResponse(w, "database_error")
+					fmt.Println("deletenotif err", err)
+					return
+				}
 				err = addFollower(yourID, theirId)
 			}
 		}

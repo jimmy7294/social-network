@@ -12,6 +12,7 @@ type notificationResponse struct {
 	Sender    string `json:"sender"`
 	Receiver  string `json:"receiver"`
 	GroupName string `json:"group_name"`
+	Type      string `json:"type"`
 	Response  string `json:"response"`
 }
 
@@ -322,4 +323,43 @@ func HandleGroupJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	helper.WriteResponse(w, "success")
 
+}
+
+func DeleteNotification(w http.ResponseWriter, r *http.Request) {
+	helper.EnableCors(&w)
+
+	if r.Method == http.MethodPost {
+		var notifInfo notificationResponse
+		err := json.NewDecoder(r.Body).Decode(&notifInfo)
+		if err != nil {
+			helper.WriteResponse(w, "decoding_error")
+			fmt.Println("decoding error delete notification", err)
+			return
+		}
+
+		uuid, err := helper.GetIdBySession(w, r)
+		if err != nil {
+			helper.WriteResponse(w, "session_error")
+		}
+
+		receiveruuid, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
+		if err != nil || receiveruuid != uuid {
+			helper.WriteResponse(w, "stop_lying_pls")
+			return
+		}
+
+		senderId, err := helper.GetuuidFromEmailOrUsername(notifInfo.Sender)
+		if err != nil {
+			helper.WriteResponse(w, "stop_lying_pls")
+			return
+		}
+		err = helper.DeleteNotificationFromDB(senderId, receiveruuid, "")
+		if err != nil {
+			helper.WriteResponse(w, "database_error")
+			return
+		}
+
+		helper.WriteResponse(w, "success")
+
+	}
 }

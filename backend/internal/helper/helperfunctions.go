@@ -247,7 +247,7 @@ func GetYourGroups(uuid int) ([]string, error) {
 		return nil
 	}
 */
-func AddNotificationToDB(content, nType, context string, usr, sender int) error {
+func AddNotificationToDB(content, nType, context string, usr, sender int) (bool, error) {
 	sqlString := `INSERT INTO notifications (notif_content,creation_date,uuid,sender_id,notif_type,notif_context)
 	SELECT ? AS notif_content,
 	? AS creation_date,
@@ -262,14 +262,19 @@ func AddNotificationToDB(content, nType, context string, usr, sender int) error 
 
 	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
-		return err
+		return true, err
 	}
 
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(content, time.Now(), usr, sender, nType, context, usr, sender, nType)
+	res, err := sqlStmt.Exec(content, time.Now(), usr, sender, nType, context, usr, sender, nType)
+	if err != nil {
+		return true, err
+	}
 
-	return err
+	affectedRows, err := res.RowsAffected()
+
+	return affectedRows == 1, err
 }
 
 func GetuuidByString(tabType, value string) (int, error) {
@@ -417,6 +422,23 @@ func AddPrivateMessageToDB(msg data.UserMessage) error {
 	defer sqlStmt.Close()
 
 	_, err = sqlStmt.Exec(msg.Content, msg.Image, time.Now(), msg.Receiver, msg.Receiver, msg.Sender, msg.Sender)
+
+	return err
+}
+
+func DeleteNotificationFromDB(sender, receiver int, context string) error {
+
+	sqlString := `DELETE FROM notifications
+	WHERE (uuid = ? AND sender_id = ? AND notif_context = ?)`
+
+	sqlStmt, err := data.DB.Prepare(sqlString)
+	if err != nil {
+		return err
+	}
+
+	defer sqlStmt.Close()
+
+	_, err = sqlStmt.Exec(receiver, sender, context)
 
 	return err
 }

@@ -3,6 +3,7 @@ package apiGO
 import (
 	"backend/backend/internal/data"
 	"backend/backend/internal/helper"
+	socket "backend/backend/internal/websocket"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -108,7 +109,10 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("sending event notification error", err)
 	}
-
+	err = socket.SendNotificationToAGroup(uuid, "A new event has been created in the group"+eventData.GroupName, eventData.GroupName, "event")
+	if err != nil {
+		fmt.Println("sending event notification socket error", err)
+	}
 	helper.WriteResponse(w, "success")
 
 }

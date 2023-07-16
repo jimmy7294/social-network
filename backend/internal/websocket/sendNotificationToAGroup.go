@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func SendNotificationToAGroup(sender, receiver int, content, context, notifType string) error {
+func SendNotificationToAGroup(sender int, content, context, notifType string) error {
 
 	senderName, err := helper.GetUsername(sender)
 	if err != nil {

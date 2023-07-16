@@ -67,6 +67,7 @@ func setupApi() {
 	http.HandleFunc("/api/handleFollowRequest", apiGO.HandleFollowRequest)
 	http.HandleFunc("/api/sendGroupJoinRequest", apiGO.SendGroupJoinRequestNotification)
 	http.HandleFunc("/api/sendGroupInvite", apiGO.SendGroupInviteNotification)
+	http.HandleFunc("/api/deleteNotification", apiGO.DeleteNotification)
 
 	http.HandleFunc("/api/ws", socket.WsEndpoint)
 
