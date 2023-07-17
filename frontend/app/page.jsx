@@ -134,7 +134,9 @@ function MakeComment(post_id) {
   );
 }
 
-function ToggleComments({ post_id }) {
+function ToggleComments(post_id) {
+  post_id = post_id.post_id;
+  const type = "normal_comments";
   const [showMore, setShowMore] = useState(false);
   const [comments, setComments] = useState([]);
   function handleClick() {
@@ -144,7 +146,7 @@ function ToggleComments({ post_id }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(post_id),
+      body: JSON.stringify({ post_id, type }),
     })
       .then((data) => data.json())
       .then((data) => {

@@ -9,70 +9,70 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, use } from "react";
 import ImageSelector from "@/app/components/imageSelector";
 
-
-function InviteToGroup({slug}) {
-    const group_name = decodeURIComponent(slug.params.slug)
-    const [username, setUsername] = useState("")
-    const[allusers, setAllUsers] = useState([])
-    useEffect(() => {
-        (async () => {
-        fetch("http://localhost:8080/api/getUsernames", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                },
-        })
-                .then((data) => data.json())
-                .then((data) => {
-                    if (data.status !== "success") {
-                        console.log("failed to get usernames", data.status) ;
-                        return
-                    }
-                    console.log("got usernames", data)
-                    setAllUsers(data.users)
-                })
-        })()
-    }, [])
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        const receiver = username
-        fetch("http://localhost:8080/api/sendGroupInvite", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                },
-                body: JSON.stringify({receiver, group_name}),
-            })
-            .then((data) => data.json())
-            .then((data) => {
-                if (data.status !== "success") {
-                    console.log("failed to invite user", data.status)
-                    return
-                }
-                console.log("invited user", data.status)
-            })
-    }
-    console.log(allusers, "all useres are here")
-    return(
-        <>
-        <div>
-            <form onSubmit={handleSubmit}>
-            {allusers &&
+function InviteToGroup({ slug }) {
+  const group_name = decodeURIComponent(slug.params.slug);
+  const [username, setUsername] = useState("");
+  const [allusers, setAllUsers] = useState([]);
+  useEffect(() => {
+    (async () => {
+      fetch("http://localhost:8080/api/getUsernames", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          if (data.status !== "success") {
+            console.log("failed to get usernames", data.status);
+            return;
+          }
+          console.log("got usernames", data);
+          setAllUsers(data.users);
+        });
+    })();
+  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const receiver = username;
+    fetch("http://localhost:8080/api/sendGroupInvite", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ receiver, group_name }),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.status !== "success") {
+          console.log("failed to invite user", data.status);
+          return;
+        }
+        console.log("invited user", data.status);
+      });
+  };
+  console.log(allusers, "all useres are here");
+  return (
+    <>
+      <div>
+        <form onSubmit={handleSubmit}>
+          {allusers && (
             <select onChange={(e) => setUsername(e.target.value)}>
-                {allusers.map((user,index) => (
-                    
-                    <option key={index} value={user.username}>{user.username}</option>
-                ))}
+              {allusers.map((user, index) => (
+                <option key={index} value={user.username}>
+                  {user.username}
+                </option>
+              ))}
             </select>
-            }
-              <p> Do you want to invite {username}</p>
-              <button type="submit">YES</button>
-            </form>
-        </div>
-        </>
-    )
+          )}
+          <p> Do you want to invite {username}</p>
+          <button type="submit">YES</button>
+        </form>
+      </div>
+    </>
+  );
 }
 
 async function addMemberToGroupChat(slug) {
