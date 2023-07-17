@@ -617,3 +617,14 @@ body {
   flex-wrap: wrap;
   width: 25vh;
 }
+
+.userList {
+  position: absolute;
+  top: 10vh;
+  left: 5%;
+  border: solid 2px black;
+  width: 15vh;
+  display: grid;
+  justify-content: center;
+  background-color: #144b56;
+}
