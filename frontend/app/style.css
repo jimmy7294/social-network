@@ -228,7 +228,7 @@ body {
 }
 
 .text {
-  margin: 5px;
+  margin: 0.5vh;
 }
 
 .imgSubmit {
@@ -610,4 +610,10 @@ body {
   scroll-behavior: smooth;
   height: 700px;
   border: solid #4faa92 2px;
+}
+
+.shroud {
+  display: flex;
+  flex-wrap: wrap;
+  width: 25vh;
 }
