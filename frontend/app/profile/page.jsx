@@ -9,7 +9,26 @@ import Link from "next/link";
 
 
 
-function HandleFollowRequest(response, sender, receiver){}
+function HandleFollowRequest(response, sender, receiver){
+  fetch("http://localhost:8080/api/handleFollowRequest", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({response, sender, receiver}),
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      if (data.status !== "success") {
+        console.log("failed to handle follow request", data.status);
+        return;
+      }
+      console.log(data);
+      location.reload('/profile');
+    }
+    );
+}
   
 
 
@@ -114,8 +133,8 @@ console.log(notification,"sakldlak")
               )}
               {notification.type === "follow_request" && (
                 <div>
-                  <button onClick ={() => HandleGroupInvite(notification.context, "accept", notification.sender, notification.receiver)}>Accept</button>
-                  <button onClick ={() => HandleGroupRequest(notification.context, "decline", notification.sender, notification.receiver)}>Decline</button>
+                  <button onClick ={() => HandleFollowRequest(notification.context, "accept", notification.sender, notification.receiver)}>Accept</button>
+                  <button onClick ={() => HandleFollowRequest(notification.context, "decline", notification.sender, notification.receiver)}>Decline</button>
                   </div>
               )}
     </div>

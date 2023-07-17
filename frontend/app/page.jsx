@@ -6,6 +6,7 @@ import encodeImageFile from "./components/encodeImage";
 import GetYourImages from "./components/GetYourImages";
 import ImageSelector from "./components/imageSelector";
 
+
 const datapromise = GetYourImages();
 
 function HomePage() {
@@ -17,9 +18,48 @@ function HomePage() {
       <Headers />
       <MakePost userImages={img} />
       <GetPosts />
+      <GetAllUsers />
     </>
   );
 }
+
+function GetAllUsers() {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    (async () => {
+    fetch("http://localhost:8080/api/getUsernames", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.status !== "success") {
+          console.log("failed to get users");
+          return;
+        }
+        setUsers(data.users);
+      });
+    })();
+  }, []);
+  return (
+  <>
+  {users &&
+  <div>
+    {users.map((user,index) => (
+      <div key={index}>
+        <a href={`profile/${user.username}`}>
+        <div>{user.username}</div>
+        </a>
+      </div>
+    ))}
+    </div>}
+  </>)
+}
+
+
 
 function MakeComment(post_id) {
   const [allImages, setAllImages] = useState([]);
@@ -312,29 +352,37 @@ function GetPosts() {
           console.log("failed to get posts");
           return;
         }
-
-        let mergedPosts = [
-          ...data.posts,
-          ...data.semi_private_posts,
-          ...data.private_posts,
-        ];
+let mergedPosts = []
+        if (data.posts !== null) {
+          mergedPosts = [...mergedPosts, ...data.posts];
+        }
+        if (data.semi_private_posts !== null) {
+          mergedPosts = [...mergedPosts, ...data.semi_private_posts];
+        }
+        if (data.private_posts !== null) {
+          mergedPosts = [...mergedPosts, ...data.private_posts];
+        }
         let publicPost = data.posts;
         let semiPost = data.semi_private_posts;
         let privatePost = data.private_posts;
-
+if (mergedPosts !== null){
         mergedPosts.sort(
           (a, b) => new Date(b.creation_date) - new Date(a.creation_date)
         );
         publicPost.sort(
           (a, b) => new Date(b.creation_date) - new Date(a.creation_date)
         );
+        if (semiPost !== null){
         semiPost.sort(
           (a, b) => new Date(b.creation_date) - new Date(a.creation_date)
         );
+        }
+        if (privatePost !== null){
         privatePost.sort(
           (a, b) => new Date(b.creation_date) - new Date(a.creation_date)
         );
-
+        }
+        }
         setAllPosts(mergedPosts);
         setPublicPost(publicPost);
         setSemiPost(semiPost);
@@ -367,6 +415,8 @@ function GetPosts() {
 }
 
 function Post({ post }) {
+ 
+ 
   return (
     <div className="post">
       <div className="postDate">

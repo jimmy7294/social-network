@@ -176,14 +176,17 @@ const Headers = (props) => {
       if (notifdat.status !== "success") {
         console.log("getting notification error", notifdat)
       }
-      setNotifications(notifdat.notifications)
+      console.log(notifdat.notifications,"ökasdjköas")
+      if(notifdat.notifications !== null){
       setNotifNumber(notifdat.notifications.length)
+      }
+
     })()
   }, [])
 
   useEffect(() => {
     setExtraNotifs(newNotif)
-    setNotifNumber((prevValue) => prevValue + 1)
+    //setNotifNumber((prevValue) => prevValue + 1)
     console.log("current new notifs", newNotif)
   }, [newNotif])
 

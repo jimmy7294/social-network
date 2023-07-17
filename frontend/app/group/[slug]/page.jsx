@@ -11,20 +11,73 @@ import  { useState, useEffect, use } from "react";
 import ImageSelector from "@/app/components/imageSelector";
 
 
-function AddOptionRow(){
+function InviteToGroup({slug}) {
+    const group_name = decodeURIComponent(slug.params.slug)
+    const [username, setUsername] = useState("")
+    const[allusers, setAllUsers] = useState([])
+    useEffect(() => {
+        (async () => {
+        fetch("http://localhost:8080/api/getUsernames", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                },
+        })
+                .then((data) => data.json())
+                .then((data) => {
+                    if (data.status !== "success") {
+                        console.log("failed to get usernames", data.status) ;
+                        return
+                    }
+                    console.log("got usernames", data)
+                    setAllUsers(data.users)
+                })
+        })()
+    }, [])
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        fetch("http://localhost:8080/api/handleGroupInvite", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({username, group_name}),
+            })
+            .then((data) => data.json())
+            .then((data) => {
+                if (data.status !== "success") {
+                    console.log("failed to invite user", data.status)
+                    return
+                }
+                console.log("invited user", data.status)
+            })
+    }
+    console.log(allusers, "all useres are here")
     return(
         <>
         <div>
-        <input
-                    type="date"
-                    className="mt-2"
-                    placeholder="event date"
-                    onChange={(e) => setEvent_Date(e.target.value)}
-                />
+            <form onSubmit={handleSubmit}>
+            {allusers &&
+            <select onChange={(e) => setUsername(e.target.value)}>
+                {allusers.map((user,index) => (
+                    
+                    <option key={index} value={user.username}>{user.username}</option>
+                ))}
+            </select>
+            }
+              <p> Do you want to invite {username}</p>
+              <button type="submit">YES</button>
+            </form>
         </div>
         </>
     )
 }
+
+
+        
+
 
 async function addMemberToGroupChat(slug) {
     if (slug === undefined) return "not_yet"
@@ -59,6 +112,7 @@ async function getGroupPageData(slug) {
        console.log("error in get gorup", data.status)
        return (data.status)
     }
+    console.log(data)
    
     return data
 }
@@ -124,6 +178,7 @@ export default function GroupPage(slug){
             { isMember && groupExists ? (
                 <>
                 <Headers notifs={notif}/>
+                <InviteToGroup slug={slug}/>
                 <MakeGroupPost slug={slug}/>
                 <RenderGroup data={groupPageData} slug={slug}/>
                 <RenderChatBox message={chat} slug={slug} websocket={websocket}/>
@@ -177,6 +232,12 @@ function RenderGroup(props) {
             setIsMember(false)
         }
       }, [])
+
+      const handleGoing = async (eventid,e) => {
+        e.preventDefault();
+       fetch()
+      }
+
       
    
       return (
@@ -196,8 +257,9 @@ function RenderGroup(props) {
                    
                     <h2>{post.author}</h2>
                         </div>
-                        <img className="avatar_preview" src={post.image} alt="post image" />
                         <div className="contents">
+                        {post.image !== null && post.image !== "http://localhost:8080/images/default.jpeg" && post.image !== "" && <img src={post.image} alt="image" className="pfp" />
+            }
                     <p>{post.content}</p>
                     <p>{post.creation_date}</p>
                         </div>
@@ -254,8 +316,16 @@ function RenderGroup(props) {
                     <p>{event.date}</p>
                     <p>{event.event_date}</p>
                         </div>
+                        <form onSubmit={(e) => handleGoing(event.even_id, e.target.value)}>
+                            <input type="radio" name="going" value="going"></input>
+                            <label for="going">Going</label>
+                            <input type="radio" name="going" value="not going"></input>
+                            <label for="not going">Not going</label>
+                          <button type="submit">submit</button>
+                    </form>
                     </div>
                     </div>
+                   
                 </div>
             ))}
             </div>
@@ -337,6 +407,8 @@ function RenderChatBox(props) {
               <h1 className="title" >Chat</h1>
               <div className="chat">
               <div className="autoScroll">
+                {messages &&
+                <div>
                 {messages.map((messages, index) => (
                     <div className="messages" key={index}>
                         <p className="lineBreak">{messages.sender}</p>
@@ -345,6 +417,8 @@ function RenderChatBox(props) {
                     </div>
                 
                 ))}
+                </div>
+}
                 </div>
                 </div>
             <div className="chatBox">
