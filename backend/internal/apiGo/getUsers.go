@@ -21,7 +21,8 @@ type users struct {
 func getUsernameAndEmail() (users, error) {
 	var userDat users
 
-	sqlString := `SELECT email,username FROM users`
+	sqlString := `SELECT email,
+	IFNULL(username, email) FROM users`
 
 	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
@@ -54,6 +55,7 @@ func GetUsernames(w http.ResponseWriter, r *http.Request) {
 		userData, err := getUsernameAndEmail()
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
+			fmt.Println("database error get usernames", err)
 			return
 		}
 		userData.Status = "success"

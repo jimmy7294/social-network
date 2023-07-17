@@ -66,11 +66,12 @@ func checkIfAlreadyGroupMember(username, groupName string) bool {
 }
 
 func addFollowerToDB(uuid int, follower string) error {
-	sqlString := `INSERT INTO followrs(uuid,follower_id)
-	? AS uuid
+	sqlString := `INSERT INTO followers(uuid,follower_id)
+	SELECT ? AS uuid,
 	u.uuid AS follower_id
 	FROM users AS u
-	WHERE u.username = ? OR u.email = ?`
+	WHERE u.username = ?
+	OR u.email = ?`
 
 	sqlStmt, err := data.DB.Prepare(sqlString)
 	if err != nil {
@@ -79,7 +80,7 @@ func addFollowerToDB(uuid int, follower string) error {
 
 	defer sqlStmt.Close()
 
-	_, err = sqlStmt.Exec(uuid, follower)
+	_, err = sqlStmt.Exec(uuid, follower, follower)
 
 	return err
 }
@@ -162,6 +163,7 @@ func HandleGroupInvite(w http.ResponseWriter, r *http.Request) {
 	if err != nil || uuid != receiveruuid {
 		helper.WriteResponse(w, "fucked")
 		fmt.Println("user not matching with notification", err)
+		fmt.Println("info", notifInfo.Receiver, notifInfo.Sender)
 		return
 	}
 
@@ -222,6 +224,7 @@ func HandleFollowRequest(w http.ResponseWriter, r *http.Request) {
 
 	receiveruuid, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
 	if err != nil || receiveruuid != uuid {
+		fmt.Println("liar detected", notifInfo.Receiver, notifInfo.Sender, receiveruuid, uuid)
 		helper.WriteResponse(w, "stop_lying_pls")
 		return
 	}
@@ -234,6 +237,7 @@ func HandleFollowRequest(w http.ResponseWriter, r *http.Request) {
 	if notifInfo.Response == "accept" {
 		err = addFollowerToDB(uuid, notifInfo.Sender)
 		if err != nil {
+			fmt.Println("database error add follower", err)
 			helper.WriteResponse(w, "database_error")
 			return
 		}

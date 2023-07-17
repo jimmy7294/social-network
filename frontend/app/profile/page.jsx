@@ -133,8 +133,8 @@ console.log(notification,"sakldlak")
               )}
               {notification.type === "follow_request" && (
                 <div>
-                  <button onClick ={() => HandleFollowRequest(notification.context, "accept", notification.sender, notification.receiver)}>Accept</button>
-                  <button onClick ={() => HandleFollowRequest(notification.context, "decline", notification.sender, notification.receiver)}>Decline</button>
+                  <button onClick ={() => HandleFollowRequest("accept", notification.sender, notification.receiver)}>Accept</button>
+                  <button onClick ={() => HandleFollowRequest("decline", notification.sender, notification.receiver)}>Decline</button>
                   </div>
               )}
     </div>

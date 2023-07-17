@@ -197,17 +197,24 @@ func SendGroupInviteNotification(w http.ResponseWriter, r *http.Request) {
 		helper.WriteResponse(w, "not_a_member")
 		return
 	}
+	receiverID, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
+	if err != nil {
+		helper.WriteResponse(w, "database_error")
+		return
+	}
+
+	isMember2, _ := helper.CheckIfGroupMember(notifInfo.GroupName, receiverID)
+	if isMember2 {
+		helper.WriteResponse(w, "already_a_member")
+		return
+	}
 
 	err = addGroupInviteNotifToDB(notifInfo.GroupName, notifInfo.Receiver, uuid)
 	if err != nil {
 		helper.WriteResponse(w, "database_error")
 		return
 	}
-	receiverID, err := helper.GetuuidFromEmailOrUsername(notifInfo.Receiver)
-	if err != nil {
-		helper.WriteResponse(w, "database_error")
-		return
-	}
+
 	err = socket.SendNotificationToAUser(uuid, receiverID, "You have received a new Group invitation", notifInfo.GroupName, "group_invite")
 	if err != nil {
 		helper.WriteResponse(w, "database_lock_i_guess?")
