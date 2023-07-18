@@ -8,11 +8,25 @@ import { usePathname } from "next/navigation";
 //import getGroupPageData from "@/app/components/test";
 import { useState, useEffect, use } from "react";
 import ImageSelector from "@/app/components/imageSelector";
+import Link from 'next/link';
 
-function InviteToGroup({ slug }) {
+function InviteToGroup(props) {
+  const slug = props.slug
+  const members = props.members
+  console.log("members invToGroup", members)
   const group_name = decodeURIComponent(slug.params.slug);
   const [username, setUsername] = useState("");
   const [allusers, setAllUsers] = useState([]);
+
+  const filterOutMembers = (user) => {
+    for (let i = 0; i < members.length; i++) {
+      if (user.email === members[i].username || user.username === members[i].username) {
+        return false
+      }
+    }
+    return true
+  }
+
   useEffect(() => {
     (async () => {
       fetch("http://localhost:8080/api/getUsernames", {
@@ -29,7 +43,7 @@ function InviteToGroup({ slug }) {
             return;
           }
           console.log("got usernames", data);
-          setAllUsers(data.users);
+          setAllUsers(data.users.filter(filterOutMembers));
         });
     })();
   }, []);
@@ -173,6 +187,7 @@ export default function GroupPage(slug) {
       {isMember && groupExists ? (
         <>
           <Headers notifs={notif} />
+          <InviteToGroup slug={slug} members={groupPageData.members}/>
           <MakeGroupPost slug={slug} />
           <RenderGroup data={groupPageData} slug={slug} />
           <RenderChatBox message={chat} slug={slug} websocket={websocket} />
@@ -893,9 +908,9 @@ function ToggleComments(props) {
           {comments.map((dat, index) => (
             <div key={index} className="commenting">
               <div className="commentDate">{dat.created}</div>
-              <a href={`profile/${dat.author}`}>
+              <Link href={`profile/${dat.author}`}>
                 <div className="commentUser">{dat.author}</div>
-              </a>
+              </Link>
               <div className="commentContent">{dat.content}</div>
             </div>
           ))}

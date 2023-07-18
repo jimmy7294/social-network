@@ -63,7 +63,7 @@ export default function Optional() {
   const [nickname, setNickname] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [privacy, setPrivate] = useState("");
-  const [avatar, setAvatar] = useState("http://localhost:8080/images/default.jpeg");
+  const [avatar, setAvatar] = useState("");
   const router = useRouter();
 
 
@@ -158,7 +158,7 @@ export default function Optional() {
 
         <p className="text">
           don't wanna expose yourself?{" "}
-          <Link href="/login" className="link-up">
+          <Link href="/" className="link-up">
             Skip
           </Link>
         </p>
