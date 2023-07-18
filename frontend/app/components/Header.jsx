@@ -102,12 +102,16 @@ function GetNotification(props) {
   //const [notification, setNotification] = useState(false);
   //const [number, setNumber] = useState([0]);
   const notification = props.notifications
+  const notifNumb = props.notifNumber
   //const number = props.notifNumber
-  const [number, setNumber] = useState(0)
+  const [number, setNumber] = useState(props.notifNumber)
+
 
   useEffect(() => {
-    setNumber(props.notifNumber)
-  }, [props.notifNumber])
+    setNumber(notifNumb)
+    console.log("useffect entered")
+  }, [notifNumb])
+  console.log("notifications updated", number, notifNumb)
  // useEffect(() => {
 /*     newWS.onerror = err => console.error(err);
 //newWS.onopen = () => setWS(newWS);
@@ -178,6 +182,7 @@ const Headers = (props) => {
       }
       console.log(notifdat.notifications,"ökasdjköas")
       if(notifdat.notifications !== null){
+      setNotifications(notifdat.notifications)
       setNotifNumber(notifdat.notifications.length)
       }
 
@@ -186,8 +191,13 @@ const Headers = (props) => {
 
   useEffect(() => {
     setExtraNotifs(newNotif)
-    //setNotifNumber((prevValue) => prevValue + 1)
-    console.log("current new notifs", newNotif)
+    let notifN = 0
+    let newNotifN = 0
+    if (notifications) notifN = notifications.length;
+    if (newNotif) newNotifN = newNotif.length;
+    setNotifNumber(notifN + newNotifN)
+    //console.log("current new notifs", newNotif)
+    //console.log("current new notif number", notifNumber, notifN, newNotifN)
   }, [newNotif])
 
   return (

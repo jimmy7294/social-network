@@ -67,7 +67,7 @@ func deleteUserFromAllGroups(userId int) {
 	for group := range AllGroupChats {
 		if _, ok := AllGroupChats[group][userId]; ok {
 			delete(AllGroupChats[group], userId)
-			updateUserlistGroupChat(group)
+			//updateUserlistGroupChat(group)
 		}
 	}
 }

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Headers from "../../components/Header";
 import { useRouter } from "next/navigation";
 
-function followCheck(slug) {
+function FollowCheck({slug}) {
   const [following, setFollwing] = useState(Boolean);
   const user = decodeURIComponent(slug.params.slug);
   useEffect(() => {
@@ -20,7 +20,7 @@ function followCheck(slug) {
       .then((data) => {
         if (data.status !== "success") {
           console.log("follow check failed");
-          return;
+          //return;
         }
         setFollwing(data.following);
       });
@@ -40,37 +40,41 @@ function followCheck(slug) {
         if (data.status !== "success") {
           console.log(data.status);
           console.log("unfollow/follow failed");
-          return;
+          //return;
         }
         console.log("unfollow/follow success 123213 12", user);
       });
   };
-  if (following) {
-    return (
+  //if (following) {
+    return ( 
       <>
-        <a href={`${user}`}>
-          <button onClick={() => handleFollow()}>Unfollow</button>
-        </a>
-      </>
-    );
-  } else {
-    return (
+      {following ? (
+      <>
+      <a href={`${user}`}>
+        <button onClick={() => handleFollow()}>Unfollow</button>
+      </a>
+    </>
+    ) : (
       <>
         <a href={`${user}`}>
           <button onClick={() => handleFollow()}>Follow</button>
         </a>
       </>
+    )}
+        </>
     );
-  }
+ // } else {
+ // }
 }
 
-function GetProfile(slug) {
+function GetProfile({slug}) {
   const user = decodeURIComponent(slug.params.slug);
   const [stuff, setStuff] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [groups, setGroups] = useState([]);
   const router = useRouter();
+  const [isPrivate, setIsPrivate] = useState(true)
   console.log(user);
 
   useEffect(() => {
@@ -92,7 +96,10 @@ function GetProfile(slug) {
           console.log("you are you");
           router.push("/profile");
 
-          return;
+          //return;
+        }
+        if (data.status !== "private") {
+          setIsPrivate(false)
         }
         setStuff(data);
         setFollowers(data.followers);
@@ -101,8 +108,80 @@ function GetProfile(slug) {
       });
   }, []);
   console.log(stuff);
-  if (stuff.status !== "private") {
-    return (
+  return (<>
+    {!isPrivate || following ? (
+        <>
+        <div className="Profile">
+          <div className="organiser">
+            <img className="avatar_preview" src={stuff.avatar} />
+          </div>
+          <div className="docu">
+            <p> {stuff.username}</p>
+            <p> {stuff.first_name}</p>
+            <p> {stuff.last_name}</p>
+            <p> Email: {stuff.email}</p>
+            <p> Bio: {stuff.bio}</p>
+            <p> Brithday: {stuff.dob}</p>
+            <p> {stuff.privacy}</p>
+            <FollowCheck slug={slug}/>
+          </div>
+        </div>
+        <div>
+          <div className="folow">
+            <h2>Followers</h2>
+            {followers && (
+              <div>
+                {followers.map((follower, index) => (
+                  <a key={index} href={`/profile/${follower}`}>
+                    <p>{follower}</p>
+                  </a>
+                ))}
+              </div>
+            )}
+  
+            {following && (
+              <div>
+                <h2>Following</h2>
+                {following.map((follow, index) => (
+                  <div key={index}>
+                    <a
+                      className="link-up"
+                      key={index}
+                      href={`/profile/${follow}`}
+                    >
+                      <p>{follow}</p>{" "}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+  
+            {groups && (
+              <div>
+                <h2>Groups</h2>
+                {groups.map((group, index) => (
+                  <div key={index}>
+                    <p>{group}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        </>
+  
+    ) : (
+      <>
+      <div>
+        <h2>Profile</h2>
+        <div>{stuff.email}</div>
+        <FollowCheck slug={slug}/>
+      </div>
+    </>
+    )}
+      </>)
+  
+/*     return (
       <>
         <div className="Profile">
           <div className="organiser">
@@ -163,7 +242,7 @@ function GetProfile(slug) {
         </div>
       </>
     );
-  }
+  
   console.log(stuff);
   return (
     <>
@@ -172,14 +251,16 @@ function GetProfile(slug) {
         <div>{stuff.email}</div>
       </div>
     </>
-  );
+  ); */
 }
 
 function ProfilePage(slug) {
   return (
     <>
       <Headers />
-      <div className="layouter">{GetProfile(slug)}</div>
+      <div className="layouter">
+        <GetProfile slug={slug}/>
+      </div>
     </>
   );
 }

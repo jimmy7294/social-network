@@ -121,7 +121,7 @@ func getProfileFromDataBase(email string) (profile, int, error) {
 	DOB,
 	IFNULL(avatar, 'http://localhost:8080/images/default.jpeg'),
 	IFNULL(username, 'no username'),
-	bio,
+	IFNULL(bio, 'no bio'),
 	privacy
 	FROM users
 	WHERE email = ?`

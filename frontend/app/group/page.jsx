@@ -12,7 +12,7 @@ function MakeGroup(){
   const [description, setDescription] = useState("");
   const router = useRouter();
 
-const handleNewGroup = (e) => {
+  const handleNewGroup = (e) => {
   e.preventDefault();
  
   fetch("http://localhost:8080/api/addGroup", {
@@ -86,9 +86,32 @@ fetch("http://localhost:8080/api/getGroupnames", {
 
 
 function Groups(){
+  const [websocket, setWebSocket] = useState(null);
+  const [notif, setNotif] = useState([]);
+
+  useEffect(()=>{
+    const newWS = new WebSocket("ws://localhost:8080/api/ws");
+        newWS.onmessage = (msg) => {
+          let newMsg = JSON.parse(msg.data);
+          console.log("new message", newMsg)
+          if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
+            console.log("new notification", newMsg);
+            setNotif((prevValue) => [...prevValue, newMsg]);
+          }
+
+        }
+        setWebSocket(newWS);
+        return () => {
+          console.log("closing websocket");
+          newWS.close();
+          websocket.close();
+        }
+  }, [])
+  console.log("notif", notif)
+  
   return (
     <>
-    <Headers/>
+    <Headers notifs={notif}/>
     <MakeGroup/>
     <YourGroups/>
     </>
