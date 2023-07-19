@@ -131,7 +131,7 @@ async function getGroupPageData(slug) {
 //const promisdata = GroupPage()
 export default function GroupPage(slug) {
   const [isMember, setIsMember] = useState(false);
-  const [chat, setChat] = useState();
+  const [chat, setChat] = useState([]);
   const [groupPageData, setGroupPageData] = useState("not_a_member");
   const [groupExists, setGroupExists] = useState(true);
   const [websocket, setWebSocket] = useState(null);
@@ -159,8 +159,14 @@ export default function GroupPage(slug) {
           let newMsg = JSON.parse(msg.data);
           if (newMsg.type === "group_message") {
             console.log("new notification parsed", newMsg);
-            setChat((prevValue) => [...prevValue, newMsg]);
-            //console.log("new chat",chat)
+               
+            setChat((prev) => {
+
+                if (prev === null) {
+                    return [newMsg]
+                }
+                return [...prev, newMsg]
+            })
           }
           if (
             newMsg.type === "group_join_request" ||
@@ -387,6 +393,8 @@ function RenderChatBox(props) {
         <h1 className="title">Chat</h1>
         <div className="chat">
           <div className="autoScroll">
+            {messages &&
+            <div>
             {messages.map((messages, index) => (
               <div className="messages" key={index}>
                 <p className="lineBreak">{messages.sender}</p>
@@ -395,6 +403,8 @@ function RenderChatBox(props) {
               </div>
             ))}
           </div>
+            }
+            </div>
         </div>
         <div className="chatBox">
           <form onSubmit={handleSubmit}>

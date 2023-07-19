@@ -104,7 +104,6 @@ function Groups(){
         return () => {
           console.log("closing websocket");
           newWS.close();
-          websocket.close();
         }
   }, [])
   console.log("notif", notif)
