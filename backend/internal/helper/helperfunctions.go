@@ -128,7 +128,7 @@ func GetUsername(uuid int) (string, error) {
 	return username, err
 }
 
-// complete fucking shitshow personified that i'm only keeping around because it amuses me
+// shitshow
 func GetFollowing(uuid int) ([]string, error) {
 	sqlString := `SELECT followers.uuid,
 COALESCE(users.username, users.email)
