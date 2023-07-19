@@ -254,11 +254,13 @@ function RenderGroup(props) {
                       <div className="poster">
                         <h2>{post.author}</h2>
                       </div>
-                      <img
-                        className="avatar_preview"
-                        src={post.image}
-                        alt="post image"
-                      />
+                  
+                      {post.image !== null &&
+        post.image !== "http://localhost:8080/images/default.jpeg" &&
+        post.image !== "" && (
+          <img src={post.image} alt="image" className="postImage" />
+        )}
+                    
                       <div className="contents">
                         <p>{post.content}</p>
                         <p>{post.creation_date}</p>
@@ -921,6 +923,9 @@ function ToggleComments(props) {
               <Link href={`profile/${dat.author}`}>
                 <div className="commentUser">{dat.author}</div>
               </Link>
+              {dat.image_path &&
+              <img src={dat.image_path} alt="image" className="pfp"></img>
+              }
               <div className="commentContent">{dat.content}</div>
             </div>
           ))}
