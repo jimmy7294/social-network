@@ -15,13 +15,13 @@ type eventResponse struct {
 	Sender    string `json:"sender"`
 }
 
-func addEventResponseToDB(eventId int, groupName, choice, userName string) (bool, error) {
+func addEventResponseToDB(eventId, uuid int, groupName, choice string) (bool, error) {
 	sqlString := `INSERT INTO eventOptionChoices(event_id,uuid,choice)
 	SELECT ? AS event_id,
 	? AS choice,
 	u.uuid AS uuid
 	FROM users AS u
-	WHERE (u.email = ? OR u.username = ?)
+	WHERE (u.uuid = ?)
 	AND NOT EXISTS(
 		SELECT 1 FROM eventOptionChoices AS e
 		WHERE e.event_id = ?
@@ -33,7 +33,7 @@ func addEventResponseToDB(eventId int, groupName, choice, userName string) (bool
 		return false, err
 	}
 
-	res, err := sqlStmt.Exec(eventId, choice, userName, userName)
+	res, err := sqlStmt.Exec(eventId, choice, uuid, eventId, uuid)
 	if err != nil {
 		return false, err
 	}
@@ -75,13 +75,13 @@ func HandleEventAnswer(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		receiveruuid, err := helper.GetuuidFromEmailOrUsername(response.Sender)
-		if err != nil || uuid != receiveruuid {
+		//receiveruuid, err := helper.GetuuidFromEmailOrUsername(response.Sender)
+		/* 		if err != nil || uuid != receiveruuid {
 			helper.WriteResponse(w, "fucked")
 			fmt.Println("user not matching with notification", err)
 			return
-		}
-		addedResponse, err := addEventResponseToDB(response.EventId, response.GroupName, response.Answer, response.Sender)
+		} */
+		addedResponse, err := addEventResponseToDB(response.EventId, uuid, response.GroupName, response.Answer)
 		if err != nil {
 			helper.WriteResponse(w, "database_error")
 			return
