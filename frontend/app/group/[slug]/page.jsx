@@ -10,27 +10,6 @@ import { useState, useEffect, use } from "react";
 import ImageSelector from "@/app/components/imageSelector";
 import Link from 'next/link';
 
-
-function Going(data){
-    let going = 0
-    let notGoing = 0
-    for(let i = 0; i < data.length; i++){
-        if(data[i] !== 1){
-            console.log(data, "answer")
-            going++
-        }else {
-            console.log(data, "answer")
-            notGoing++
-        }
-}
-return(
-    <>
-    <p>Going: {going}</p>
-    <p>Not Going: {notGoing}</p>
-    </>
-)
-}
-
 function InviteToGroup(props) {
   const slug = props.slug
   const members = props.members
@@ -262,27 +241,6 @@ function RenderGroup(props) {
       setIsMember(false);
     }
   }, []);
-  const HandleEventResponse = async (answer, event_id) => {
-    const group_name = groupname;
-    fetch("http://localhost:8080/api/handleEventAnswer", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({group_name, answer, event_id}),
-        })
-        .then((data) => data.json())
-        .then((data) => {
-            if (data.status !== "success") {
-                console.log("failed to handle event answer", data.status);
-                return;
-            }
-            console.log("handled event answer", data.status);
-        });
-    }
-
-
 
 console.log(events, "events")
   return (
@@ -351,26 +309,7 @@ console.log(events, "events")
               <div className="container">
                 {events.map((event, index) => (
                   <div className="groupEvent" key={index}>
-                    <div className="groupPost">
-                      <div className="postti">
-                        <h2>{event.title}</h2>
-                        <p>{event.description}</p>
-
-                        <div className="contents">
-                          <p>{event.date}</p>
-                          <p>{event.event_date}</p>
-                        </div>
-                        {!event.already_chosen &&
-                        <form>
-                        <button onClick={() => {HandleEventResponse("going",event.event_id)}}>Going</button>
-                        <button onClick={() => {HandleEventResponse("notgoing", event.event_id)}}>Not Going</button>
-                    </form>
-                                }
-                                {event.already_chosen &&
-                                Going(event.answers)}
-                      </div>
-                    </div>
-                   
+                    <Event event={event} groupName={groupname}/>
                   </div>
                 ))}
               </div>
@@ -478,6 +417,59 @@ function RenderChatBox(props) {
       </div>
     </>
   );
+}
+
+function Event(props) {
+  const event = props.event
+  const groupname = props.groupName
+  const [hasAnswered, setHasAnswered] = useState(event.already_chosen)
+
+  const HandleEventResponse = async (answer, event_id) => {
+    const group_name = groupname;
+    fetch("http://localhost:8080/api/handleEventAnswer", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({group_name, answer, event_id}),
+        })
+        .then((data) => data.json())
+        .then((data) => {
+            if (data.status !== "success") {
+                console.log("failed to handle event answer", data.status);
+                return;
+            }
+            console.log("handled event answer", data.status);
+        });
+    }
+
+  return (
+    <>
+      <div className="groupPost">
+        <div className="postti">
+          <h2>{event.title}</h2>
+          <p>{event.description}</p>
+
+          <div className="contents">
+            <p>{event.date}</p>
+            <p>{event.event_date}</p>
+          </div>
+          {!hasAnswered ? (
+            <form>
+              <button onClick={() => {HandleEventResponse("going",event.event_id)}}>Going</button>
+              <button onClick={() => {HandleEventResponse("not going", event.event_id)}}>Not Going</button>
+            </form>
+          ):(
+            event.options.map((opt, ind) => (
+              <p key={ind}>{opt}: {event.answers[ind]}</p>
+              )
+            )
+          )}
+        </div>
+      </div>
+    </>
+  )
 }
 
 async function ChatBox(slug) {
