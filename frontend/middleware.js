@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export async function middleware(req, NextRequest){
+    //console.log("what is a req",req)
     const cookiee = req.cookies.get('session_token')
     console.log("should be session",cookiee)
     let response = NextResponse.next()
@@ -31,10 +32,9 @@ const fetchResponse = await fetch("http://localhost:8080/api/cookie", {
 
     //if cookie is different from the DB throw error and stay on login
     if (data.status !== "success") {
-      console.log("got to throw error")
-      response.cookies.delete("session_token")
-      //return response
-      return response
+        const responso = NextResponse.redirect("http://localhost:3000/login")
+        responso.cookies.delete("session_token")
+        return responso
     }
     if (data.status === "success" && (req.nextUrl.href === "http://localhost:3000/login" || req.nextUrl.href === "http://localhost:3000/register")) {
         return NextResponse.redirect("http://localhost:3000/")
