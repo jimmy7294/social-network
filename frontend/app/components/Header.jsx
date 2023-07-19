@@ -221,9 +221,9 @@ const Headers = (props) => {
             </a>
             </div>
       <GetNotification notifNumber={notifNumber} notifications={notifications}/>
-      <a href="/login" className="fit">
+      <a href="/login" className="fit" onClick ={() => {Logout()}}>
       <div className="logout">
-       <div className="theSoundOfTaDaronne" onClick ={() => {Logout()}}>log out</div>
+       <div className="theSoundOfTaDaronne" >log out</div>
       </div>
       </a>
     </header>

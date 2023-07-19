@@ -27,12 +27,14 @@ export default function Login() {
     const data = await response.json();
     console.log("Register data:", data);
 
-    if (data.error) {
-      console.error("Error:", data.error);
-    } else {
+    if ( data.status !== "success") {
+      console.error("Error:", data.status);
+      return
+    } 
       cookie.set("session_token", data.token)
+      console.log(data.status)
       router.push("/")
-    }
+    
   };
   return (
     <>  

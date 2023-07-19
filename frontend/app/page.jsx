@@ -92,6 +92,7 @@ function MakeComment(post_id) {
           console.log("failed to add comment", data);
           return;
         }
+        location.reload("/");
       });
   };
   return (
@@ -156,6 +157,7 @@ function ToggleComments(post_id) {
 
         setComments(data.comments);
         setShowMore(!showMore);
+        console.log(data.comments, "comments")
       });
   }
   return (
@@ -171,6 +173,9 @@ function ToggleComments(post_id) {
               <a href={`profile/${dat.author}`}>
                 <div className="commentUser">{dat.author}</div>
               </a>
+              {dat.image_path &&
+              <img src={dat.image_path} alt="image" className="pfp"></img>
+              }
               <div className="commentContent">{dat.content}</div>
             </div>
           ))}
