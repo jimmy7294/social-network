@@ -8,24 +8,27 @@ import { usePathname } from "next/navigation";
 //import getGroupPageData from "@/app/components/test";
 import { useState, useEffect, use } from "react";
 import ImageSelector from "@/app/components/imageSelector";
-import Link from 'next/link';
+import Link from "next/link";
 
 function InviteToGroup(props) {
-  const slug = props.slug
-  const members = props.members
-  console.log("members invToGroup", members)
+  const slug = props.slug;
+  const members = props.members;
+  console.log("members invToGroup", members);
   const group_name = decodeURIComponent(slug.params.slug);
   const [username, setUsername] = useState("");
   const [allusers, setAllUsers] = useState([]);
 
   const filterOutMembers = (user) => {
     for (let i = 0; i < members.length; i++) {
-      if (user.email === members[i].username || user.username === members[i].username) {
-        return false
+      if (
+        user.email === members[i].username ||
+        user.username === members[i].username
+      ) {
+        return false;
       }
     }
-    return true
-  }
+    return true;
+  };
 
   useEffect(() => {
     (async () => {
@@ -43,9 +46,8 @@ function InviteToGroup(props) {
             return;
           }
           console.log("got usernames", data);
-         
+
           setAllUsers(data.users.filter(filterOutMembers));
-          
         });
     })();
   }, []);
@@ -162,14 +164,13 @@ export default function GroupPage(slug) {
           let newMsg = JSON.parse(msg.data);
           if (newMsg.type === "group_message") {
             console.log("new notification parsed", newMsg);
-               
-            setChat((prev) => {
 
-                if (prev === null) {
-                    return [newMsg]
-                }
-                return [...prev, newMsg]
-            })
+            setChat((prev) => {
+              if (prev === null) {
+                return [newMsg];
+              }
+              return [...prev, newMsg];
+            });
           }
           if (
             newMsg.type === "group_join_request" ||
@@ -196,7 +197,7 @@ export default function GroupPage(slug) {
       {isMember && groupExists ? (
         <>
           <Headers notifs={notif} />
-          <InviteToGroup slug={slug} members={groupPageData.members}/>
+          <InviteToGroup slug={slug} members={groupPageData.members} />
           <MakeGroupPost slug={slug} />
           <RenderGroup data={groupPageData} slug={slug} />
           <RenderChatBox message={chat} slug={slug} websocket={websocket} />
@@ -227,7 +228,7 @@ function RenderGroup(props) {
   const [userType, setUserType] = useState("");
   const [isMember, setIsMember] = useState(false);
   const groupname = decodeURIComponent(slug.params.slug);
-  
+
   useEffect(() => {
     if (data !== "not_a_member") {
       setGroupPosts(data.group_posts);
@@ -242,7 +243,7 @@ function RenderGroup(props) {
     }
   }, []);
 
-console.log(events, "events")
+  console.log(events, "events");
   return (
     <>
       <div>
@@ -258,13 +259,18 @@ console.log(events, "events")
                       <div className="poster">
                         <h2>{post.author}</h2>
                       </div>
-                  
+
                       {post.image !== null &&
-        post.image !== "http://localhost:8080/images/default.jpeg" &&
-        post.image !== "" && (
-          <img src={post.image} alt="image" className="postImage" />
-        )}
-                    
+                        post.image !==
+                          "http://localhost:8080/images/default.jpeg" &&
+                        post.image !== "" && (
+                          <img
+                            src={post.image}
+                            alt="image"
+                            className="postImage"
+                          />
+                        )}
+
                       <div className="contents">
                         <p>{post.content}</p>
                         <p>{post.creation_date}</p>
@@ -309,7 +315,7 @@ console.log(events, "events")
               <div className="container">
                 {events.map((event, index) => (
                   <div className="groupEvent" key={index}>
-                    <Event event={event} groupName={groupname}/>
+                    <Event event={event} groupName={groupname} />
                   </div>
                 ))}
               </div>
@@ -389,18 +395,18 @@ function RenderChatBox(props) {
         <h1 className="title">Chat</h1>
         <div className="chat">
           <div className="autoScroll">
-            {messages &&
-            <div>
-            {messages.map((messages, index) => (
-              <div className="messages" key={index}>
-                <p className="lineBreak">{messages.sender}</p>
-                <p className="lineBreak">{messages.content}</p>
-                <p className="lineBreak">{messages.created}</p>
+            {messages && (
+              <div>
+                {messages.map((messages, index) => (
+                  <div className="messages" key={index}>
+                    <p className="lineBreak">{messages.sender}</p>
+                    <p className="lineBreak">{messages.content}</p>
+                    <p className="lineBreak">{messages.created}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-            }
-            </div>
         </div>
         <div className="chatBox">
           <form onSubmit={handleSubmit}>
@@ -420,29 +426,29 @@ function RenderChatBox(props) {
 }
 
 function Event(props) {
-  const event = props.event
-  const groupname = props.groupName
-  const [hasAnswered, setHasAnswered] = useState(event.already_chosen)
+  const event = props.event;
+  const groupname = props.groupName;
+  const [hasAnswered, setHasAnswered] = useState(event.already_chosen);
 
   const HandleEventResponse = async (answer, event_id) => {
     const group_name = groupname;
     fetch("http://localhost:8080/api/handleEventAnswer", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({group_name, answer, event_id}),
-        })
-        .then((data) => data.json())
-        .then((data) => {
-            if (data.status !== "success") {
-                console.log("failed to handle event answer", data.status);
-                return;
-            }
-            console.log("handled event answer", data.status);
-        });
-    }
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ group_name, answer, event_id }),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.status !== "success") {
+          console.log("failed to handle event answer", data.status);
+          return;
+        }
+        console.log("handled event answer", data.status);
+      });
+  };
 
   return (
     <>
@@ -457,19 +463,32 @@ function Event(props) {
           </div>
           {!hasAnswered ? (
             <form>
-              <button onClick={() => {HandleEventResponse("going",event.event_id)}}>Going</button>
-              <button onClick={() => {HandleEventResponse("not going", event.event_id)}}>Not Going</button>
+              <button
+                onClick={() => {
+                  HandleEventResponse("going", event.event_id);
+                }}
+              >
+                Going
+              </button>
+              <button
+                onClick={() => {
+                  HandleEventResponse("not going", event.event_id);
+                }}
+              >
+                Not Going
+              </button>
             </form>
-          ):(
+          ) : (
             event.options.map((opt, ind) => (
-              <p key={ind}>{opt}: {event.answers[ind]}</p>
-              )
-            )
+              <p key={ind}>
+                {opt}: {event.answers[ind]}
+              </p>
+            ))
           )}
         </div>
       </div>
     </>
-  )
+  );
 }
 
 async function ChatBox(slug) {
@@ -809,9 +828,9 @@ function ToggleComments(props) {
               <Link href={`profile/${dat.author}`}>
                 <div className="commentUser">{dat.author}</div>
               </Link>
-              {dat.image_path &&
-              <img src={dat.image_path} alt="image" className="pfp"></img>
-              }
+              {dat.image_path && (
+                <img src={dat.image_path} alt="image" className="pfp"></img>
+              )}
               <div className="commentContent">{dat.content}</div>
             </div>
           ))}
@@ -827,4 +846,3 @@ function ToggleComments(props) {
     </>
   );
 }
-

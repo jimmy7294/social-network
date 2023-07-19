@@ -61,6 +61,7 @@ function GetAllUsers() {
 }
 
 function MakeComment(post_id) {
+  const [error, setError] = useState(null);
   const [allImages, setAllImages] = useState([]);
   const [image, setImage] = useState("");
   const [content, setContent] = useState("");
@@ -77,6 +78,13 @@ function MakeComment(post_id) {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+
+    if (content === "") {
+      setError("Say something nice :)");
+      return;
+    }
+    setError(null);
+
     fetch("http://localhost:8080/api/addComment", {
       method: "POST",
       credentials: "include",
@@ -99,15 +107,16 @@ function MakeComment(post_id) {
     <>
       <div className="makeComment">
         {image === "" ? (
-          <h3>no selected image</h3>
+          <p className="warning">No image selected</p>
         ) : (
           <img src={image} className="avatar_preview"></img>
         )}
         <form onSubmit={handleCommentSubmit}>
           <input
             type="text"
-            placeholder="content"
+            placeholder="..."
             className="commentContentCreation"
+            maxLength={255}
             onChange={(e) => setContent(e.target.value)}
           />
           {showImages ? (
@@ -121,14 +130,15 @@ function MakeComment(post_id) {
             </button>
           )}
           <button type="submit" className="commentCreationButton">
-            submit
+            Send
           </button>
         </form>
         <form onSubmit={encodeImageFile}>
           <input type="file" id="image" name="image"></input>
           <button type="submit" className="text">
-            AddImage
+            Upload an image
           </button>
+          {error && <p className="error">{error}</p>}
         </form>
       </div>
     </>
@@ -157,7 +167,7 @@ function ToggleComments(post_id) {
 
         setComments(data.comments);
         setShowMore(!showMore);
-        console.log(data.comments, "comments")
+        console.log(data.comments, "comments");
       });
   }
   return (
@@ -173,9 +183,9 @@ function ToggleComments(post_id) {
               <a href={`profile/${dat.author}`}>
                 <div className="commentUser">{dat.author}</div>
               </a>
-              {dat.image_path &&
-              <img src={dat.image_path} alt="image" className="pfp"></img>
-              }
+              {dat.image_path && (
+                <img src={dat.image_path} alt="image" className="pfp"></img>
+              )}
               <div className="commentContent">{dat.content}</div>
             </div>
           ))}
@@ -193,6 +203,7 @@ function ToggleComments(post_id) {
 }
 
 function MakePost({ userImages }) {
+  const [error, setError] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [privacy, setPrivacy] = useState("public");
@@ -205,6 +216,11 @@ function MakePost({ userImages }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (title === "" || content === "") {
+      setError("Title and Content need fulfilling");
+      return;
+    }
+    setError(null);
     // console.log(allowed_users, "fucked");
     // console.log(image, { type, privacy, allowed_users, image, content, title });
     const res = await fetch("http://localhost:8080/api/addPost", {
@@ -250,10 +266,6 @@ function MakePost({ userImages }) {
     }
   };
   const AddToAllowed = (e) => {
-    // console.log(
-    //   e.target.checked,
-    //   "lkusdhfksdhafljkhdsajlkfhljsadfhjlkashljkdfhljksadljkflhjkas"
-    // );
     if (e.target.checked) {
       setAllowed((allowed_users) => [...allowed_users, e.target.value]);
     } else {
@@ -276,6 +288,7 @@ function MakePost({ userImages }) {
             className="titleCreation"
             type="text"
             placeholder="title"
+            maxLength="100"
             onChange={(e) => setTitle(e.target.value)}
           />
           <select
@@ -307,9 +320,11 @@ function MakePost({ userImages }) {
             type="text"
             placeholder="content"
             className="postContentCreation"
+            maxLength={200}
             onChange={(e) => setContent(e.target.value)}
           />
           <br />
+          {error && <p className="error">{error}</p>}
           <button type="submit" className="postCreationButton">
             submit
           </button>
