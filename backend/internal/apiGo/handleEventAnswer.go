@@ -18,8 +18,8 @@ type eventResponse struct {
 func addEventResponseToDB(eventId, uuid int, groupName, choice string) (bool, error) {
 	sqlString := `INSERT INTO eventOptionChoices(event_id,uuid,choice)
 	SELECT ? AS event_id,
-	? AS choice,
-	u.uuid AS uuid
+	u.uuid AS uuid,
+	? AS choice
 	FROM users AS u
 	WHERE (u.uuid = ?)
 	AND NOT EXISTS(
@@ -55,6 +55,7 @@ func HandleEventAnswer(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("decoding event answer", err)
 			return
 		}
+		fmt.Println("resp", response)
 
 		groupExist := helper.CheckIfStringExist("groups", "group_name", response.GroupName)
 		if !groupExist {
