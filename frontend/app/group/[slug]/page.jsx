@@ -15,9 +15,11 @@ function Going(data){
     let going = 0
     let notGoing = 0
     for(let i = 0; i < data.length; i++){
-        if(data.anwser === 1){
+        if(data[i] !== 1){
+            console.log(data, "answer")
             going++
         }else {
+            console.log(data, "answer")
             notGoing++
         }
 }
