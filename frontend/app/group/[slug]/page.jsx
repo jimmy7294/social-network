@@ -367,10 +367,18 @@ function RenderChatBox(props) {
   const message = props.message;
   const websocket = props.websocket;
   const groupName = decodeURIComponent(props.slug.params.slug);
-  console.log("render chat box", message, groupName);
   const [messages, setMessages] = useState([]);
+  const [error, setError] = useState();
+
   function handleSubmit(event) {
     event.preventDefault();
+
+    if (event.target.chat.value === "") {
+      setError("Please enter a message");
+      return;
+    }
+    setError(null);
+
     const msg = event.target.chat.value;
     websocket.send(
       JSON.stringify({
@@ -412,9 +420,10 @@ function RenderChatBox(props) {
               id="chat"
               name="chat"
               className="postContentCreation"
-              placeholder="message"
+              placeholder="Enter your message"
             />
-            <button type="submit">send</button>
+            <button type="submit">Send</button>
+            {error && <p className="error">{error}</p>}
           </form>
         </div>
       </div>
@@ -557,6 +566,7 @@ function MakeGroupPost(props) {
   const [image, setImage] = useState("");
   const [allImage, setAllImage] = useState([]);
   const [showImages, setShowImages] = useState(false);
+  const [error, setError] = useState(null);
   //const pathname = usePathname()
   //const router = useRouter();
 
@@ -568,6 +578,14 @@ function MakeGroupPost(props) {
   }, []);
 
   const SubmitHandle = async (e) => {
+    e.preventDefault();
+
+    if (title === "" || content === "") {
+      setError("Please fill in all fields");
+      return;
+    }
+    setError(null);
+
     fetch("http://localhost:8080/api/addPost", {
       method: "POST",
       credentials: "include",
@@ -589,7 +607,7 @@ function MakeGroupPost(props) {
     <>
       <div>
         {image === "" ? (
-          <h3>no selected image</h3>
+          <p className="warning">no selected image</p>
         ) : (
           <img src={image} className="avatar_preview"></img>
         )}
@@ -605,16 +623,17 @@ function MakeGroupPost(props) {
           <input
             className="titleCreation"
             type="text"
-            placeholder="title"
+            placeholder="..."
             onChange={(e) => setTitle(e.target.value)}
           />
 
           <textarea
             className="postContentCreation"
             type="text"
-            placeholder="content"
+            placeholder="what do you want to say?"
             onChange={(e) => setContent(e.target.value)}
           />
+          {error && <p className="error">{error}</p>}
           <button type="submit">submit</button>
         </form>
         {showImages ? (
@@ -638,10 +657,15 @@ function MakeEvent({ slug }) {
   const [title, setEventTitle] = useState("");
   const [content, setContent] = useState("");
   const [event_date, setEvent_Date] = useState("");
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(group_name);
+    if (title === "" || content === "" || event_date === "") {
+      setError("Fill in all fields!");
+      return;
+    }
+    setError(null);
     fetch("http://localhost:8080/api/addEvent", {
       method: "POST",
       credentials: "include",
@@ -666,14 +690,14 @@ function MakeEvent({ slug }) {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="event title"
+            placeholder="Event Name"
             className="mt-2"
             onChange={(e) => setEventTitle(e.target.value)}
           />
           <textarea
             type="text"
             className="postContentCreation"
-            placeholder="event description"
+            placeholder="Event Description"
             onChange={(e) => setContent(e.target.value)}
           />
           <input
@@ -683,7 +707,8 @@ function MakeEvent({ slug }) {
             onChange={(e) => setEvent_Date(e.target.value)}
           />
 
-          <button type="submit">submit</button>
+          <button type="submit">Create Event</button>
+          {error && <p className="error">{error}</p>}
         </form>
       </div>
     </>
@@ -718,6 +743,7 @@ function MakeComment(props) {
   const [allImage, setAllImage] = useState([]);
   const [showImages, setShowImages] = useState(false);
   const [content, setContent] = useState("");
+  const [error, setError] = useState(null);
   const post_type = "group_post";
 
   useEffect(() => {
@@ -728,7 +754,12 @@ function MakeComment(props) {
   }, []);
 
   const handleCommentSubmit = async (e) => {
-    /*  e.preventDefault() */
+    e.preventDefault();
+    if (content === "") {
+      setError("Say some nice!");
+      return;
+    }
+    setError(null);
     fetch("http://localhost:8080/api/addComment", {
       method: "POST",
       credentials: "include",
@@ -750,7 +781,7 @@ function MakeComment(props) {
     <>
       <div className="makeComment">
         {image === "" ? (
-          <h3>no selected image</h3>
+          <p className="warning">no selected image</p>
         ) : (
           <img src={image} className="avatar_preview"></img>
         )}
@@ -758,13 +789,14 @@ function MakeComment(props) {
         <form onSubmit={handleCommentSubmit}>
           <input
             type="text"
-            placeholder="content"
+            placeholder="..."
             className="commentContentCreation"
             onChange={(e) => setContent(e.target.value)}
           />
           <button type="submit" className="commentCreationButton">
-            submit
+            Send
           </button>
+          {error && <p className="error">{error}</p>}
         </form>
         {showImages ? (
           <>
@@ -836,7 +868,7 @@ function ToggleComments(props) {
       )}
       {showMore && !comments && (
         <div>
-          no comments
+          no comments here yet
           <MakeComment post_id={post_id} group_name={group_name} />
         </div>
       )}

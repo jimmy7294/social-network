@@ -65,15 +65,15 @@ function GetAllUsers() {
   return (
     <>
       {users && (
-        <div className="userList">
+        <ul className="userList">
           {users.map((user, index) => (
-            <div key={index}>
+            <li key={index}>
               <a href={`profile/${user.username}`}>
                 <div className="text">{user.username}</div>
               </a>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </>
   );

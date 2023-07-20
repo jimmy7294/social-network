@@ -229,6 +229,8 @@ body {
 
 .text {
   margin: 0.5vh;
+  overflow-wrap: break-word;
+  font-size: small;
 }
 
 .imgSubmit {
@@ -323,9 +325,14 @@ body {
   border-color: #4faa92;
   border-style: none;
   color: #e3f2ee;
-  margin-left: 85%;
-  width: 15%;
-  height: 20px;
+  margin-left: 75%;
+  width: 25%;
+  height: 30px; /* increased height */
+  font-size: 12px;
+  padding: 5px 10px; /* added padding */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .makePost {
@@ -627,8 +634,9 @@ body {
   border: solid 2px black;
   width: 15vh;
   display: grid;
-  justify-content: center;
+  justify-content: left;
   background-color: #144b56;
+  overflow: auto;
 }
 
 .postImage {
