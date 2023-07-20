@@ -21,7 +21,12 @@ function HomePage() {
       console.log("new message", newMsg)
       if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
             console.log("new notification", newMsg);
-            setNotif((prevValue) => [...prevValue, newMsg]);
+            setNotif((prevValue) => {
+              //console.log("prev",prevValue)
+              //console.log("upd", [...prevValue, newMsg])
+
+              return [...prevValue, newMsg]});
+            //console.log("upd value", notif)
       }
 
     }
@@ -33,7 +38,7 @@ function HomePage() {
   }, [])
   return (
     <>
-      <Headers notif={notif}/>
+      <Headers notifs={notif}/>
       <MakePost userImages={img} />
       <GetPosts />
       <GetAllUsers />

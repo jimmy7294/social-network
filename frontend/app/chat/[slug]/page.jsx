@@ -67,7 +67,7 @@ export default function currentChat(slug) {
 
   return (
     <>
-      <Headers notif={notif} />
+      <Headers notifs={notif} />
       <h2>Chatting With {user}</h2>
       {/* {GetMessages(slug)} */}
       <RenderChatBox message={chat} slug={slug} websocket={websocket} />

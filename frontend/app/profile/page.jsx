@@ -279,7 +279,7 @@ function ProfilePage(){
   }, [])
   return(
     <>
-    <Headers notif={notif}/>
+    <Headers notifs={notif}/>
     
     <GetProfile/>
     </>

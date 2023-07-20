@@ -106,7 +106,7 @@ export default function Optional() {
   };
   return (
     <>
-      <Headers notif={notif} />
+      <Headers notifs={notif}/>
       <div className="signin-window">
         <form onSubmit={encodeImageFile}>
           <input type="file" id="image" name="image"></input>

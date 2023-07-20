@@ -276,7 +276,7 @@ function ProfilePage(slug) {
   }, [])
   return (
     <>
-      <Headers notif={notif}/>
+      <Headers notifs={notif}/>
       <div className="layouter">
         <GetProfile slug={slug}/>
       </div>

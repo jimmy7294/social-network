@@ -158,7 +158,7 @@ newWS.onmessage = (msg) => {
 
 const Headers = (props) => {
   const newNotif = props.notifs
-  //console.log("newNotif", newNotif)
+  //console.log("newNotif headbar", newNotif)
   const [extraNotifs, setExtraNotifs] = useState([])
   const [notifications, setNotifications] = useState()
   const [tinyProfInfo, setTinyProfInfo] = useState()
