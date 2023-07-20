@@ -34,7 +34,13 @@ export default function currentChat(slug) {
             (newMsg.receiver === user || newMsg.sender === user)
           ) {
             //console.log("new notification parsed",newMsg)
-            setChat((prevValue) => [...prevValue, newMsg]);
+            setChat((prev) => {
+              if (prev === null) {
+                return [newMsg];
+              }
+              return [...prev, newMsg];
+            });
+
             //console.log("new chat",chat)
           }
           if (

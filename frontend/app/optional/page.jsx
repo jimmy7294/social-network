@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
@@ -9,55 +9,52 @@ import GetYourImages from "../components/GetYourImages";
 
 import Link from "next/link";
 
-
-
-
-
-function Avatars({arg}) {
+function Avatars({ arg }) {
   const [stockImages, setStockImages] = useState([]);
   const [userImages, setUserImages] = useState([]);
-  const images = GetYourImages()
-useEffect(() => {
-  (async () => {
-    const images = await GetYourImages()
-    setUserImages(images.user_images)
-    setStockImages(images.stock_images)
-  })()
-}, [])
-   
-  console.log(images, "here i am")
+  const images = GetYourImages();
+  useEffect(() => {
+    (async () => {
+      const images = await GetYourImages();
+      setUserImages(images.user_images);
+      setStockImages(images.stock_images);
+    })();
+  }, []);
 
-          // setStockImages(images.stock_images)
-          // setUserImages(images.user_images);
+  console.log(images, "here i am");
+
+  // setStockImages(images.stock_images)
+  // setUserImages(images.user_images);
 
   return (
     <>
       <div className="padder">
         {stockImages.map((image, index) => (
-          <img src={image} onClick={(e) => arg(image)} key={index} alt={`Avatar ${index}`} className="pfp" />
+          <img
+            src={image}
+            onClick={(e) => arg(image)}
+            key={index}
+            alt={`Avatar ${index}`}
+            className="pfp"
+          />
         ))}
       </div>
       {userImages && (
         <div className="padder">
           {userImages.map((image, index) => (
-            <img src={image} onClick={(e) => arg(image)} key={index} alt={`Avatar ${index}`} className="pfp" />
+            <img
+              src={image}
+              onClick={(e) => arg(image)}
+              key={index}
+              alt={`Avatar ${index}`}
+              className="pfp"
+            />
           ))}
         </div>
       )}
-
     </>
   );
-        }
-
-
-
-
-
-
-
-
-
-
+}
 
 export default function Optional() {
   const [nickname, setNickname] = useState("");
@@ -67,27 +64,31 @@ export default function Optional() {
   const router = useRouter();
   const [notif, setNotif] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const newWS = new WebSocket("ws://localhost:8080/api/ws");
     newWS.onmessage = (msg) => {
       let newMsg = JSON.parse(msg.data);
-      console.log("new message", newMsg)
-      if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
-            console.log("new notification", newMsg);
-            setNotif((prevValue) => [...prevValue, newMsg]);
+      console.log("new message", newMsg);
+      if (
+        newMsg.type === "group_join_request" ||
+        newMsg.type === "group_invite" ||
+        newMsg.type === "follow_request" ||
+        newMsg.type === "event"
+      ) {
+        console.log("new notification", newMsg);
+        setNotif((prevValue) => [...prevValue, newMsg]);
       }
-
-    }
+    };
     //setWebSocket(newWS);
     return () => {
       console.log("closing websocket");
       newWS.close();
-    }
-  }, [])
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(avatar)
+    console.log(avatar);
     const response = await fetch("http://localhost:8080/api/updateSettings", {
       method: "POST",
       credentials: "include",
@@ -105,20 +106,25 @@ export default function Optional() {
   };
   return (
     <>
-      <Headers notif={notif}/>
+      <Headers notif={notif} />
       <div className="signin-window">
+        <form onSubmit={encodeImageFile}>
+          <input type="file" id="image" name="image"></input>
+          <button type="submit" className="text">
+            Upload an image
+          </button>
+        </form>
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="padder">
-          <img src= {avatar} alt="" value={0} className="avatar_preview" />  
+            <img src={avatar} alt="" value={0} className="avatar_preview" />
           </div>
           <div className="container">
-            <a  type="submit" id={0} className="pick-me-profile" >
+            <a type="submit" id={0} className="pick-me-profile">
               <Avatars arg={setAvatar}></Avatars>
             </a>
           </div>
           <div>
-            <label id="image" >Choose an image:</label>
-            <input type="file" id="image" name="image" onChange={e => {encodeImageFile(e.target), router.push("/optional")}} ></input>
+            <label id="image">Choose an image:</label>
           </div>
           <br />
           <label id="aboutMe">About Me</label>
