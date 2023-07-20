@@ -8,7 +8,7 @@ import Headers from "../components/Header";
  function AllChats(){
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        fetch("http://localhost:8080/api/getUsernames", {
+        (async () => { fetch("http://localhost:8080/api/getUsernames", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -23,6 +23,8 @@ import Headers from "../components/Header";
                     console.log(data.users[0].username, "salkdjiosa")
                     setUsers(data.users)
                 })
+            })()
+        
             }, []);
             console.log(users,"sakldlak")
 
@@ -49,14 +51,32 @@ import Headers from "../components/Header";
 }
 
 
-function chatpage(){
+function Chatpage(){
+    const [notif, setNotif] = useState([]);
+    useEffect(()=>{
+        const newWS = new WebSocket("ws://localhost:8080/api/ws");
+        newWS.onmessage = (msg) => {
+          let newMsg = JSON.parse(msg.data);
+          console.log("new message", newMsg)
+          if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
+                console.log("new notification", newMsg);
+                setNotif((prevValue) => [...prevValue, newMsg]);
+          }
+    
+        }
+        //setWebSocket(newWS);
+        return () => {
+          console.log("closing websocket");
+              newWS.close();
+        }
+      }, [])
     return(
         <>
-        <Headers />
+        <Headers notifs={notif}/>
         <AllChats />
         </>
     )
 }
 
 
-export default chatpage;
+export default Chatpage;

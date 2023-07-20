@@ -91,22 +91,22 @@ function Groups(){
 
   useEffect(()=>{
     const newWS = new WebSocket("ws://localhost:8080/api/ws");
-        newWS.onmessage = (msg) => {
-          let newMsg = JSON.parse(msg.data);
-          console.log("new message", newMsg)
-          if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
+    newWS.onmessage = (msg) => {
+      let newMsg = JSON.parse(msg.data);
+      console.log("new message", newMsg)
+      if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
             console.log("new notification", newMsg);
             setNotif((prevValue) => [...prevValue, newMsg]);
-          }
+      }
 
-        }
-        setWebSocket(newWS);
-        return () => {
-          console.log("closing websocket");
-          newWS.close();
-        }
+    }
+    //setWebSocket(newWS);
+    return () => {
+      console.log("closing websocket");
+      newWS.close();
+    }
   }, [])
-  console.log("notif", notif)
+  //console.log("notif", notif)
   
   return (
     <>

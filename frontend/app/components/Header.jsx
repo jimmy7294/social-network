@@ -109,9 +109,9 @@ function GetNotification(props) {
 
   useEffect(() => {
     setNumber(notifNumb)
-    console.log("useffect entered")
+    //console.log("useffect entered")
   }, [notifNumb])
-  console.log("notifications updated", number, notifNumb)
+  //console.log("notifications updated", number, notifNumb)
  // useEffect(() => {
 /*     newWS.onerror = err => console.error(err);
 //newWS.onopen = () => setWS(newWS);

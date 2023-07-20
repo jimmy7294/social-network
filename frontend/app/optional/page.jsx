@@ -65,7 +65,25 @@ export default function Optional() {
   const [privacy, setPrivate] = useState("");
   const [avatar, setAvatar] = useState("");
   const router = useRouter();
+  const [notif, setNotif] = useState([]);
 
+  useEffect(()=>{
+    const newWS = new WebSocket("ws://localhost:8080/api/ws");
+    newWS.onmessage = (msg) => {
+      let newMsg = JSON.parse(msg.data);
+      console.log("new message", newMsg)
+      if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
+            console.log("new notification", newMsg);
+            setNotif((prevValue) => [...prevValue, newMsg]);
+      }
+
+    }
+    //setWebSocket(newWS);
+    return () => {
+      console.log("closing websocket");
+      newWS.close();
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,7 +105,7 @@ export default function Optional() {
   };
   return (
     <>
-      <Headers />
+      <Headers notif={notif}/>
       <div className="signin-window">
         <form className="sorting" onSubmit={handleSubmit}>
           <div className="padder">
