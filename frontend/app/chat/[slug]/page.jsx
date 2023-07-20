@@ -6,6 +6,7 @@ export default function currentChat(slug){
     const user = decodeURIComponent(slug.params.slug)
     const [chat, setChat] = useState()
     const [websocket, setWebSocket] = useState()
+    const [notif, setNotif] = useState([]);
     useEffect(() => {
         (async () => {
 /*             const m = await addMemberToGroupChat(slug)
@@ -17,21 +18,25 @@ export default function currentChat(slug){
 
             } */
             const c = await getChat(slug)
-            setChat(c)
+            setChat(c.messages)
 /*             const g = await getGroupPageData(slug)
             setGroupPageData(g) */
-            if (c) {
+            if (c.status === "success") {
                 console.log("should be true")
                 //setIsMember(true);
                 const newWS = new WebSocket("ws://localhost:8080/api/ws")
             newWS.onmessage = (msg) => {
-                console.log("new notification",msg)
+                //console.log("new notification",msg)
                 let newMsg = JSON.parse(msg.data)
-                console.log("new notif parsed", newMsg)
+                //console.log("new notif parsed", newMsg)
                 if (newMsg.type === "private_message" && (newMsg.receiver === user || newMsg.sender === user)) {
                 //console.log("new notification parsed",newMsg)
                 setChat((prevValue) => [...prevValue, newMsg])
                 //console.log("new chat",chat)
+                }
+                if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
+                    console.log("new notification", newMsg);
+                    setNotif((prevValue) => [...prevValue, newMsg]);
                 }
              }
              setWebSocket(newWS)
@@ -48,7 +53,7 @@ export default function currentChat(slug){
 
     return(
         <>
-        <Headers />
+        <Headers notif={notif}/>
         <h2>Chatting With {user}</h2>
         {/* {GetMessages(slug)} */}
         <RenderChatBox message={chat} slug={slug} websocket={websocket}/>
@@ -59,8 +64,9 @@ export default function currentChat(slug){
 function RenderChatBox(props) {
     const message = props.message
     const websocket = props.websocket
+    //console.log("ws",websocket)
     const otherUser = decodeURIComponent(props.slug.params.slug)
-    console.log("render chat box", message, otherUser)
+    //console.log("render chat box", message, otherUser)
     const [messages, setMessages] = useState([])
     function handleSubmit(event) {
         
@@ -134,10 +140,10 @@ async function getChat(slug) {
     const response = await json.json()
     if (response.status === "success") {
         console.log("response",response)
-        return response.messages
+        return response
     }
     console.log("error msg", response.status)
-    return response.status
+    return response
 }
 
 function SendMessage(reciver){

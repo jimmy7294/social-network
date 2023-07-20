@@ -172,13 +172,10 @@ export default function GroupPage(slug) {
               return [...prev, newMsg];
             });
           }
-          if (
-            newMsg.type === "group_join_request" ||
-            newMsg.type === "group_invite"
-          ) {
+          if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
             console.log("new notification", newMsg);
             setNotif((prevValue) => [...prevValue, newMsg]);
-          }
+      }
         };
         setWebSocket(newWS);
         return () => {
