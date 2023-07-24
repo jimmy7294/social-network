@@ -15,6 +15,7 @@ function InviteToGroup(props) {
   const group_name = decodeURIComponent(slug.params.slug);
   const [username, setUsername] = useState("");
   const [allusers, setAllUsers] = useState([]);
+  const [invite_success, setInviteSuccess] = useState(false);
 
   const filterOutMembers = (user) => {
     for (let i = 0; i < members.length; i++) {
@@ -49,6 +50,11 @@ function InviteToGroup(props) {
     })();
   }, []);
   // console.log("all users", allusers);
+  const handleChange = (e) => {
+    setUsername(e.target.value);
+    setInviteSuccess(false);
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const receiver = username;
@@ -66,9 +72,29 @@ function InviteToGroup(props) {
           console.log("failed to invite user", data.status);
           return;
         }
+        setInviteSuccess(true);
         // console.log("invited user", data.status);
       });
   };
+  if (invite_success) {
+    return (
+      <div>
+      <form onSubmit={handleSubmit}>
+        {allusers && (
+          <select onChange={(e) => handleChange(e)}>
+            {allusers.map((user, index) => (
+              <option key={index} value={user.username}>
+                {user.username}
+              </option>
+            ))}
+          </select>
+        )}
+        <p>{username} has been invited</p>
+        <button type="submit">YES</button>
+      </form>
+    </div>
+    );
+  }
   return (
     <>
       <div>
@@ -310,6 +336,7 @@ function RenderGroup(props) {
                 {events.map((event, index) => (
                   <div className="groupEvent" key={index}>
                     <Event event={event} groupName={groupname} />
+                    
                   </div>
                 ))}
               </div>
@@ -458,7 +485,7 @@ function Event(props) {
       <div className="groupPost">
         <div className="postti">
           <h2>{event.title}</h2>
-          <p>{event.description}</p>
+          <p>{event.content}</p>
 
           <div className="contents">
             <p>{event.date}</p>
