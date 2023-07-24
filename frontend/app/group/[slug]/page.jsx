@@ -198,7 +198,7 @@ export default function GroupPage(slug) {
             newMsg.type === "follow_request" ||
             newMsg.type === "event"
           ) {
-            // console.log("new notification", newMsg);
+            console.log("new notification", newMsg);
             setNotif((prevValue) => [...prevValue, newMsg]);
           }
         };
@@ -218,8 +218,10 @@ export default function GroupPage(slug) {
       {isMember && groupExists ? (
         <>
           <Headers notifs={notif} />
-          <InviteToGroup slug={slug} members={groupPageData.members} />
-          <MakeGroupPost slug={slug} />
+          <div className="standards">
+            <InviteToGroup slug={slug} members={groupPageData.members} />
+            <MakeGroupPost slug={slug} />
+          </div>
           <RenderGroup data={groupPageData} slug={slug} />
           <RenderChatBox message={chat} slug={slug} websocket={websocket} />
         </>
