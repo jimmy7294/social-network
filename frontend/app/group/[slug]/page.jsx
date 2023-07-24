@@ -54,7 +54,7 @@ function InviteToGroup(props) {
     setUsername(e.target.value);
     setInviteSuccess(false);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const receiver = username;
@@ -642,6 +642,7 @@ function MakeEvent({ slug }) {
   const [content, setContent] = useState("");
   const [event_date, setEvent_Date] = useState("");
   const [error, setError] = useState(null);
+  const options = ["going", "not going"]
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -656,7 +657,7 @@ function MakeEvent({ slug }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ group_name, title, content, event_date }),
+      body: JSON.stringify({ group_name, title, content, event_date, options }),
     })
       .then((data) => data.json())
       .then((data) => {
