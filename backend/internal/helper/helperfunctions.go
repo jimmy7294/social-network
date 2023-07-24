@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"backend/backend/internal/data"
+	"backend/internal/data"
 	"fmt"
 	"net/http"
 	"time"

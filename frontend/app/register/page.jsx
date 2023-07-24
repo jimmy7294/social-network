@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -32,19 +32,21 @@ export default function Register() {
 
     //setRegistrationDone(true) and hide the mandatory form, show the optional form
     if (data.status === "success") {
-      cookie.set("session_token", data.token)
+      cookie.set("session_token", data.token);
       router.push("/optional");
     }
   };
 
   return (
     <>
-        <header className="headbar">
-    <img className="logo"
+      <header className="headbar">
+        <img
+          className="logo"
           src="http://localhost:8080/images/Rickrolling.png"
-          alt="Your Company"/>
-    <h1 className="padder">Irrelevent Discussion</h1>
-    </header>
+          alt="Your Company"
+        />
+        <h1 className="padder">Irrelevent Discussion</h1>
+      </header>
       <div className="signin-window">
         <form className="organ" onSubmit={handleSubmit}>
           {/*Email*/}
@@ -65,7 +67,7 @@ export default function Register() {
           </div>
           {/*First Name*/}
           <div className="gibspace">
-              <label htmlFor="firstName">First Name</label>
+            <label htmlFor="firstName">First Name</label>
             <div className="mt-2">
               <input
                 id="firstName"
@@ -81,7 +83,7 @@ export default function Register() {
           </div>
           {/* Last Name */}
           <div className="gibspace">
-              <label htmlFor="lastName">Last Name</label>
+            <label htmlFor="lastName">Last Name</label>
             <div className="mt-2">
               <input
                 id="lastName"
@@ -97,7 +99,7 @@ export default function Register() {
           </div>
           {/* Birth Date */}
           <div className="gibspace">
-              <label htmlFor="birthDate">Date of Birth</label>
+            <label htmlFor="birthDate">Date of Birth</label>
             <div className="mt-2">
               <input
                 id="birthDate"
@@ -114,7 +116,7 @@ export default function Register() {
           </div>
           {/* Password */}
           <div className="gibspace">
-              <label htmlFor="password">Password</label>
+            <label htmlFor="password">Password</label>
             <div className="mt-2">
               <input
                 id="password"
@@ -142,6 +144,6 @@ export default function Register() {
           </Link>
         </p>
       </div>
-    </> 
+    </>
   );
 }

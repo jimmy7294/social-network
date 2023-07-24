@@ -2,7 +2,7 @@
 
 import Headers from "../../components/Header";
 import { useRouter } from "next/navigation";
-import GetYourImages from "../../components/GetYourImages";
+import GetYourImages from "../../components/getyourimages";
 import encodeImageFile from "../../components/encodeImage";
 import { usePathname } from "next/navigation";
 //import getGroupPageData from "@/app/components/test";
@@ -172,10 +172,15 @@ export default function GroupPage(slug) {
               return [...prev, newMsg];
             });
           }
-          if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
+          if (
+            newMsg.type === "group_join_request" ||
+            newMsg.type === "group_invite" ||
+            newMsg.type === "follow_request" ||
+            newMsg.type === "event"
+          ) {
             console.log("new notification", newMsg);
             setNotif((prevValue) => [...prevValue, newMsg]);
-      }
+          }
         };
         setWebSocket(newWS);
         return () => {

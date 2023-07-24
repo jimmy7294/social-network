@@ -1,10 +1,9 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { useState } from "react";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import cookie from "js-cookie";
-
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,38 +12,39 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let cok = cookie.get("test")
-    let cok2 = cookie.get()
-    console.log(cok)
-    console.log(cok2)
+    let cok = cookie.get("test");
+    let cok2 = cookie.get();
+    console.log(cok);
+    console.log(cok2);
     const response = await fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({email, password}),
+      body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
     console.log("Register data:", data);
 
-    if ( data.status !== "success") {
+    if (data.status !== "success") {
       console.error("Error:", data.status);
-      return
-    } 
-      cookie.set("session_token", data.token)
-      console.log(data.status)
-      router.push("/")
-    
+      return;
+    }
+    cookie.set("session_token", data.token);
+    console.log(data.status);
+    router.push("/");
   };
   return (
-    <>  
-    <header className="headbar">
-    <img className="logo"
+    <>
+      <header className="headbar">
+        <img
+          className="logo"
           src="http://localhost:8080/images/Rickrolling.png"
-          alt="Your Company"/>
-    <h1 className="padder">Irrelevent Discussion</h1>
-    </header>
-     
+          alt="Your Company"
+        />
+        <h1 className="padder">Irrelevent Discussion</h1>
+      </header>
+
       <div className="signin-window">
         <h2>Sign in</h2>
         <form
@@ -70,24 +70,24 @@ export default function Login() {
           </div>
           <div className="gibspace">
             <label htmlFor="password">Password</label>
-          <div className="mt-2">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field"
-            />
-          </div>
-          <a href="https://youtu.be/eY52Zsg-KVI" className="forgot">
-            Forgot password?
-          </a>
-          <div className="padder">
-            <button type="submit">Sign in</button>
-          </div>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field"
+              />
+            </div>
+            <a href="https://youtu.be/eY52Zsg-KVI" className="forgot">
+              Forgot password?
+            </a>
+            <div className="padder">
+              <button type="submit">Sign in</button>
+            </div>
           </div>
         </form>
 

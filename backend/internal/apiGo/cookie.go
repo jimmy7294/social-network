@@ -1,7 +1,7 @@
 package apiGO
 
 import (
-	"backend/backend/internal/helper"
+	"backend/internal/helper"
 	"net/http"
 )
 

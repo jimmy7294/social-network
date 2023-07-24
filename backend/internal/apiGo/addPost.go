@@ -1,8 +1,8 @@
 package apiGO
 
 import (
-	"backend/backend/internal/data"
-	"backend/backend/internal/helper"
+	"backend/internal/data"
+	"backend/internal/helper"
 	"encoding/json"
 	"fmt"
 	"net/http"

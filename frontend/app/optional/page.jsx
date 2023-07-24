@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 //import { useCookies } from "react-cookie";
 import Headers from "../components/Header";
 import encodeImageFile from "../components/encodeImage";
-import GetYourImages from "../components/GetYourImages";
+import GetYourImages from "../components/getyourimages";
 
 import Link from "next/link";
 
@@ -106,7 +106,7 @@ export default function Optional() {
   };
   return (
     <>
-      <Headers notifs={notif}/>
+      <Headers notifs={notif} />
       <div className="signin-window">
         <form onSubmit={encodeImageFile}>
           <input type="file" id="image" name="image"></input>

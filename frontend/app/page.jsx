@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from "react";
 import Headers from "./components/Header";
 import encodeImageFile from "./components/encodeImage";
-import GetYourImages from "./components/GetYourImages";
+import GetYourImages from "./components/getyourimages";
 import ImageSelector from "./components/imageSelector";
 
 const datapromise = GetYourImages();
@@ -14,31 +14,36 @@ function HomePage() {
   // console.log("images from top", img);
   const [notif, setNotif] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const newWS = new WebSocket("ws://localhost:8080/api/ws");
     newWS.onmessage = (msg) => {
       let newMsg = JSON.parse(msg.data);
-      console.log("new message", newMsg)
-      if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
-            console.log("new notification", newMsg);
-            setNotif((prevValue) => {
-              //console.log("prev",prevValue)
-              //console.log("upd", [...prevValue, newMsg])
+      console.log("new message", newMsg);
+      if (
+        newMsg.type === "group_join_request" ||
+        newMsg.type === "group_invite" ||
+        newMsg.type === "follow_request" ||
+        newMsg.type === "event"
+      ) {
+        console.log("new notification", newMsg);
+        setNotif((prevValue) => {
+          //console.log("prev",prevValue)
+          //console.log("upd", [...prevValue, newMsg])
 
-              return [...prevValue, newMsg]});
-            //console.log("upd value", notif)
+          return [...prevValue, newMsg];
+        });
+        //console.log("upd value", notif)
       }
-
-    }
+    };
     //setWebSocket(newWS);
     return () => {
       console.log("closing websocket");
       newWS.close();
-    }
-  }, [])
+    };
+  }, []);
   return (
     <>
-      <Headers notifs={notif}/>
+      <Headers notifs={notif} />
       <MakePost userImages={img} />
       <GetPosts />
       <GetAllUsers />

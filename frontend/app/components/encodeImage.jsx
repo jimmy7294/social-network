@@ -1,10 +1,9 @@
-"use client"
+"use client";
 
 function encodeImageFile(element) {
+  let file = element.target.image.files[0];
 
-let file = element.target.image.files[0]
-
-if (file === undefined) return;
+  if (file === undefined) return;
   let reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onloadend = function () {
@@ -17,7 +16,6 @@ if (file === undefined) return;
       body: JSON.stringify(reader.result),
     });
   };
-
 }
 
 export default encodeImageFile;

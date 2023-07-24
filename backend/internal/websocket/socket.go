@@ -4,8 +4,8 @@ import (
 	//"backend/internal/data"
 	// "backend/internal/sqlite"
 
-	"backend/backend/internal/data"
-	"backend/backend/internal/helper"
+	"backend/internal/data"
+	"backend/internal/helper"
 	"fmt"
 	"net/http"
 	"time"

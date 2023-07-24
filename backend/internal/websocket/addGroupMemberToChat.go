@@ -1,7 +1,7 @@
 package socket
 
 import (
-	"backend/backend/internal/helper"
+	"backend/internal/helper"
 	"encoding/json"
 	"fmt"
 	"net/http"

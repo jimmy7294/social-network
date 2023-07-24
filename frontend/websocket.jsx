@@ -7,9 +7,9 @@
 //       this.type = data.type;
 //     }
 //   }
-  
-  //let timeoutId;
-  
+
+//let timeoutId;
+
 //   function removeTyping() {
 //     let el = document.querySelector(".typing");
 //     if (el !== null) {
@@ -17,9 +17,9 @@
 //       timeoutId = clearTimeout(timeoutId);
 //     }
 //   }
-  
+
 //   let socket;
-  
+
 //   window.onbeforeunload = function () {
 //     preventDefault();
 //     console.log("onbefore");
@@ -27,34 +27,34 @@
 //     onNavigate("/");
 //     return "fuck you";
 //   };
-  
+
 export default function OpenChatSocket() {
-    if (socket !== undefined) {
-      return;
-    }
-    socket = new WebSocket("ws://localhost:8080/api/ws");
-    console.log("Attempting Websocket Connetcion");
-    socket.onmessage = function (evt) {
-      const eventData = JSON.parse(evt.data);
-      const event = Object.assign(new Event(eventData));
-      routeEvent(event);
-    };
-    socket.onopen = () => {
-      console.log("Connected");
-    };
-  
-    socket.onclose = (event) => {
-      console.log("Socket Closed", event);
-      let name = "session_token";
-      document.cookie = name + "=; Max-Age=-99999999;";
-      console.log("closed and out");
-    };
-  
-    socket.onerror = (error) => {
-      console.log("Socket Error:", error);
-    };
+  if (socket !== undefined) {
+    return;
   }
-  
+  socket = new WebSocket("ws://localhost:8080/api/ws");
+  console.log("Attempting Websocket Connetcion");
+  socket.onmessage = function (evt) {
+    const eventData = JSON.parse(evt.data);
+    const event = Object.assign(new Event(eventData));
+    routeEvent(event);
+  };
+  socket.onopen = () => {
+    console.log("Connected");
+  };
+
+  socket.onclose = (event) => {
+    console.log("Socket Closed", event);
+    let name = "session_token";
+    document.cookie = name + "=; Max-Age=-99999999;";
+    console.log("closed and out");
+  };
+
+  socket.onerror = (error) => {
+    console.log("Socket Error:", error);
+  };
+}
+
 //   function routeEvent(event) {
 //     if (
 //       event.sender === undefined ||
@@ -118,7 +118,7 @@ export default function OpenChatSocket() {
 //         break;
 //     }
 //   }
-  
+
 //   function sendMessage() {
 //     let newmessage = document.getElementById("messafge");
 //     if (/\S/.test(newmessage.value)) {
@@ -134,6 +134,4 @@ export default function OpenChatSocket() {
 //       getUsers();
 //     }
 //     return false;
-  //}
-
- 
+//}

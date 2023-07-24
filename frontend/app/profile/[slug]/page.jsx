@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Headers from "../../components/Header";
 import { useRouter } from "next/navigation";
 
-function FollowCheck({slug}) {
+function FollowCheck({ slug }) {
   const [following, setFollwing] = useState(Boolean);
   const user = decodeURIComponent(slug.params.slug);
   useEffect(() => {
@@ -46,35 +46,35 @@ function FollowCheck({slug}) {
       });
   };
   //if (following) {
-    return ( 
-      <>
+  return (
+    <>
       {following ? (
-      <>
-      <a href={`${user}`}>
-        <button onClick={() => handleFollow()}>Unfollow</button>
-      </a>
-    </>
-    ) : (
-      <>
-        <a href={`${user}`}>
-          <button onClick={() => handleFollow()}>Follow</button>
-        </a>
-      </>
-    )}
+        <>
+          <a href={`${user}`}>
+            <button onClick={() => handleFollow()}>Unfollow</button>
+          </a>
         </>
-    );
- // } else {
- // }
+      ) : (
+        <>
+          <a href={`${user}`}>
+            <button onClick={() => handleFollow()}>Follow</button>
+          </a>
+        </>
+      )}
+    </>
+  );
+  // } else {
+  // }
 }
 
-function GetProfile({slug}) {
+function GetProfile({ slug }) {
   const user = decodeURIComponent(slug.params.slug);
   const [stuff, setStuff] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [groups, setGroups] = useState([]);
   const router = useRouter();
-  const [isPrivate, setIsPrivate] = useState(true)
+  const [isPrivate, setIsPrivate] = useState(true);
   console.log(user);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ function GetProfile({slug}) {
           //return;
         }
         if (data.status !== "private") {
-          setIsPrivate(false)
+          setIsPrivate(false);
         }
         setStuff(data);
         setFollowers(data.followers);
@@ -108,80 +108,81 @@ function GetProfile({slug}) {
       });
   }, []);
   console.log(stuff);
-  return (<>
-    {!isPrivate || following ? (
+  return (
+    <>
+      {!isPrivate || following ? (
         <>
-        <div className="Profile">
-          <div className="organiser">
-            <img className="avatar_preview" src={stuff.avatar} />
+          <div className="Profile">
+            <div className="organiser">
+              <img className="avatar_preview" src={stuff.avatar} />
+            </div>
+            <div className="docu">
+              <p> {stuff.username}</p>
+              <p> {stuff.first_name}</p>
+              <p> {stuff.last_name}</p>
+              <p> Email: {stuff.email}</p>
+              <p> Bio: {stuff.bio}</p>
+              <p> Brithday: {stuff.dob}</p>
+              <p> {stuff.privacy}</p>
+              <FollowCheck slug={slug} />
+            </div>
           </div>
-          <div className="docu">
-            <p> {stuff.username}</p>
-            <p> {stuff.first_name}</p>
-            <p> {stuff.last_name}</p>
-            <p> Email: {stuff.email}</p>
-            <p> Bio: {stuff.bio}</p>
-            <p> Brithday: {stuff.dob}</p>
-            <p> {stuff.privacy}</p>
-            <FollowCheck slug={slug}/>
-          </div>
-        </div>
-        <div>
-          <div className="folow">
-            <h2>Followers</h2>
-            {followers && (
-              <div>
-                {followers.map((follower, index) => (
-                  <a key={index} href={`/profile/${follower}`}>
-                    <p>{follower}</p>
-                  </a>
-                ))}
-              </div>
-            )}
-  
-            {following && (
-              <div>
-                <h2>Following</h2>
-                {following.map((follow, index) => (
-                  <div key={index}>
-                    <a
-                      className="link-up"
-                      key={index}
-                      href={`/profile/${follow}`}
-                    >
-                      <p>{follow}</p>{" "}
+          <div>
+            <div className="folow">
+              <h2>Followers</h2>
+              {followers && (
+                <div>
+                  {followers.map((follower, index) => (
+                    <a key={index} href={`/profile/${follower}`}>
+                      <p>{follower}</p>
                     </a>
-                  </div>
-                ))}
-              </div>
-            )}
-  
-            {groups && (
-              <div>
-                <h2>Groups</h2>
-                {groups.map((group, index) => (
-                  <div key={index}>
-                    <p>{group}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+
+              {following && (
+                <div>
+                  <h2>Following</h2>
+                  {following.map((follow, index) => (
+                    <div key={index}>
+                      <a
+                        className="link-up"
+                        key={index}
+                        href={`/profile/${follow}`}
+                      >
+                        <p>{follow}</p>{" "}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {groups && (
+                <div>
+                  <h2>Groups</h2>
+                  {groups.map((group, index) => (
+                    <div key={index}>
+                      <p>{group}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
         </>
-  
-    ) : (
-      <>
-      <div>
-        <h2>Profile</h2>
-        <div>{stuff.email}</div>
-        <FollowCheck slug={slug}/>
-      </div>
+      ) : (
+        <>
+          <div>
+            <h2>Profile</h2>
+            <div>{stuff.email}</div>
+            <FollowCheck slug={slug} />
+          </div>
+        </>
+      )}
     </>
-    )}
-      </>)
-  
-/*     return (
+  );
+
+  /*     return (
       <>
         <div className="Profile">
           <div className="organiser">
@@ -257,28 +258,32 @@ function GetProfile({slug}) {
 function ProfilePage(slug) {
   const [notif, setNotif] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const newWS = new WebSocket("ws://localhost:8080/api/ws");
     newWS.onmessage = (msg) => {
       let newMsg = JSON.parse(msg.data);
-      console.log("new message", newMsg)
-      if (newMsg.type === "group_join_request" || newMsg.type === "group_invite" || newMsg.type === "follow_request" || newMsg.type === "event") {
-            console.log("new notification", newMsg);
-            setNotif((prevValue) => [...prevValue, newMsg]);
+      console.log("new message", newMsg);
+      if (
+        newMsg.type === "group_join_request" ||
+        newMsg.type === "group_invite" ||
+        newMsg.type === "follow_request" ||
+        newMsg.type === "event"
+      ) {
+        console.log("new notification", newMsg);
+        setNotif((prevValue) => [...prevValue, newMsg]);
       }
-
-    }
+    };
     //setWebSocket(newWS);
     return () => {
       console.log("closing websocket");
       newWS.close();
-    }
-  }, [])
+    };
+  }, []);
   return (
     <>
-      <Headers notifs={notif}/>
+      <Headers notifs={notif} />
       <div className="layouter">
-        <GetProfile slug={slug}/>
+        <GetProfile slug={slug} />
       </div>
     </>
   );

@@ -1,9 +1,9 @@
 package main
 
 import (
-	apiGO "backend/backend/internal/apiGo"
-	"backend/backend/internal/data"
-	socket "backend/backend/internal/websocket"
+	apiGO "backend/internal/apiGo"
+	"backend/internal/data"
+	socket "backend/internal/websocket"
 	"database/sql"
 	"fmt"
 	"log"

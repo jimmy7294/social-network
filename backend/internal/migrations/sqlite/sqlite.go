@@ -1,6 +1,6 @@
 package sqlite
 
-import "backend/backend/internal/data"
+import "backend/internal/data"
 
 func CheckSessionToken(sessionString string) (int, error) {
 	stmt := "CHECK uid FROM users WHERE session_token = ?;"

@@ -1,9 +1,9 @@
 package apiGO
 
 import (
-	"backend/backend/internal/data"
-	"backend/backend/internal/helper"
-	socket "backend/backend/internal/websocket"
+	"backend/internal/data"
+	"backend/internal/helper"
+	socket "backend/internal/websocket"
 	"encoding/json"
 	"fmt"
 	"net/http"

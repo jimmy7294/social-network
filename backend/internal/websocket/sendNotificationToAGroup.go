@@ -1,8 +1,8 @@
 package socket
 
 import (
-	"backend/backend/internal/data"
-	"backend/backend/internal/helper"
+	"backend/internal/data"
+	"backend/internal/helper"
 	"time"
 )
 
