@@ -4,6 +4,15 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import PrintNewMessage from "../page.jsx";
 
+//export const newWS = new WebSocket("ws://localhost:8080/api/ws")
+
+// if(msg.type === "message"){
+//   if(pathname === `"/chat/"${msg.sender}`){
+//     PrintNewMessage(msg)
+//   }
+// } else if(msg.type === "notification"){
+//   GetNotification()
+// }
 async function GetTinyProfileInfo() {
   const json = await fetch("http://localhost:8080/api/getHeadbar", {
     method: "POST",
@@ -18,9 +27,41 @@ async function GetTinyProfileInfo() {
 }
 
 function GetTinyProfile(props) {
+  //const [username, setUsername] = useState([]);
+  //const [avatar, setAvatar] = useState([]);
   const username = props.username;
   const avatar = props.avatar;
   const [msg, setMsg] = useState([]);
+  /* console.log("slug stuff",slug.param)
+if (slug.param !== undefined) {
+  console.log("slug", slug.param.slug, typeof slug.param.slug)
+/*   let param = decodeURIComponent(slug.param.slug)
+  if (param !== undefined) {
+    console.log(param)
+  } 
+} */
+  /* 
+  useEffect(() => {   
+
+  fetch("http://localhost:8080/api/getHeadbar", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify("voff"),
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      if (data.status !== "success") {
+        console.log("failed to get profile");
+        return;
+      }
+      console.log(data);
+      setUsername(data.username);
+      setAvatar(data.avatar);
+    });
+}, []); */
   return (
     <>
       <a className="fit" href="/profile">
@@ -52,13 +93,48 @@ function Logout() {
 }
 
 function GetNotification(props) {
+  //const [notification, setNotification] = useState(false);
+  //const [number, setNumber] = useState([0]);
   const notification = props.notifications;
   const notifNumb = props.notifNumber;
+  //const number = props.notifNumber
   const [number, setNumber] = useState(props.notifNumber);
 
   useEffect(() => {
     setNumber(notifNumb);
+    //console.log("useffect entered")
   }, [notifNumb]);
+  //console.log("notifications updated", number, notifNumb)
+  // useEffect(() => {
+  /*     newWS.onerror = err => console.error(err);
+//newWS.onopen = () => setWS(newWS);
+newWS.onmessage = (msg) => {
+  let newMsg = JSON.parse(msg.data)
+  if (newMsg.type === "notification") {
+    console.log("new notification",msg)
+  }
+} */
+  // fetch("http://localhost:8080/api/getNotifications", {
+  //   method: "POST",
+  //   credentials: "include",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // })
+  //   .then((data) => data.json())
+  //   .then((data) => {
+  //     if (data.status !== "success") {
+  //       console.log("failed to get notification");
+  //        return;
+  //      }
+  //      console.log(data, "here be notifications")
+  //      if(data.notifications !== null){
+  //        setNotification(true);
+  //       setNumber(data.notifications.length);
+  //      console.log(data, notification);
+  //      }
+  //    });
+  //}, []);
 
   return (
     <>
@@ -71,6 +147,7 @@ function GetNotification(props) {
 
 const Headers = (props) => {
   const newNotif = props.notifs;
+  //console.log("newNotif headbar", newNotif)
   const [extraNotifs, setExtraNotifs] = useState([]);
   const [notifications, setNotifications] = useState();
   const [tinyProfInfo, setTinyProfInfo] = useState();
@@ -82,15 +159,16 @@ const Headers = (props) => {
     (async () => {
       const userdat = await GetTinyProfileInfo();
       if (userdat.status !== "success") {
-        // console.log("sumtin went wrong", notifdat);
+        console.log("sumtin went wrong", notifdat);
       }
       setUsername(userdat.username);
       setAvatar(userdat.avatar);
 
       const notifdat = await getNotificationInfo();
       if (notifdat.status !== "success") {
-        // console.log("getting notification error", notifdat);
+        console.log("getting notification error", notifdat);
       }
+      // console.log(notifdat.notifications, "ökasdjköas");
       if (notifdat.notifications !== null) {
         setNotifications(notifdat.notifications);
         setNotifNumber(notifdat.notifications.length);
@@ -141,7 +219,7 @@ const Headers = (props) => {
         }}
       >
         <div className="logout">
-          <div className="theSoundOfTaDaronne">Log out</div>
+          <div className="theSoundOfTaDaronne">log out</div>
         </div>
       </a>
     </header>
