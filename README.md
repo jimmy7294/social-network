@@ -1,27 +1,30 @@
 # social-network
 
-rjaact
+# How to run
+
+/backend
+go run main.go
+
+/frontend
+npm run dev
+
+# On Docker
+
+docker-compose up --build
+
+# Color Reference
 
 ## Color Reference
 
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Button default | ![#0f1f2c](https://via.placeholder.com/10/0f1f2c?text=+) #0f1f2c |
+| Color                | Hex                                                              |
+| -------------------- | ---------------------------------------------------------------- |
+| Button default       | ![#0f1f2c](https://via.placeholder.com/10/0f1f2c?text=+) #0f1f2c |
 | Button hover default | ![#56c3b7](https://via.placeholder.com/10/56c3b7?text=+) #56c3b7 |
-| Background| ![#326984](https://via.placeholder.com/10/326984?text=+) #326984 |
-| Text | ![#e4edf1](https://via.placeholder.com/10/e4edf1?text=+) #e4edf1
-| Error | ![#d44729](https://via.placeholder.com/10/d44729?text=+) #d44729
-| Error text | ![#d44729](https://via.placeholder.com/10/d44729?text=+) #d44729|
+| Background           | ![#326984](https://via.placeholder.com/10/326984?text=+) #326984 |
+| Text                 | ![#e4edf1](https://via.placeholder.com/10/e4edf1?text=+) #e4edf1 |
+| Error                | ![#d44729](https://via.placeholder.com/10/d44729?text=+) #d44729 |
+| Error text           | ![#d44729](https://via.placeholder.com/10/d44729?text=+) #d44729 |
 
 ## Font Reference
 
 Roboto mono - https://fonts.google.com/specimen/Roboto+Mono
-
-
-## make go terminal commands work
-(in terminal):
-code ~/.zshrc
-
-Then put this line in the file:
-
-export PATH="$PATH:/Users/username here/go/bin"
