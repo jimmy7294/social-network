@@ -15,36 +15,42 @@ export async function middleware(req, NextRequest) {
     } else return NextResponse.redirect("http://localhost:3000/login");
   }
 
-  return fetch("http://backend:8080/api/cookie", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: `${cookiee.name}=${cookiee.value}`,
-    },
-  })
-    .then((fetchResponse) => fetchResponse.json())
-    .then((data) => {
-      if (data.status !== "success") {
-        const responso = NextResponse.redirect("http://localhost:3000/login");
-        responso.cookies.delete("session_token");
-        return responso;
-      }
-      if (
-        data.status === "success" &&
-        (req.nextUrl.href === "http://localhost:3000/login" ||
-          req.nextUrl.href === "http://localhost:3000/register")
-      ) {
-        return NextResponse.redirect("http://localhost:3000/");
-      }
-      console.log("cookie check success");
-      return response;
+  const tryFetch = async (url) => {
+    return fetch(url, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `${cookiee.name}=${cookiee.value}`,
+      },
     })
-    .catch((error) => {
-      // Handle any errors from the fetch here
-      console.log(error);
-      return NextResponse.next();
-    });
+      .then((fetchResponse) => fetchResponse.json())
+      .then((data) => {
+        if (data.status !== "success") {
+          const responso = NextResponse.redirect("http://localhost:3000/login");
+          responso.cookies.delete("session_token");
+          return responso;
+        }
+        if (
+          data.status === "success" &&
+          (req.nextUrl.href === "http://localhost:3000/login" ||
+            req.nextUrl.href === "http://localhost:3000/register")
+        ) {
+          return NextResponse.redirect("http://localhost:3000/");
+        }
+        console.log("cookie check success");
+        return response;
+      });
+  };
+
+  try {
+    // Try to fetch from localhost first
+    return await tryFetch("http://localhost:8080/api/cookie");
+  } catch (error) {
+    console.log("Error fetching from localhost, trying backend: ", error);
+    // If localhost fails, try to fetch from backend
+    return tryFetch("http://backend:8080/api/cookie");
+  }
 }
 
 export const config = {
