@@ -15,16 +15,16 @@ function HandleFollowRequest(response, sender, receiver) {
     .then((data) => data.json())
     .then((data) => {
       if (data.status !== "success") {
-        console.log("failed to handle follow request", data.status);
+        // console.log("failed to handle follow request", data.status);
         return;
       }
-      console.log(data);
+      // console.log(data);
       location.reload("/profile");
     });
 }
 
 function HandleGroupRequest(group_name, response, sender, receiver) {
-  console.log(sender);
+  // console.log(sender);
   fetch("http://localhost:8080/api/handleGroupJoinRequest", {
     method: "POST",
     credentials: "include",
@@ -36,19 +36,19 @@ function HandleGroupRequest(group_name, response, sender, receiver) {
     .then((data) => data.json())
     .then((data) => {
       if (data.status !== "success") {
-        console.log("failed to handle group request");
-        console.log(data.status);
+        // console.log("failed to handle group request");
+        // console.log(data.status);
         return;
       }
-      console.log(data);
+      // console.log(data);
       location.reload("/profile");
     });
 }
 
 function HandleGroupInvite(group_name, response, sender, receiver) {
-  console.log(sender, "sender");
-  console.log(receiver, "receiver");
-  console.log(group_name, "group_name");
+  // console.log(sender, "sender");
+  // console.log(receiver, "receiver");
+  // console.log(group_name, "group_name");
   fetch("http://localhost:8080/api/handleGroupInvite", {
     method: "POST",
     credentials: "include",
@@ -60,11 +60,11 @@ function HandleGroupInvite(group_name, response, sender, receiver) {
     .then((data) => data.json())
     .then((data) => {
       if (data.status !== "success") {
-        console.log("failed to handle group invite");
-        console.log(data.status);
+        // console.log("failed to handle group invite");
+        // console.log(data.status);
         return;
       }
-      console.log(data);
+      // console.log(data);
       location.reload("/profile");
     });
 }
@@ -83,15 +83,14 @@ function GetNotification() {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to get notifications");
+          // console.log("failed to get notifications");
           return;
         }
-        console.log(data);
         setNotification(data.notifications);
       });
   }, []);
 
-  console.log(notification, "sakldlak");
+  // console.log(notification, "notifications if any");
   return (
     <>
       {!notification && (
@@ -218,9 +217,9 @@ function GetProfile() {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log(data);
+          // console.log(data);
         }
-        console.log(data, "profile");
+        // console.log(data, "profile");
         setprofile(data);
         setFollowers(data.followers);
         setFollowing(data.following);
@@ -228,7 +227,7 @@ function GetProfile() {
         setCreatedPosts(data.created_posts);
       });
   }, []);
-  console.log(created_posts, "created_posts");
+  // console.log(created_posts, "created_posts");
   return (
     <>
       <div>
@@ -318,20 +317,20 @@ function ProfilePage() {
     const newWS = new WebSocket("ws://localhost:8080/api/ws");
     newWS.onmessage = (msg) => {
       let newMsg = JSON.parse(msg.data);
-      console.log("new message", newMsg);
+      // console.log("new message", newMsg);
       if (
         newMsg.type === "group_join_request" ||
         newMsg.type === "group_invite" ||
         newMsg.type === "follow_request" ||
         newMsg.type === "event"
       ) {
-        console.log("new notification", newMsg);
+        // console.log("new notification", newMsg);
         setNotif((prevValue) => [...prevValue, newMsg]);
       }
     };
     //setWebSocket(newWS);
     return () => {
-      console.log("closing websocket");
+      // console.log("closing websocket");
       newWS.close();
     };
   }, []);

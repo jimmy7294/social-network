@@ -19,7 +19,7 @@ function FollowCheck({ slug }) {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("follow check failed");
+          // console.log("follow check failed");
           //return;
         }
         setFollwing(data.following);
@@ -38,14 +38,13 @@ function FollowCheck({ slug }) {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log(data.status);
-          console.log("unfollow/follow failed");
-          //return;
+          // console.log(data.status);
+          // console.log("unfollow/follow failed");
+          return;
         }
-        console.log("unfollow/follow success 123213 12", user);
+        // console.log("unfollow/follow success 123213 12", user);
       });
   };
-  //if (following) {
   return (
     <>
       {following ? (
@@ -63,8 +62,6 @@ function FollowCheck({ slug }) {
       )}
     </>
   );
-  // } else {
-  // }
 }
 
 function GetProfile({ slug }) {
@@ -75,7 +72,6 @@ function GetProfile({ slug }) {
   const [groups, setGroups] = useState([]);
   const router = useRouter();
   const [isPrivate, setIsPrivate] = useState(true);
-  console.log(user);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/getProfile", {
@@ -88,12 +84,11 @@ function GetProfile({ slug }) {
     })
       .then((data) => data.json())
       .then((data) => {
-        console.log(data, "data");
+        // console.log(data, "data");
         if (data.status !== "success") {
-          console.log("get profile failed", data); // Update the state with fetched data
+          // console.log("get profile failed", data); // Update the state with fetched data
         }
         if (data.you === true) {
-          console.log("you are you");
           router.push("/profile");
 
           //return;
@@ -107,7 +102,6 @@ function GetProfile({ slug }) {
         setGroups(data.groups);
       });
   }, []);
-  console.log(stuff);
   return (
     <>
       {!isPrivate || following ? (
@@ -181,78 +175,6 @@ function GetProfile({ slug }) {
       )}
     </>
   );
-
-  /*     return (
-      <>
-        <div className="Profile">
-          <div className="organiser">
-            <img className="avatar_preview" src={stuff.avatar} />
-          </div>
-          <div className="docu">
-            <p> {stuff.username}</p>
-            <p> {stuff.first_name}</p>
-            <p> {stuff.last_name}</p>
-            <p> Email: {stuff.email}</p>
-            <p> Bio: {stuff.bio}</p>
-            <p> Brithday: {stuff.dob}</p>
-            <p> {stuff.privacy}</p>
-            {followCheck(slug)}
-          </div>
-        </div>
-        <div>
-          <div className="folow">
-            <h2>Followers</h2>
-            {followers && (
-              <div>
-                {followers.map((follower, index) => (
-                  <a key={index} href={`/profile/${follower}`}>
-                    <p>{follower}</p>
-                  </a>
-                ))}
-              </div>
-            )}
-
-            {following && (
-              <div>
-                <h2>Following</h2>
-                {following.map((follow, index) => (
-                  <div key={index}>
-                    <a
-                      className="link-up"
-                      key={index}
-                      href={`/profile/${follow}`}
-                    >
-                      <p>{follow}</p>{" "}
-                    </a>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {groups && (
-              <div>
-                <h2>Groups</h2>
-                {groups.map((group, index) => (
-                  <div key={index}>
-                    <p>{group}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </>
-    );
-  
-  console.log(stuff);
-  return (
-    <>
-      <div>
-        <h2>Profile</h2>
-        <div>{stuff.email}</div>
-      </div>
-    </>
-  ); */
 }
 
 function ProfilePage(slug) {

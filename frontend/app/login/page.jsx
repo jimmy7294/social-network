@@ -8,14 +8,11 @@ import cookie from "js-cookie";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let cok = cookie.get("test");
-    let cok2 = cookie.get();
-    console.log(cok);
-    console.log(cok2);
     const response = await fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: {
@@ -24,14 +21,12 @@ export default function Login() {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
-    console.log("Register data:", data);
 
     if (data.status !== "success") {
-      console.error("Error:", data.status);
+      setError(data.status);
       return;
     }
     cookie.set("session_token", data.token);
-    console.log(data.status);
     router.push("/");
   };
   return (
@@ -85,6 +80,7 @@ export default function Login() {
             <a href="https://youtu.be/eY52Zsg-KVI" className="forgot">
               Forgot password?
             </a>
+            {error && <p className="error">{error}</p>}
             <div className="padder">
               <button type="submit">Sign in</button>
             </div>

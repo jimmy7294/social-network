@@ -11,10 +11,7 @@ export default function Register() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [birthDate, setBirthDate] = useState("");
-  // const [nickname, setNickname] = useState("");
-  // const [avatar, setAvatar] = useState("");
-  // const [aboutMe, setAboutMe] = useState("");
-  // const [registrationDone, setRegistrationDone] = useState(false);
+  const [error, setError] = useState("");
 
   const router = useRouter();
 
@@ -28,12 +25,14 @@ export default function Register() {
       body: JSON.stringify({ email, password, firstName, lastName, birthDate }),
     });
     const data = await response.json();
-    console.log("Register data:", data);
 
     //setRegistrationDone(true) and hide the mandatory form, show the optional form
     if (data.status === "success") {
       cookie.set("session_token", data.token);
       router.push("/optional");
+    } else {
+      setError("The email is already in use");
+      return;
     }
   };
 
@@ -132,6 +131,7 @@ export default function Register() {
           </div>
           {/* Submit Button */}
           <div className="gibspace">
+            {error && <p className="error">{error}</p>}
             <button type="submit" className="padder">
               Register
             </button>

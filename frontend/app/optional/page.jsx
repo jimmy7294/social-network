@@ -2,7 +2,6 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-//import { useCookies } from "react-cookie";
 import Headers from "../components/Header";
 import encodeImageFile from "../components/encodeImage";
 import GetYourImages from "../components/getyourimages";
@@ -20,11 +19,6 @@ function Avatars({ arg }) {
       setStockImages(images.stock_images);
     })();
   }, []);
-
-  console.log(images, "here i am");
-
-  // setStockImages(images.stock_images)
-  // setUserImages(images.user_images);
 
   return (
     <>
@@ -81,14 +75,13 @@ export default function Optional() {
     };
     //setWebSocket(newWS);
     return () => {
-      console.log("closing websocket");
+      // console.log("closing websocket");
       newWS.close();
     };
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(avatar);
     const response = await fetch("http://localhost:8080/api/updateSettings", {
       method: "POST",
       credentials: "include",
@@ -98,7 +91,6 @@ export default function Optional() {
       body: JSON.stringify({ nickname, aboutMe, avatar, privacy }),
     });
     const data = await response.json();
-    console.log("Register data:", data);
     //setRegistrationDone(true) and hide the mandatory form, show the optional form
     if (data.status === "success") {
       router.push("/");

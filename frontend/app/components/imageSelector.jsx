@@ -35,7 +35,7 @@ function ImageSelector(props) {
             </div>
           ))
         ) : (
-          <h1>no user images</h1>
+          <h1></h1>
         )}
       </div>
     </>

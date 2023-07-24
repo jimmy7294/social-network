@@ -18,14 +18,14 @@ function HomePage() {
     const newWS = new WebSocket("ws://localhost:8080/api/ws");
     newWS.onmessage = (msg) => {
       let newMsg = JSON.parse(msg.data);
-      console.log("new message", newMsg);
+      // console.log("new message", newMsg);
       if (
         newMsg.type === "group_join_request" ||
         newMsg.type === "group_invite" ||
         newMsg.type === "follow_request" ||
         newMsg.type === "event"
       ) {
-        console.log("new notification", newMsg);
+        // console.log("new notification", newMsg);
         setNotif((prevValue) => {
           //console.log("prev",prevValue)
           //console.log("upd", [...prevValue, newMsg])
@@ -37,7 +37,7 @@ function HomePage() {
     };
     //setWebSocket(newWS);
     return () => {
-      console.log("closing websocket");
+      // console.log("closing websocket");
       newWS.close();
     };
   }, []);
@@ -65,7 +65,7 @@ function GetAllUsers() {
         .then((data) => data.json())
         .then((data) => {
           if (data.status !== "success") {
-            console.log("failed to get users");
+            // console.log("failed to get users");
             return;
           }
           setUsers(data.users);
@@ -124,9 +124,9 @@ function MakeComment(post_id) {
     })
       .then((data) => data.json())
       .then((data) => {
-        console.log("added comment", data);
+        // console.log("added comment", data);
         if (data.status !== "success") {
-          console.log("failed to add comment", data);
+          // console.log("failed to add comment", data);
           return;
         }
         location.reload("/");
@@ -191,12 +191,12 @@ function ToggleComments(post_id) {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to get comments", data);
+          // console.log("failed to get comments", data);
         }
 
         setComments(data.comments);
         setShowMore(!showMore);
-        console.log(data.comments, "comments");
+        // console.log(data.comments, "comments");
       });
   }
   return (
@@ -223,7 +223,7 @@ function ToggleComments(post_id) {
       )}
       {showMore && !comments && (
         <div>
-          no comments
+          no comments yet
           <MakeComment post_id={post_id} />
         </div>
       )}
@@ -288,7 +288,7 @@ function MakePost({ userImages }) {
       });
       const data = await res.json();
       if (data.status !== "success") {
-        console.log("failed to get users");
+        // console.log("failed to get users");
         return;
       }
       setUsers(data.users);
@@ -399,7 +399,7 @@ function GetPosts() {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to get posts");
+          // console.log("failed to get posts");
           return;
         }
         let mergedPosts = [];

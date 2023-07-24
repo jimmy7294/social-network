@@ -4,8 +4,6 @@ import Headers from "../../components/Header";
 import { useRouter } from "next/navigation";
 import GetYourImages from "../../components/getyourimages";
 import encodeImageFile from "../../components/encodeImage";
-import { usePathname } from "next/navigation";
-//import getGroupPageData from "@/app/components/test";
 import { useState, useEffect, use } from "react";
 import ImageSelector from "@/app/components/imageSelector";
 import Link from "next/link";
@@ -13,7 +11,7 @@ import Link from "next/link";
 function InviteToGroup(props) {
   const slug = props.slug;
   const members = props.members;
-  console.log("members invToGroup", members);
+  // console.log("members invToGroup", members);
   const group_name = decodeURIComponent(slug.params.slug);
   const [username, setUsername] = useState("");
   const [allusers, setAllUsers] = useState([]);
@@ -45,13 +43,12 @@ function InviteToGroup(props) {
             console.log("failed to get usernames", data.status);
             return;
           }
-          console.log("got usernames", data);
 
           setAllUsers(data.users.filter(filterOutMembers));
         });
     })();
   }, []);
-  console.log("all users", allusers);
+  // console.log("all users", allusers);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const receiver = username;
@@ -69,10 +66,9 @@ function InviteToGroup(props) {
           console.log("failed to invite user", data.status);
           return;
         }
-        console.log("invited user", data.status);
+        // console.log("invited user", data.status);
       });
   };
-  console.log(allusers, "all useres are here");
   return (
     <>
       <div>
@@ -111,8 +107,7 @@ async function addMemberToGroupChat(slug) {
 }
 
 async function getGroupPageData(slug) {
-  console.log("slug", slug);
-  if (slug === undefined) return "not_a_member";
+  if (slug === undefined) return;
   const groupname = decodeURIComponent(slug.params.slug);
   const json = await fetch("http://localhost:8080/api/getGroupPage", {
     method: "POST",
@@ -124,7 +119,7 @@ async function getGroupPageData(slug) {
   });
   const data = await json.json();
   if (data.status !== "success") {
-    console.log("error in get gorup", data.status);
+    // console.log("error in get group", data.status);
     return data.status;
   }
 
@@ -156,14 +151,13 @@ export default function GroupPage(slug) {
       const g = await getGroupPageData(slug);
       setGroupPageData(g);
       if (g !== "not_a_member") {
-        console.log("should be true");
         setIsMember(true);
         const newWS = new WebSocket("ws://localhost:8080/api/ws");
         newWS.onmessage = (msg) => {
           //console.log("new notification",msg)
           let newMsg = JSON.parse(msg.data);
           if (newMsg.type === "group_message") {
-            console.log("new notification parsed", newMsg);
+            // console.log("new notification parsed", newMsg);
 
             setChat((prev) => {
               if (prev === null) {
@@ -178,13 +172,13 @@ export default function GroupPage(slug) {
             newMsg.type === "follow_request" ||
             newMsg.type === "event"
           ) {
-            console.log("new notification", newMsg);
+            // console.log("new notification", newMsg);
             setNotif((prevValue) => [...prevValue, newMsg]);
           }
         };
         setWebSocket(newWS);
         return () => {
-          console.log("closing websocket");
+          // console.log("closing websocket");
           newWS.close();
         };
       }
@@ -193,7 +187,6 @@ export default function GroupPage(slug) {
       }
     })();
   }, []);
-  console.log("render main file");
   return (
     <>
       {isMember && groupExists ? (
@@ -222,7 +215,6 @@ export default function GroupPage(slug) {
 function RenderGroup(props) {
   const data = props.data;
   const slug = props.slug;
-  console.log("render group slug", slug);
   const [groupPosts, setGroupPosts] = useState([]);
   const [events, setEvents] = useState([]);
   const [members, setMembers] = useState([]);
@@ -245,7 +237,7 @@ function RenderGroup(props) {
     }
   }, []);
 
-  console.log(events, "events");
+  // console.log(events, "events");
   return (
     <>
       <div>
@@ -454,10 +446,10 @@ function Event(props) {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to handle event answer", data.status);
+          // console.log("failed to handle event answer", data.status);
           return;
         }
-        console.log("handled event answer", data.status);
+        // console.log("handled event answer", data.status);
       });
   };
 
@@ -506,9 +498,6 @@ async function ChatBox(slug) {
   if (slug === undefined) {
     return;
   }
-  //console.log("cookies???", NextResponse.cookies)
-  //console.log("cok", NextPageContext)
-  // const [message, setMessage] = useState([]);
   const groupname = decodeURIComponent(slug.params.slug);
   const json = await fetch("http://localhost:8080/api/getGroupChat", {
     method: "POST",
@@ -520,47 +509,10 @@ async function ChatBox(slug) {
   });
   const response = await json.json();
   if (response.status === "success") {
-    console.log("dsak");
     return response.messages;
   }
-  console.log("failed to get chat");
   return;
 }
-/*         .then((data) => data.json())
-        .then((data) => {
-            if (data.status !== "success"){
-                console.log("failed to get chat")
-                return
-            }
-            console.log(data)
-            console.log("got chat")
-            return data.messages
-            //etMessage(data.messages)
-        }) */
-
-/*     return(
-    <>
-   
-        {message.map((message, index) => (
-            <div key={index}>
-                <p>{message.username}</p>
-                <p>{message.message}</p>
-                <p>{message.time}</p>
-            </div>
-        
-        ))}
-
-   
-
-    <div className="chatBox">
-        <h1>ChatBox</h1>
-        <input type="text" placeholder="message"/>
-        <button>send</button>
-    </div>
-    </>
-    )
-}
- */
 
 function MakeGroupPost(props) {
   const slug = props.slug;
@@ -572,8 +524,6 @@ function MakeGroupPost(props) {
   const [allImage, setAllImage] = useState([]);
   const [showImages, setShowImages] = useState(false);
   const [error, setError] = useState(null);
-  //const pathname = usePathname()
-  //const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -602,10 +552,10 @@ function MakeGroupPost(props) {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to add post", data);
+          // console.log("failed to add post", data);
           return;
         }
-        console.log("added post", data);
+        // console.log("added post", data);
       });
   };
   return (
@@ -682,10 +632,10 @@ function MakeEvent({ slug }) {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to add event", data);
+          // console.log("failed to add event", data);
           return;
         }
-        console.log(data);
+        // console.log(data);
       });
     location.reload();
   };
@@ -733,11 +683,11 @@ function RequestToJoin(slug) {
     .then((data) => data.json())
     .then((data) => {
       if (data.status !== "success") {
-        console.log(data.status);
-        console.log("request to join failed");
+        // console.log(data.status);
+        // console.log("request to join failed");
         return;
       }
-      console.log("request to join success");
+      // console.log("request to join success");
     });
 }
 
@@ -776,10 +726,10 @@ function MakeComment(props) {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to add comment", data);
+          // console.log("failed to add comment", data);
           return;
         }
-        console.log("added comment", data);
+        // console.log("added comment", data);
       });
   };
   return (
@@ -842,7 +792,7 @@ function ToggleComments(props) {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to get comments", data);
+          // console.log("failed to get comments", data);
         }
 
         setComments(data.comments);

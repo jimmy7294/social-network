@@ -16,14 +16,13 @@ function AllChats() {
         .then((res) => res.json())
         .then((data) => {
           if (data.status !== "success") {
-            console.log("error getting allusernames for chat", data.status);
+            // console.log("error getting allusernames for chat", data.status);
           }
-          console.log(data.users[0].username, "salkdjiosa");
+          // console.log(data.users[0].username, "salkdjiosa");
           setUsers(data.users);
         });
     })();
   }, []);
-  console.log(users, "sakldlak");
 
   return (
     <>
@@ -66,9 +65,9 @@ function Chatpage() {
         }
       }
     };
-    //setWebSocket(newWS);
+
     return () => {
-      console.log("closing websocket");
+      // console.log("closing websocket");
       newWS.close();
     };
   }, []);

@@ -9,39 +9,24 @@ export default function currentChat(slug) {
   const [notif, setNotif] = useState([]);
   useEffect(() => {
     (async () => {
-      /*             const m = await addMemberToGroupChat(slug)
-            if (m !== "success") {
-                if (m === "group_does_not_exist") {
-                    setGroupExists(false)
-                    return
-                }
-
-            } */
       const c = await getChat(slug);
       setChat(c.messages);
-      /*             const g = await getGroupPageData(slug)
-            setGroupPageData(g) */
+
       if (c.status === "success") {
-        console.log("should be true");
-        //setIsMember(true);
         const newWS = new WebSocket("ws://localhost:8080/api/ws");
         newWS.onmessage = (msg) => {
-          //console.log("new notification",msg)
           let newMsg = JSON.parse(msg.data);
-          //console.log("new notif parsed", newMsg)
+
           if (
             newMsg.type === "private_message" &&
             (newMsg.receiver === user || newMsg.sender === user)
           ) {
-            //console.log("new notification parsed",newMsg)
             setChat((prev) => {
               if (prev === null) {
                 return [newMsg];
               }
               return [...prev, newMsg];
             });
-
-            //console.log("new chat",chat)
           }
           if (
             newMsg.type === "group_join_request" ||
@@ -55,21 +40,17 @@ export default function currentChat(slug) {
         };
         setWebSocket(newWS);
         return () => {
-          console.log("closing websocket");
+          // console.log("closing websocket");
           newWS.close();
         };
       }
-      /*             if (g === "group_does_not_exist") {
-                setGroupExists(false)
-              } */
     })();
   }, []);
 
   return (
     <>
       <Headers notifs={notif} />
-      <h2>Chatting With {user}</h2>
-      {/* {GetMessages(slug)} */}
+      <h2>Chatting with {user}</h2>
       <RenderChatBox message={chat} slug={slug} websocket={websocket} />
     </>
   );
@@ -123,16 +104,8 @@ function RenderChatBox(props) {
                 </div>
               ))
             ) : (
-              <h1>No Messages.</h1>
+              <h2>No Messages</h2>
             )}
-            {/*                 {messages.map((messages, index) => (
-                    <div className="messages" key={index}>
-                        <p className="lineBreak">{messages.sender}</p>
-                        <p className="lineBreak">{messages.content}</p>
-                        <p className="lineBreak">{messages.created}</p>
-                    </div>
-                
-                ))} */}
           </div>
         </div>
         <div className="chatBox">
@@ -167,7 +140,7 @@ async function getChat(slug) {
   });
   const response = await json.json();
   if (response.status === "success") {
-    console.log("response", response);
+    // console.log("response", response);
     return response;
   }
   console.log("error msg", response.status);

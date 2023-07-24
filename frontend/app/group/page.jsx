@@ -29,10 +29,10 @@ function MakeGroup() {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("failed to make group");
+          // console.log("failed to make group");
           return;
         }
-        console.log("group made");
+        // console.log("group made");
         const url = `/group/${name}`;
         router.push(url);
       });
@@ -76,7 +76,7 @@ function YourGroups() {
       .then((data) => data.json())
       .then((data) => {
         if (data.status !== "success") {
-          console.log("error");
+          // console.log("error");
           return;
         }
         setGroups(data.groups);
@@ -106,20 +106,20 @@ function Groups() {
     const newWS = new WebSocket("ws://localhost:8080/api/ws");
     newWS.onmessage = (msg) => {
       let newMsg = JSON.parse(msg.data);
-      console.log("new message", newMsg);
+      // console.log("new message", newMsg);
       if (
         newMsg.type === "group_join_request" ||
         newMsg.type === "group_invite" ||
         newMsg.type === "follow_request" ||
         newMsg.type === "event"
       ) {
-        console.log("new notification", newMsg);
+        // console.log("new notification", newMsg);
         setNotif((prevValue) => [...prevValue, newMsg]);
       }
     };
     //setWebSocket(newWS);
     return () => {
-      console.log("closing websocket");
+      // console.log("closing websocket");
       newWS.close();
     };
   }, []);

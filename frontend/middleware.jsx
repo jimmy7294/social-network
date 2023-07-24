@@ -15,7 +15,7 @@ export async function middleware(req, NextRequest) {
     } else return NextResponse.redirect("http://localhost:3000/login");
   }
 
-  return fetch("http://localhost:8080/api/cookie", {
+  return fetch("http://backend:8080/api/cookie", {
     method: "POST",
     credentials: "include",
     headers: {
